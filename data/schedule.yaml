@@ -1,0 +1,211 @@
+startdate: "2019-01-08"
+dateFormat: 'Mon, Jan 2'
+schedule:
+- week: 0
+  day: 2
+  lecture: "Introduction"
+  slides:
+  readings:
+  notes: 
+
+- week: 1
+  day: 0
+  lecture: "Linux Systems"
+  slides: Lec01
+  readings:
+  notes:
+  
+- week: 2
+  day: 0
+  lecture: "Docker"
+  slides: Lec02
+  shell: Lec02_docker.txt
+  screencast: https://youtu.be/Oaa86NstgHQ
+  readings:
+    - text: Docker Install Docs
+      link: https://docs.docker.com/install/
+    - text: Docker Cheatsheet
+      link: https://github.com/wsargent/docker-cheat-sheet
+  notes: 
+
+- week: 2
+  day: 2
+  lecture: "Rocker & Dockerfiles"
+  slides: Lec03
+  screencast: https://youtu.be/mx3Cid7jHQc
+  shell: Lec03_rocker.txt
+  readings:
+    - text: Rocker paper
+      link: https://rjournal.github.io/archive/2017/RJ-2017-065/index.html
+    - text: Dockerfile Best Practices
+      link: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+
+- week: 3
+  day: 0
+  lecture: "Singularity"
+  slides: Lec04
+  screencast: https://youtu.be/_fPyQfrcrq8
+  shell: Lec04_singularity.txt
+  readings:
+    - text: Singularity Documentation (2.6)
+      link: https://www.sylabs.io/guides/2.6/user-guide/index.html
+    - text: Singularity Commands
+      link: https://www.sylabs.io/guides/2.6/user-guide/appendix.html#commands
+  notes: 
+  
+- week: 3
+  day: 2
+  lecture: "Putting it together"
+  slides:
+  screencast: https://youtu.be/W7RzTfKEvrc
+  shell: example_pm25.txt
+  notes: "<a href='https://github.com/Sta790-Sp19/example_pm25'>example_pm25 repo</a>"
+
+- week: 4
+  day: 0
+  lecture: "Cluster & Slurm Basics"
+  slides: Lec05
+  screencast: https://youtu.be/dGuLRNmLJWQ
+  shell: Lec05_slurm.txt
+  readings:
+    - text: DCC Acceptable Use
+      link: https://rc.duke.edu/appropriate-use-cluster/
+    - text: DCC Workshop materials
+      link: https://rc.duke.edu/wp-content/uploads/DCC_Workshop_10-04-2018.pdf
+    - text: Slurm Documentation
+      link: http://schedmd.com/slurmdocs
+  notes: 
+
+- week: 4
+  day: 2
+  lecture: "Slurm batch jobs"
+  slides: Lec06
+  screencast: https://youtu.be/OEDWmzb7_2I
+  shell: Lec06_sbatch.txt
+
+
+- week: 5
+  day: 0
+  lecture: "Parallelization"
+  slides: Lec07
+  screencast: https://www.youtube.com/watch?v=Dpknsq-oTlE
+  shell: Lec07_parallel.txt
+  
+- week: 5
+  day: 2
+  lecture: "(More) Parallelization"
+  screencast: https://youtu.be/MubnijxUlQ4
+
+- week: 6
+  day: 0
+  lecture: "Profiling"
+  screencast: https://youtu.be/b6yHp1ppqGo 
+  readings:
+  - text: Profvis
+    link: https://rstudio.github.io/profvis/
+  notes: 
+
+- week: 6
+  day: 2
+  lecture: "Profiling with perf"
+  screencast: https://youtu.be/cFVmoeX4GYw
+  shell: perf.txt
+
+- week: 7
+  day: 0
+  lecture: "Rcpp + C++ Basics"
+  slides: Lec08
+  screencast: https://youtu.be/-1AdZIqutwI
+  readings:
+    - text: Adv-R Rcpp Chapter
+      link: http://adv-r.had.co.nz/Rcpp.html
+    - text: Dirk Eddelbuettel's Talks
+      link: http://dirk.eddelbuettel.com/presentations.html
+  notes: 
+  
+- week: 7
+  day: 2
+  lecture: "std::vector and Rcpp Vectors"
+  slides: Lec09
+  screencast: https://youtu.be/cwscs5zg5Cg
+  readings:
+    - text: cppreference.com - std::vector
+      link: https://en.cppreference.com/w/cpp/container/vector
+    - text: Rcpp Doxygen - Vector
+      link: http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1Vector.html
+    - text: Rcpp Sugar
+      link: http://dirk.eddelbuettel.com/code/rcpp/Rcpp-sugar.pdf
+  notes:
+
+- week: 8
+  day: 0
+  lecture: "STL Containers"
+  slides: Lec10
+  screencast: https://youtu.be/mF8AEdlHJIk
+  readings: 
+    - text: Container Reference
+      link: http://www.cplusplus.com/reference/stl/
+  notes: 
+
+- week: 8
+  day: 2
+  lecture: "<i>Class canceled</i>"
+  readings: 
+  notes: 
+
+- week: 9
+  day: 0
+  lecture: "<i>No class</i> - Spring recess"
+
+- week: 9
+  day: 2
+  lecture: "<i>No class</i> - Spring recess"
+
+- week: 10
+  day: 0
+  lecture: "Armadillo"
+  slides: Lec11
+  screencast: https://youtu.be/ERVLvDvRtxU
+  readings:
+    - text: Armadillo Docs
+      link: http://arma.sourceforge.net/docs.html
+  notes: "<a href='https://github.com/Sta790-Sp19/example_arma'>arma example repo</a>"
+
+- week: 10
+  day: 2
+  lecture: "Armadillo - Sparse Matrices"
+  slides: Lec12
+  screencast: 
+  readings:
+    - text: RcppArmadillo - Sparse Matrix Vignette
+      link: https://cran.r-project.org/web/packages/RcppArmadillo/vignettes/RcppArmadillo-sparseMatrix.pdf
+  notes:
+  
+
+- week: 11
+  day: 0
+  lecture: "Memory Management"
+  slides:
+  readings:
+  notes: 
+  
+- week: 12
+  day: 0
+  lecture: "Thrust & CUDA"
+  slides:
+  readings:
+  notes: 
+  
+- week: 13
+  day: 0
+  lecture: "CUBLAS & Magma"
+  slides:
+  readings:
+  notes: 
+  
+- week: 14
+  day: 0
+  lecture: "TDB"
+  slides:
+  readings:
+  notes: 

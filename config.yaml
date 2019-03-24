@@ -1,0 +1,50 @@
+baseurl: "/"
+title: "Advanced Statistical Computing"
+author: "Colin Rundel"
+copyright: "&copy; 2019. All rights reserved."
+ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+
+menu:
+  main:
+  - name: Home
+    pre: <i class='fa fa-home fa-fw'></i>
+    weight: 1
+    identifier: home
+    url: "#schedule"  
+  - name: Syllabus
+    pre: <i class='fa fa-file-text-o fa-fw'></i>
+    weight: 2
+    identifier: syllabus
+    url: "#syllabus"
+  - name: Github
+    pre: <i class='fa fa-github fa-fw'></i>
+    weight: 6
+    url: https://github.com/Sta790-Sp19/
+
+params:
+  subtitle: ""
+  course: "Sta 790-02"
+  semester: Spring 2019
+  highlightjs: androidstudio
+  highlightjs_extra_languages:
+    - yaml
+  dateFormat: '02 Jan 2006, 15:04'
+  sections:
+    - schedule
+    - syllabus
+    - contact
+    - about
+  contact:
+    - name: Prof. Rundel
+      office: 204 Old Chemistry
+      email: rundel@gmail.com
+      hours: TBD
+  class:
+    - room: Perkins 060 (Link Classroom 1)
+      dates:
+        - type: Lecture
+          days: Tuedays 11:45 AM - 01:00 PM
+        - type: Lab
+          days: Thursdays 11:45 AM - 01:00 PM
+    
