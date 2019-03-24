@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Slurm odds and ends</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Colin Rundel" />
+    <meta name="date" content="2019-02-12" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Slurm odds and ends
+### Colin Rundel
+### 2019-02-12
+
+---
+
+exclude: true
+
+
+
+---
+class: middle
+
+# Slurm Accounts
+
+---
+
+## Account Info
+
+.smaller[ .shell[
+```console
+cr173@dcc-statdept-01  ~ $ sacctmgr list user | grep cr173
+     cr173     sta790      None
+
+cr173@dcc-slogin-02  ~ $ sacctmgr show assoc u=cr173
+   Cluster    Account       User  Partition     Share GrpJobs       GrpTRES GrpSubmit     GrpWall   GrpTRESMins MaxJobs       MaxTRES MaxTRESPerNode MaxSubmit     MaxWall   MaxTRESMins                  QOS   Def QOS GrpTRESRunMin
+---------- ---------- ---------- ---------- --------- ------- ------------- --------- ----------- ------------- ------- ------------- -------------- --------- ----------- ------------- -------------------- --------- -------------
+       dcc     sta790      cr173                    1               cpu=500                                         500                                                                                normal
+       dcc  rundellab      cr173                    1               cpu=500                                         400                                                                                normal
+       dcc   statdept      cr173                    1               cpu=500                                         500                                                                                normal
+```
+] ]
+
+---
+
+## Using accounts
+
+.shell[
+```console
+cr173@dcc-slogin-02  ~ $ srun --partition=statdept --pty bash
+srun: Requested partition configuration not available now
+srun: job 46311238 queued and waiting for resources
+^C
+srun: Job allocation 46311238 has been revoked
+srun: Force Terminated job 46311238
+
+cr173@dcc-slogin-02  ~ $ srun --partition=statdept --account=statdept --pty bash
+srun: job 46311292 queued and waiting for resources
+srun: job 46311292 has been allocated resources
+
+cr173@dcc-slogin-02  ~ $ srun -c64 --partition=statdept --account=statdept --pty bash
+srun: job 46311461 queued and waiting for resources
+srun: job 46311461 has been allocated resources
+```
+]
+
+---
+
+## Using multiple partitions
+
+.shell[
+```bash
+#!/usr/bin/bash
+#SBATCH --partition=statdept-low,herringlab-low,volfovskylab-low
+#SBATCH --account=statdept
+#SBATCH --array=1-10
+#SBATCH -c 32
+
+hostname
+```
+]
+
+---
+class: middle
+
+# Slurm Modules
+
+---
+
+## Available Modules
+
+.smaller[ .shell[
+```console
+cr173@dcc-slogin-02  ~ $ module avail
+
+---------------------------------------------------- /opt/apps/modulefiles ----------------------------------------------------
+almaBTE/v1.3.2       CUDA/9.1             gsl/2.4              MotionCor2/1.1.0     PhyML/20141029       samtools/1.9
+AMBER/18-GPU         Cufflinks/2.1.1      JAGS/4.2.0           MotionCor2/1.2.1     Picard/2.16.0        Schrodinger/2018-4
+Anaconda2/2.7.13     Cufflinks/2.2.2      Java/1.8.0_60        MPICH/3.2.1          Picard/2.18.2        Spider/24.08
+Anaconda3/3.5.2      Dakota/6.8.0         Julia/0.6.0          MPICH/3.2.1-intel    Plink/1.90           SPRNG/5
+Anaconda3/5.1.0      dot                  Julia/0.6.2          NAMD/2.11-GPU        PROJ/5.2.0           Stacks/2.0b
+Bamsurgeon/1.1       EMAN2/2.22           Julia/1.0.0          NCBI-BLAST/2.7.1     PRSice/3.2.3         Stacks/2.1
+bcftools/1.4         EMMAX/07Mar2010      LAMMPS/11Aug2017     NCL_NCARG/6.4.0      Python/2.7.11        STAR/2.5.3a
+bcl2fastq/2.20       Exonerate/2.4.0      LAMMPS/16Mar18       NCO/4.7.4            Python/3.6.2         Stata/15.1
+Bedtools/2.25.0      FastQC/0.11.5        Mathematica/10.3     Ncview/2.17          Python/3.6.4         Subread/1.6.3
+BigWig/1.0           FastQC/0.11.7        Matlab/R2016a        NetCDF/4.4.1         Python-GPU/3.6.5     Tassel/5
+Boost/1.59           FASTX-Toolkit/0.0.14 Matlab/R2017b        NetCDF/4.6.1         R/3.2.5              Tassel/5.0
+Boost/1.64           ffmpeg/3.3.2         Matlab/R2018a        Neuron/7.5           R/3.3.2              TopHat/2.1.1
+Bowtie/1.2.2         ffmpeg/gpu-3.3.2     Matlab/R2018b        Neuron/7.6.2         R/3.4.2              Trim_galore/0.4.3
+Bowtie2/2.3.3.1      FFTW/3.3.7           MC-Flashfold/v34     null                 R/3.4.4              Trimmomatic/0.36
+Bowtie2/2.3.4.3      GATK/3.8-0           MEME/5.0.2           OpenMPI/2.0.3        R/3.5.2              Trimmomatic/0.38
+BWA/0.7.15           Gautomatch/0.56      Migrate/3.6.11       OpenMPI/2.1.0        Relion/2.0.2         Trinity/2.6.6
+BWA/0.7.17           GCC/5.4.0            Minimap2/2.15        Panoply/4.8.9        Relion/3             use.own
+CGAL/4.13            Gctf/v1.06           module-git           Parallel/20180322    Relion/3.0-GPU       VarScan/v2.4.3
+cisTEM/1.0.0-beta    GDAL/2.4.0           module-info          Perl/5.20.1          RepeatMasker/4.0.5   VCFtools/0.1.15
+CTFFIND/4.1.10       GMAP/2018-07-04      modules              PETSc/3.6.4          Rosetta/3.9          VCFtools/0.1.17
+CUDA/10.0            GRASS/7.6.0          MolProbity/2015      PETSc/3.7.7          Sam2Tsv/1.0          Velvet/1.2.10
+CUDA/8.0             GROMACS/2018         Moose/06-18-18       PETSc/3.8.3          samtools/1.3.1
+CUDA/9.0             GROMACS/2018-2-GPU   Moose/08-27-18       PGI-compiler/18.10   samtools/1.4-19
+```
+] ]
+
+---
+
+## Loading Modules
+
+.shell[
+```console
+cr173@dcc-slogin-02  ~ $ R
+-bash: R: command not found
+
+cr173@dcc-slogin-02  ~ $ module load R/3.5.2
+R 3.5.2
+
+cr173@dcc-slogin-02  ~ $ R
+
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+&gt;
+```
+]
+
+---
+
+.shell[
+```r
+&gt; rownames(installed.packages())
+ [1] "ape"               "base"              "boot"
+ [4] "class"             "cluster"           "clusterGeneration"
+ [7] "CMplot"            "coda"              "codetools"
+[10] "colorspace"        "combinat"          "compiler"
+[13] "curl"              "datasets"          "data.table"
+[16] "deSolve"           "digest"            "diversitree"
+[19] "expm"              "fastmatch"         "foreign"
+[22] "geiger"            "GenSA"             "graphics"
+[25] "grDevices"         "grid"              "igraph"
+[28] "KernSmooth"        "lattice"           "magrittr"
+[31] "maps"              "MASS"              "Matrix"
+[34] "methods"           "mgcv"              "mnormt"
+[37] "mvtnorm"           "ncbit"             "nlme"
+[40] "nloptr"            "nnet"              "numDeriv"
+[43] "parallel"          "phangorn"          "pkgconfig"
+[46] "plotrix"           "quadprog"          "Rcpp"
+[49] "rpart"             "scatterplot3d"     "spatial"
+[52] "splines"           "stats"             "stats4"
+[55] "subplex"           "survival"          "tcltk"
+[58] "tools"             "utils"
+```
+]
+
+---
+
+## Removing Modules
+
+.shell[
+```console
+cr173@dcc-slogin-02  ~ $ module list
+Currently Loaded Modulefiles:
+  1) R/3.5.2
+  
+cr173@dcc-slogin-02  ~ $ module purge
+R 3.5.2
+
+cr173@dcc-slogin-02  ~ $ module list
+No Modulefiles Currently Loaded.
+
+cr173@dcc-slogin-02  ~ $ R
+-bash: R: command not found
+```
+]
+
+---
+
+## The issue with modules
+
+.shell[
+```console
+cr173@dcc-slogin-02  ~ $ srun -c4 --pty bash
+srun: job 46308419 queued and waiting for resources
+srun: job 46308419 has been allocated resources
+
+cr173@dcc-core-36  ~ $ module load R/3.5.2
+R 3.5.2
+cr173@dcc-core-36  ~ $ Rscript -e "x = matrix(1,5000,5000); system.time(x %*% x)"
+   user  system elapsed
+178.298   0.217 178.535
+
+cr173@dcc-core-36  ~ $ singularity exec r-ver.simg Rscript -e "x = matrix(1,5000,5000); system.time(x %*% x)"
+   user  system elapsed
+ 10.548   5.963   4.196
+```
+]
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

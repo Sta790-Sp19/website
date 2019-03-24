@@ -1,0 +1,261 @@
+---
+title: "sbatch"
+author: "Colin Rundel"
+date: "2019-02-07"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      highlightSpans: true
+      countIncrementalSlides: false
+
+---
+exclude: true
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE}
+options(crayon.enabled = TRUE)
+```
+
+---
+
+## `sbatch` options
+
+<br/>
+
+| Short | Long               | Default  | Description                                 |
+|-------|------------------- |----------|---------------------------------------------|
+| `-p`  | `--partition`      |          | Which partition to use                      |
+| `-o`  | `--output`         | *        | Where to send stdout                        |
+| `-e`  | `--error`          | *        | Where to send stderr                        |
+| `-c`  | `--cpus-per-task`  | 1        | CPUs per task                               |
+|       | `--mem`            | ? M      | Real memory required per node               |
+|       | `--mem-per-cpu `   | ? M      | Minimum memory required per allocated CPU   |
+| `-a`  | `--array`          | *        | Submit a job array (sbatch only)            |
+|       | `--mail-type`      | NONE     | Some values are NONE, BEGIN, END, FAIL, ALL |
+---
+
+## slurm batch script
+
+These describe a command or commands to be run when your allocation becomes available. In practice they are just a shell script file with some properly formated comments at the start that affect Slurm's behavior.
+
+<br/>
+
+
+```shell
+#!/bin/bash
+#SBATCH --partition=common
+#SBATCH --output=test.out
+#SBATCH --error=test.err
+
+hostname
+```
+
+.smaller[ .columns[ 
+.shell[
+```console
+cr173@dcc-slogin-01  ~ $ sbatch hostname.sh
+Submitted batch job 45465245
+cr173@dcc-slogin-01  ~ $ cat test.out
+dcc-core-17
+cr173@dcc-slogin-01  ~ $ cat test.err
+```
+]
+
+.shell[
+```console
+cr173@dcc-slogin-01  ~ $ sbatch -N4 hostname.sh
+Submitted batch job 45465273
+cr173@dcc-slogin-01  ~ $ cat test.out
+dcc-core-186
+cr173@dcc-slogin-01  ~ $ cat test.err
+```
+]
+] ]
+
+
+---
+
+## Multiple Tasks
+
+```shell
+#!/bin/bash
+#SBATCH --partition=common
+#SBATCH --output=test.out
+#SBATCH --error=test.err
+
+*srun hostname
+```
+
+.shell[
+```console
+cr173@dcc-slogin-01  ~ $ sbatch -N4 hostname.sh
+Submitted batch job 45467915
+cr173@dcc-slogin-01  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45467915    common hostname    cr173 PD       0:00      4 (None)
+cr173@dcc-slogin-01  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45467915    common hostname    cr173  R       0:02      4 dcc-core-[159-162]
+cr173@dcc-slogin-01  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-01  ~ $ cat test.out
+dcc-core-159
+dcc-core-162
+dcc-core-161
+dcc-core-160
+```
+]
+
+---
+
+.shell[
+```console
+cr173@dcc-slogin-01  ~ $ sbatch -n4 hostname.sh
+Submitted batch job 45467964
+cr173@dcc-slogin-01  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-01  ~ $ cat test.out
+dcc-core-113
+dcc-core-113
+dcc-core-113
+dcc-core-113
+```
+]
+
+---
+
+## Multiple Tasks - arrays
+
+```shell
+#!/bin/bash
+#SBATCH --partition=common
+#SBATCH --output=test_%A_%a.out
+#SBATCH --error=test_%A_%a.err
+#SBATCH --array=0-3
+
+hostname
+```
+
+.smaller[ .shell[
+```console
+cr173@dcc-slogin-01  ~ $ sbatch hostname_array.sh
+Submitted batch job 45468247
+
+cr173@dcc-slogin-01  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+    45468247_[0-3]    common hostname    cr173 PD       0:00      1 (None)
+
+cr173@dcc-slogin-01  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+cr173@dcc-slogin-01  ~ $ ls
+gerrymandering-xsede  hostname.sh  test_45468247_0.err  test_45468247_1.err  test_45468247_2.err  test_45468247_3.err  test.err
+hostname_array.sh     R            test_45468247_0.out  test_45468247_1.out  test_45468247_2.out  test_45468247_3.out  test.out
+
+cr173@dcc-slogin-01  ~ $ grep "" test_45468247_*.out
+test_45468247_0.out:dcc-core-17
+test_45468247_1.out:dcc-core-21
+test_45468247_2.out:dcc-core-26
+test_45468247_3.out:dcc-core-42
+```
+] ]
+
+---
+
+## Filename patterns
+
+<br/><br/>
+
+| pattern | description                                                                                   |
+|:-------:|-----------------------------------------------------------------------------------------------|
+| %%      | The character "%                                                                              |
+| %A      | Job array's master job allocation number.                                                     |
+| %a      | Job array ID (index) number                                                                   |
+| %J      | jobid.stepid of the running job. (e.g. "128.0")                                               |
+| %j      | jobid of the running job                                                                      |
+| %N      | short hostname. This will create a separate IO file per node.                                 | 
+| %n      | Node identifier relative to current job (e.g. "0" is the first node of the running job)       |
+| %s      | stepid of the running job.                                                                    |
+| %t      | task identifier (rank) relative to current job. This will create a separate IO file per task. |
+| %u      | User name                                                                                     |
+| %x      | Job name                                                                                      |
+
+
+---
+
+## Environment Variables
+
+<br/><br/>
+
+| Variable              | Description
+|-----------------------|-----------------------------------------------------------------------|
+| SLURM_ARRAY_TASK_ID   | Job array ID (index) number. |
+| SLURM_ARRAY_JOB_ID    | Job array's master job ID number. |
+| SLURM_CPUS_ON_NODE    | Number of CPUS on the allocated node. |
+| SLURM_CPUS_PER_TASK   | Number of cpus requested per task. Only set if --cpus-per-task used |
+| SLURM_MEM_PER_CPU     | Same as --mem-per-cpu |
+| SLURM_MEM_PER_NODE    | Same as --mem |
+| SLURM_NTASKS          | Same as -n, --ntasks |
+| SLURMD_NODENAME       | Name of the node running the job script. |
+
+---
+
+```shell
+#!/bin/bash
+#SBATCH --partition=common
+#SBATCH --output=test_%A_%a.out
+#SBATCH --error=test_%A_%a.err
+#SBATCH --array=0-1
+
+echo "node         : $SLURMD_NODENAME"
+echo "Job id       : $SLURM_ARRAY_JOB_ID"
+echo "Task id      : $SLURM_ARRAY_TASK_ID"
+echo ""
+echo "ntasks       : $SLURM_NTASKS"
+echo "ncpus        : $SLURM_CPUS_ON_NODE"
+echo "ncpus / task : $SLURM_CPUS_PER_TASK"
+echo "mem / cpu    : $SLURM_MEM_PER_CPU"
+echo "mem / node   : $SLURM_MEM_PER_NODE"
+```
+
+---
+
+.smaller[ .shell[
+```console
+cr173@dcc-slogin-01  ~ $ sbatch env_var.sh
+Submitted batch job 45469864
+cr173@dcc-slogin-01  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45469864_0    common env_var.    cr173 CG       0:04      1 dcc-core-08
+        45469864_1    common env_var.    cr173 CG       0:04      1 dcc-core-14
+cr173@dcc-slogin-01  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-01  ~ $ ls
+env_var.sh  gerrymandering-xsede  hostname_array.sh  hostname.sh  R  test_45469864_1.err
+cr173@dcc-slogin-01  ~ $ more test_45469864_1.err
+cr173@dcc-slogin-01  ~ $ ls
+env_var.sh  gerrymandering-xsede  hostname_array.sh  hostname.sh  R  test_45469864_0.err  test_45469864_0.out  test_45469864_1.err  test_45469864_1.out
+cr173@dcc-slogin-01  ~ $ grep "" test_45469864_*.out
+test_45469864_0.out:node         : dcc-core-08
+test_45469864_0.out:Job id       : 45469864
+test_45469864_0.out:Task id      : 0
+test_45469864_0.out:
+test_45469864_0.out:ntasks       :
+test_45469864_0.out:ncpus        : 1
+test_45469864_0.out:ncpus / task :
+test_45469864_0.out:mem / cpu    : 2048
+test_45469864_0.out:mem / node   :
+test_45469864_1.out:node         : dcc-core-14
+test_45469864_1.out:Job id       : 45469864
+test_45469864_1.out:Task id      : 1
+test_45469864_1.out:
+test_45469864_1.out:ntasks       :
+test_45469864_1.out:ncpus        : 1
+test_45469864_1.out:ncpus / task :
+test_45469864_1.out:mem / cpu    : 2048
+test_45469864_1.out:mem / node   :
+```
+] ]

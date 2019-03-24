@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>STL containers</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Colin Rundel" />
+    <meta name="date" content="2019-03-05" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# STL containers
+### Colin Rundel
+### 2019-03-05
+
+---
+
+exclude: true
+
+
+
+
+```r
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+---
+class: middle
+
+## Common Methods
+
+---
+
+## Iterators
+
+|                 | Method              |  Description                                                      |
+|-----------------|---------------------|-------------------------------------------------------------------|
+| **Accessors**   | `v.begin()`         |  Get iterator for 1st element                                     | 
+|                 | `v.end()`           |  Get iterator for *past-the-end* element                          |
+|                 | `v.rbegin()`        |  Get reverse iterator for last element                            | 
+|                 | `v.rend()`          |  Get reverse iterator for the element preceding the first element |
+|                 | `v.cbegin()`        |  Get const iterator for 1st element                               | 
+|                 | `v.cend()`          |  Get const iterator for *past-the-end* element                    |
+|                 | `v.crbegin()`       |  Get const reverse iterator for last element                      | 
+|                 | `v.crend()`         |  Get const reverse iterator for the element preceding the first element |
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::export]]
+void iters() {
+  std::vector&lt;int&gt; a = {1, 2, 3, 4, 5};
+  
+  Rcpp::Rcout &lt;&lt; "a.begin() -&gt; a.end():\n"; 
+  for(auto x = a.begin(); x != a.end(); ++x) {
+    Rcpp::Rcout &lt;&lt; *x &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n\n";
+
+  Rcpp::Rcout &lt;&lt; "a.rbegin() -&gt; a.rend():\n"; 
+  for(auto x = a.rbegin(); x != a.rend(); ++x) {
+    Rcpp::Rcout &lt;&lt; *x &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n\n";
+}
+```
+
+
+```r
+iters()
+```
+
+```
+## a.begin() -&gt; a.end():
+## 1, 2, 3, 4, 5,   
+## 
+## a.rbegin() -&gt; a.rend():
+## 5, 4, 3, 2, 1, 
+```
+]
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::export]]
+void citers() {
+  std::vector&lt;int&gt; a = {1, 2, 3, 4, 5};
+  
+  Rcpp::Rcout &lt;&lt; "a.begin() -&gt; a.end():\n"; 
+  for(auto x = a.begin(); x != a.end(); ++x) {
+    Rcpp::Rcout &lt;&lt; *x &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n\n";
+
+  *a.begin() = 7;
+  //*a.cbegin() = 7;
+  
+  Rcpp::Rcout &lt;&lt; "a.begin() -&gt; a.end():\n"; 
+  for(auto x = a.begin(); x != a.end(); ++x) {
+    Rcpp::Rcout &lt;&lt; *x &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n\n";
+}
+```
+
+
+```r
+citers()
+```
+
+```
+## a.begin() -&gt; a.end():
+## 1, 2, 3, 4, 5,   
+## 
+## a.begin() -&gt; a.end():
+## 7, 2, 3, 4, 5, 
+```
+]
+
+---
+
+## Other methods
+
+|                 | Method              |  Description                                                      |
+|-----------------|---------------------|-------------------------------------------------------------------|
+| **Capacity**    | `v.size()`          |  Get number of elements                                           | 
+|                 | `v.max_size()`      |  Get maximum number of elements a container can hold              |
+|                 | `v.empty()`         |  Predicate function checking if container is empty                | 
+| **Modifiers**   | `v.clear()`         |  Removes all elements from container                              |
+|                 | `v.swap(x)`         |  Exchanges the content of `v` with `x`                            |
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+#include &lt;array&gt;
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::export]]
+void size() {
+  std::array&lt;int, 3&gt; a;
+  std::vector&lt;int&gt; b;
+  std::vector&lt;std::string&gt; c;
+  std::list&lt;int&gt; d;
+  std::list&lt;std::string&gt; e;
+  std::set&lt;int&gt; f;
+  std::set&lt;std::string&gt; g;
+  
+  Rcpp::Rcout &lt;&lt; "std::array&lt;int, 3&gt; a       size=" &lt;&lt; a.size() &lt;&lt; "   max_size=" &lt;&lt; a.max_size() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "std::vector&lt;int&gt; b         size=" &lt;&lt; b.size() &lt;&lt; "   max_size=" &lt;&lt; b.max_size() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "std::vector&lt;std::string&gt; c size=" &lt;&lt; c.size() &lt;&lt; "   max_size=" &lt;&lt; c.max_size() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "std::list&lt;int&gt; d           size=" &lt;&lt; d.size() &lt;&lt; "   max_size=" &lt;&lt; d.max_size() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "std::list&lt;std::string&gt; e   size=" &lt;&lt; e.size() &lt;&lt; "   max_size=" &lt;&lt; e.max_size() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "std::set&lt;int&gt; f            size=" &lt;&lt; f.size() &lt;&lt; "   max_size=" &lt;&lt; f.max_size() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "std::set&lt;std::string&gt; g    size=" &lt;&lt; g.size() &lt;&lt; "   max_size=" &lt;&lt; g.max_size() &lt;&lt; "\n";
+}
+```
+
+
+```r
+size()
+```
+
+```
+## std::array&lt;int, 3&gt; a       size=3   max_size=3
+## std::vector&lt;int&gt; b         size=0   max_size=4611686018427387903
+## std::vector&lt;std::string&gt; c size=0   max_size=768614336404564650
+## std::list&lt;int&gt; d           size=0   max_size=768614336404564650
+## std::list&lt;std::string&gt; e   size=0   max_size=461168601842738790
+## std::set&lt;int&gt; f            size=0   max_size=576460752303423487
+## std::set&lt;std::string&gt; g    size=0   max_size=329406144173384850
+```
+]
+
+---
+class: middle
+
+# Sequence Containers
+
+---
+
+## `std::array` - *C++11*
+
+.center[
+![](imgs/vector.png)
+]
+
+|                 | Method              | Complexity                   | Description                      |
+|-----------------|---------------------|------------------------------|----------------------------------|
+| **Accessors**   | `v[i]`              | `\(\mathcal{O}(1)\)`             | Get element at position i        | 
+|                 | `v.at[i]`           | `\(\mathcal{O}(1)\)`             | Get element at position i        | 
+|                 | `v.front()`         | `\(\mathcal{O}(1)\)`             | Get first element                | 
+|                 | `v.back()`          | `\(\mathcal{O}(1)\)`             | Get last element                 | 
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+#include &lt;array&gt;
+// [[Rcpp::plugins(cpp11)]]
+
+// [[Rcpp::export]]
+void std_array() {
+  std::array&lt;int, 3&gt; a = {1, 2, 3};
+  std::array&lt;std::string, 2&gt; s = {std::string("Hello"), "world!"};
+  
+  Rcpp::Rcout &lt;&lt; "a: "; 
+  for(auto const&amp; v: a) {
+    Rcpp::Rcout &lt;&lt; v &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n";
+  
+  Rcpp::Rcout &lt;&lt; "s: "; 
+  for(auto const&amp; v: s) {
+    Rcpp::Rcout &lt;&lt; v &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n";
+}
+```
+
+
+```r
+std_array()
+```
+
+```
+## a: 1, 2, 3,   
+## s: Hello, world!, 
+```
+]
+
+---
+
+## `std::vector`
+
+.center[
+![](imgs/vector.png)
+]
+
+|                 | Method              | Complexity                   | Description                      |
+|-----------------|---------------------|------------------------------|----------------------------------|
+| **Accessors**   | `v[i]`              | `\(\mathcal{O}(1)\)`             | Get element at position i        | 
+|                 | `v.at[i]`           | `\(\mathcal{O}(1)\)`             | Get element at position i        | 
+|                 | `v.front()`         | `\(\mathcal{O}(1)\)`             | Get first element                | 
+|                 | `v.back()`          | `\(\mathcal{O}(1)\)`             | Get last element                 | 
+| **Modifiers**   | `v.push_back(x)`    | `\(\mathcal{O}(1)\)` (amortized) | Add x to the back                | 
+|                 | `v.pop_back(x)`     | `\(\mathcal{O}(1)\)`             | Remove and return back element   | 
+|                 | `v.insert(it, x)`   | `\(\mathcal{O}(n)\)`             | Insert x after it                | 
+|                 | `v.erase(it)`       | `\(\mathcal{O}(n)\)`             | Erase element at it              | 
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+// [[Rcpp::plugins(cpp11)]]
+
+// [[Rcpp::export]]
+void std_vector() {
+  std::vector&lt;int&gt; a = {0, 1, 2, 3, 4};
+  
+  Rcpp::Rcout &lt;&lt; "a: "; 
+  for(auto it = a.begin(); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; *it &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n";
+  
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; a[3] &lt;&lt; "   // subset\n";
+  
+  auto it = a.begin();
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(++(++(++it))) &lt;&lt; "   // pre-increment\n";
+  
+  it = a.end();
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(--(--it)) &lt;&lt; "   // pre-decrement\n";
+  
+  it = a.begin();
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(it + 3) &lt;&lt; "   // iterator add\n";
+  
+  it = a.begin();
+  std::advance(it, 3);
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *it &lt;&lt; "   // std::advance from begin\n";
+  
+  it = a.end();
+  std::advance(it, -2);
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *it &lt;&lt; "   // std::advance from end\n";
+}
+```
+
+
+```r
+std_vector()
+```
+
+```
+## a: 0, 1, 2, 3, 4,   
+## a[3] = 3   // subset
+## a[3] = 3   // pre-increment
+## a[3] = 3   // pre-decrement
+## a[3] = 3   // iterator add
+## a[3] = 3   // std::advance from begin
+## a[3] = 3   // std::advance from end
+```
+]
+
+---
+
+## `std::deque`
+
+.center[
+![](imgs/deque.png)
+]
+
+|                 | Method              | Complexity                   | Description                      |
+|-----------------|---------------------|------------------------------|----------------------------------|
+| **Accessors**   | `v[i]`              | `\(\mathcal{O}(1)\)`             | Get element at position i        | 
+|                 | `v.at[i]`           | `\(\mathcal{O}(1)\)`             | Get element at position i        | 
+|                 | `v.front()`         | `\(\mathcal{O}(1)\)`             | Get first element                | 
+|                 | `v.back()`          | `\(\mathcal{O}(1)\)`             | Get last element                 | 
+| **Modifiers**   | `v.push_back(x)`    | `\(\mathcal{O}(1)\)` (amortized) | Add x to the back                | 
+|                 | `v.pop_back(x)`     | `\(\mathcal{O}(1)\)`             | Remove and return back element   | 
+|                 | `v.push_front(x)`   | `\(\mathcal{O}(1)\)` (amortized) | Add x to the front               | 
+|                 | `v.pop_front(x)`    | `\(\mathcal{O}(1)\)`             | Remove and return front element  | 
+|                 | `v.insert(it, x)`   | `\(\mathcal{O}(n)\)`             | Insert x after it                | 
+|                 | `v.erase(it)`       | `\(\mathcal{O}(n)\)`             | Erase element at it              | 
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+#include &lt;deque&gt;
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::export]]
+void std_deque() {
+  std::deque&lt;int&gt; a = {0, 1, 2, 3, 4};
+  
+  Rcpp::Rcout &lt;&lt; "a: "; 
+  for(auto it = a.begin(); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; *it &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n";
+  
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; a[3] &lt;&lt; "   // subset\n";
+  
+  auto it = a.begin();
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(++(++(++it))) &lt;&lt; "   // pre-increment\n";
+  
+  it = a.end();
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(--(--it)) &lt;&lt; "   // pre-decrement\n";
+  
+  it = a.begin();
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(it + 3) &lt;&lt; "   // iterator add\n";
+  
+  it = a.begin();
+  std::advance(it, 3);
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *it &lt;&lt; "   // std::advance from begin\n";
+  
+  it = a.end();
+  std::advance(it, -2);
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *it &lt;&lt; "   // std::advance from end\n";
+}
+```
+
+
+```r
+std_deque()
+```
+
+```
+## a: 0, 1, 2, 3, 4,   
+## a[3] = 3   // subset
+## a[3] = 3   // pre-increment
+## a[3] = 3   // pre-decrement
+## a[3] = 3   // iterator add
+## a[3] = 3   // std::advance from begin
+## a[3] = 3   // std::advance from end
+```
+]
+
+---
+
+## `std::list`
+
+.center[
+![](imgs/list.png)
+]
+
+|                 | Method              | Complexity              | Description                      |
+|-----------------|---------------------|-------------------------|----------------------------------|
+| **Accessors**   | `v.front()`         | `\(\mathcal{O}(1)\)`        | Get first element                |
+|                 | `v.back()`          | `\(\mathcal{O}(1)\)`        | Get last element                 |
+| **Modifiers**   | `v.push_back(x)`    | `\(\mathcal{O}(1)\)`        | Add x to the back                |
+|                 | `v.pop_back()`      | `\(\mathcal{O}(1)\)`        | Remove and return back element   |
+|                 | `v.push_front(x)`   | `\(\mathcal{O}(1)\)`        | Add x to the front               |
+|                 | `v.pop_front()`     | `\(\mathcal{O}(1)\)`        | Remove and return front element  |
+|                 | `v.insert(it, x)`   | `\(\mathcal{O}(1)\)`        | Insert x after it                |
+|                 | `v.erase(it)`       | `\(\mathcal{O}(1)\)`        | Erase element at it              |
+|                 | `v.remove(x)`       | `\(\mathcal{O}(n)\)`        | Remove all occurances of x       |
+|                 | `v.reverse()`       | `\(\mathcal{O}(n)\)`        | Reverse elements                 |
+|                 | `v.sort()`          | `\(\mathcal{O}(n \log n)\)` | Sort elements                    |
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+// [[Rcpp::plugins(cpp11)]]
+
+// [[Rcpp::export]]
+void std_list() {
+  std::list&lt;int&gt; a = {0, 1, 2, 3, 4};
+  
+  Rcpp::Rcout &lt;&lt; "a: "; 
+  for(auto it = a.begin(); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; *it &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n";
+  
+  //Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; a[3] &lt;&lt; "   // subset\n";
+  
+  auto it = a.begin();
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(++(++(++it))) &lt;&lt; "   // pre-increment\n";
+  
+  it = a.end();
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(--(--it)) &lt;&lt; "   // pre-decrement\n";
+  
+  //it = a.begin();
+  //Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(it + 3) &lt;&lt; "   // iterator add\n";
+  
+  it = a.begin();
+  std::advance(it, 3);
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *it &lt;&lt; "   // std::advance from begin\n";
+  
+  it = a.end();
+  std::advance(it, -2);
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *it &lt;&lt; "   // std::advance from end\n";
+}
+```
+
+
+```r
+std_list()
+```
+
+```
+## a: 0, 1, 2, 3, 4,   
+## a[3] = 3   // pre-increment
+## a[3] = 3   // pre-decrement
+## a[3] = 3   // std::advance from begin
+## a[3] = 3   // std::advance from end
+```
+]
+
+---
+
+## `std::forward_list` - *C++11*
+
+.center[
+![](imgs/forward_list.png)
+]
+
+|                 | Method                  | Complexity              | Description                      |
+|-----------------|-------------------------|-------------------------|----------------------------------|
+| **Accessors**   | `v.front()`             | `\(\mathcal{O}(1)\)`        | Get first element                |
+| **Modifiers**   | `v.push_front(x)`       | `\(\mathcal{O}(1)\)`        | Add x to the front               |
+|                 | `v.pop_front()`         | `\(\mathcal{O}(1)\)`        | Remove and return front element  |
+|                 | `v.insert_after(it, x)` | `\(\mathcal{O}(1)\)`        | Insert x after it                |
+|                 | `v.erase_after(it)`     | `\(\mathcal{O}(1)\)`        | Erase element at it              |
+|                 | `v.remove(x)`           | `\(\mathcal{O}(n)\)`        | Remove all occurances of x       |
+|                 | `v.reverse()`           | `\(\mathcal{O}(n)\)`        | Reverse elements                 |
+|                 | `v.sort()`              | `\(\mathcal{O}(n \log n)\)` | Sort elements                    |
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+#include &lt;forward_list&gt;
+// [[Rcpp::plugins(cpp11)]]
+
+// [[Rcpp::export]]
+void std_forward_list() {
+  std::forward_list&lt;int&gt; a = {0, 1, 2, 3, 4};
+  
+  Rcpp::Rcout &lt;&lt; "a: "; 
+  for(auto it = a.begin(); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; *it &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n";
+  
+  //Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; a[3] &lt;&lt; "   // subset\n";
+  
+  auto it = a.begin();
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(++(++(++it))) &lt;&lt; "   // pre-increment\n";
+  
+  //it = a.end();
+  //Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(--(--it)) &lt;&lt; "   // pre-decrement\n";
+  
+  //it = a.begin();
+  //Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *(it + 3) &lt;&lt; "   // iterator add\n";
+  
+  it = a.begin();
+  std::advance(it, 3);
+  Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *it &lt;&lt; "   // std::advance from begin\n";
+  
+  //it = a.end();
+  //std::advance(it, -2);
+  //Rcpp::Rcout &lt;&lt; "a[3] = " &lt;&lt; *it &lt;&lt; "   // std::advance from end\n";
+}
+```
+
+
+```r
+std_forward_list()
+```
+
+```
+## a: 0, 1, 2, 3, 4,   
+## a[3] = 3   // pre-increment
+## a[3] = 3   // std::advance from begin
+```
+]
+
+
+---
+class: middle
+
+# Associative Containers
+
+---
+
+## `std::set` &amp; `std::multiset`
+
+.center[
+![](imgs/set.png)
+]
+
+|                 | Method              | Complexity              | Description                      |
+|-----------------|---------------------|-------------------------|----------------------------------|
+| **Accessors**   | `v.find(x)`         | `\(\mathcal{O}(\log n)\)`   | Find element                     |
+|                 | `v.count(x)`        | `\(\mathcal{O}(\log n)\)`   | Number of items equal to x       |
+| **Modifiers**   | `v.insert(x)`       | `\(\mathcal{O}(\log n)\)`   | Insert element with value x      |
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+#include &lt;set&gt;
+// [[Rcpp::plugins(cpp11)]]
+
+// [[Rcpp::export]]
+void std_set() {
+  std::set&lt;int&gt; a = {0, 3, 5};
+  
+  Rcpp::Rcout &lt;&lt; "a: "; 
+  for(auto it = a.begin(); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; *it &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n";
+  
+  Rcpp::Rcout &lt;&lt; "a.count(1) = " &lt;&lt; a.count(1) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "a.count(2) = " &lt;&lt; a.count(2) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "a.count(3) = " &lt;&lt; a.count(3) &lt;&lt; "\n";
+  
+  Rcpp::Rcout &lt;&lt; "\nInserting 2 ...\n";
+  a.insert(2);
+  Rcpp::Rcout &lt;&lt; "Inserting 3 ...\n\n";
+  a.insert(3);
+  
+  Rcpp::Rcout &lt;&lt; "a.count(1) = " &lt;&lt; a.count(1) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "a.count(2) = " &lt;&lt; a.count(2) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "a.count(3) = " &lt;&lt; a.count(3) &lt;&lt; "\n";
+}
+```
+
+
+```r
+std_set()
+```
+
+```
+## a: 0, 3, 5,   
+## a.count(1) = 0
+## a.count(2) = 0
+## a.count(3) = 1
+## 
+## Inserting 2 ...
+## Inserting 3 ...
+## 
+## a.count(1) = 0
+## a.count(2) = 1
+## a.count(3) = 1
+```
+]
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+#include &lt;set&gt;
+// [[Rcpp::plugins(cpp11)]]
+
+// [[Rcpp::export]]
+void std_multiset() {
+  std::multiset&lt;int&gt; a = {0, 3, 5};
+  
+  Rcpp::Rcout &lt;&lt; "a: "; 
+  for(auto it = a.begin(); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; *it &lt;&lt; ", ";
+  }
+  Rcpp::Rcout &lt;&lt; "\b\b  \n";
+  
+  Rcpp::Rcout &lt;&lt; "a.count(1) = " &lt;&lt; a.count(1) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "a.count(2) = " &lt;&lt; a.count(2) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "a.count(3) = " &lt;&lt; a.count(3) &lt;&lt; "\n";
+  
+  Rcpp::Rcout &lt;&lt; "\nInserting 2 ...\n";
+  a.insert(2);
+  Rcpp::Rcout &lt;&lt; "Inserting 3 ...\n\n";
+  a.insert(3);
+  
+  Rcpp::Rcout &lt;&lt; "a.count(1) = " &lt;&lt; a.count(1) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "a.count(2) = " &lt;&lt; a.count(2) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "a.count(3) = " &lt;&lt; a.count(3) &lt;&lt; "\n";
+}
+```
+
+
+```r
+std_multiset()
+```
+
+```
+## a: 0, 3, 5,   
+## a.count(1) = 0
+## a.count(2) = 0
+## a.count(3) = 1
+## 
+## Inserting 2 ...
+## Inserting 3 ...
+## 
+## a.count(1) = 0
+## a.count(2) = 1
+## a.count(3) = 2
+```
+]
+
+---
+
+## `std::map` &amp; `std::multimap`
+
+.center[
+![](imgs/map.png)
+]
+
+|                 | Method              | Complexity              | Description                      |
+|-----------------|---------------------|-------------------------|----------------------------------|
+| **Accessors**   | `v[x]`              | `\(\mathcal{O}(\log n)\)`   | Retrieve value stored for x      |
+|                 | `v.find(x)`         | `\(\mathcal{O}(\log n)\)`   | Find key x                       |
+| **Modifiers**   | `v[x] = val`        | `\(\mathcal{O}(\log n)\)`   | Store value  in key x            |
+|                 | `v.insert(x)`       | `\(\mathcal{O}(\log n)\)`   | Insert x                         |
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+// [[Rcpp::plugins(cpp11)]]
+
+// [[Rcpp::export]]
+void std_map() {
+  std::map&lt;std::string, int&gt; a = {
+    {"hij", 3},
+    {"def", 1}
+  };
+  
+  a["abc"] = 5;
+  
+  Rcpp::Rcout &lt;&lt; "a:\n"; 
+  for(auto it = a.begin(); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; "  "  &lt;&lt; it-&gt;first 
+                &lt;&lt; " : " &lt;&lt; it-&gt;second &lt;&lt; "\n";
+  }
+  
+  a["abc"] = 77;
+  a.insert(std::make_pair("klm", 32));
+  
+  Rcpp::Rcout &lt;&lt; "a:\n"; 
+  for(auto it = a.begin(); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; "  "  &lt;&lt; it-&gt;first 
+                &lt;&lt; " : " &lt;&lt; it-&gt;second &lt;&lt; "\n";
+  }
+}
+```
+
+
+```r
+std_map()
+```
+
+```
+## a:
+##   abc : 5
+##   def : 1
+##   hij : 3
+## a:
+##   abc : 77
+##   def : 1
+##   hij : 3
+##   klm : 32
+```
+]
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+// [[Rcpp::plugins(cpp11)]]
+
+// [[Rcpp::export]]
+void std_multimap() {
+  std::multimap&lt;std::string, int&gt; a = {
+    {"hij", 3},
+    {"def", 1},
+    {"abc", 5}
+  };
+  
+  Rcpp::Rcout &lt;&lt; "a:\n"; 
+  for(auto it = a.begin(); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; "  "  &lt;&lt; it-&gt;first 
+                &lt;&lt; " : " &lt;&lt; it-&gt;second &lt;&lt; "\n";
+  }
+  
+  //a["abc"] = 77;
+  a.insert(std::make_pair("abc", 77));
+  a.insert(std::make_pair("klm", 32));
+  
+  Rcpp::Rcout &lt;&lt; "a:\n"; 
+  for(auto it = a.begin(); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; "  "  &lt;&lt; it-&gt;first 
+                &lt;&lt; " : " &lt;&lt; it-&gt;second &lt;&lt; "\n";
+  }
+}
+```
+
+
+```r
+std_multimap()
+```
+
+```
+## a:
+##   abc : 5
+##   def : 1
+##   hij : 3
+## a:
+##   abc : 5
+##   abc : 77
+##   def : 1
+##   hij : 3
+##   klm : 32
+```
+]
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+// [[Rcpp::plugins(cpp11)]]
+
+// [[Rcpp::export]]
+void std_multimap_find() {
+  std::multimap&lt;std::string, int&gt; a = {
+    {"hij", 3},
+    {"def", 1},
+    {"abc", 5},
+    {"abc", 77},
+  };
+  
+  Rcpp::Rcout &lt;&lt; "Find \"abc\":\n"; 
+  for(auto it = a.find("abc"); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; "  "  &lt;&lt; it-&gt;first 
+                &lt;&lt; " : " &lt;&lt; it-&gt;second &lt;&lt; "\n";
+  }
+  
+  Rcpp::Rcout &lt;&lt; "Find \"def\":\n"; 
+  for(auto it = a.find("def"); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; "  "  &lt;&lt; it-&gt;first 
+                &lt;&lt; " : " &lt;&lt; it-&gt;second &lt;&lt; "\n";
+  }
+
+  Rcpp::Rcout &lt;&lt; "Find \"xyz\":\n"; 
+  for(auto it = a.find("xyz"); it != a.end(); ++it) {
+    Rcpp::Rcout &lt;&lt; "  "  &lt;&lt; it-&gt;first 
+                &lt;&lt; " : " &lt;&lt; it-&gt;second &lt;&lt; "\n";
+  }
+}
+```
+
+
+```r
+std_multimap_find()
+```
+
+```
+## Find "abc":
+##   abc : 5
+##   abc : 77
+##   def : 1
+##   hij : 3
+## Find "def":
+##   def : 1
+##   hij : 3
+## Find "xyz":
+```
+]
+
+---
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+// [[Rcpp::plugins(cpp11)]]
+
+// [[Rcpp::export]]
+void std_multimap_find2() {
+  std::multimap&lt;std::string, int&gt; a = {
+    {"hij", 3},
+    {"def", 1},
+    {"abc", 5},
+    {"abc", 77},
+  };
+  
+  Rcpp::Rcout &lt;&lt; "Find \"abc\":\n"; 
+  for(auto it = a.find("abc"); it != a.end() &amp;&amp; it-&gt;first == "abc"; ++it) {
+    Rcpp::Rcout &lt;&lt; "  "  &lt;&lt; it-&gt;first 
+                &lt;&lt; " : " &lt;&lt; it-&gt;second &lt;&lt; "\n";
+  }
+  
+  Rcpp::Rcout &lt;&lt; "Find \"def\":\n"; 
+  for(auto it = a.find("def"); it != a.end() &amp;&amp; it-&gt;first == "def"; ++it) {
+    Rcpp::Rcout &lt;&lt; "  "  &lt;&lt; it-&gt;first 
+                &lt;&lt; " : " &lt;&lt; it-&gt;second &lt;&lt; "\n";
+  }
+  
+  Rcpp::Rcout &lt;&lt; "Find \"xyz\":\n"; 
+  for(auto it = a.find("xyz"); it != a.end() &amp;&amp; it-&gt;first == "x7z"; ++it) {
+    Rcpp::Rcout &lt;&lt; "  "  &lt;&lt; it-&gt;first 
+                &lt;&lt; " : " &lt;&lt; it-&gt;second &lt;&lt; "\n";
+  }
+}
+```
+
+
+```r
+std_multimap_find2()
+```
+
+```
+## Find "abc":
+##   abc : 5
+##   abc : 77
+## Find "def":
+##   def : 1
+## Find "xyz":
+```
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

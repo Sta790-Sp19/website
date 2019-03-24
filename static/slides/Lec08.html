@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Intro to C++ and Rcpp</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Colin Rundel" />
+    <meta name="date" content="2019-02-26" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Intro to C++ and Rcpp
+### Colin Rundel
+### 2019-02-26
+
+---
+
+exclude: true
+
+
+
+---
+
+## Types
+
+&lt;br/&gt;
+
+| Type        | Size (bits*)    | Description                            | Value Range
+|-------------|:---------------:|----------------------------------------|---------------------
+| `bool`      | *               | Logical value: `true` or `false`       | 
+| `char`      | 8               | Character (ASCII or UTF8)              | `\(\pm 127\)`
+| `short int` | 16              | Small integers                         | `\(\pm 3.27 \cdot 10^4\)`
+| `int`       | 32              | Medium integers                        | `\(\pm 2.14 \cdot 10^9\)`
+| `long int`  | 64              | Large integers                         | `\(\pm 9.22 \cdot 10^18\)`
+| `float`     | 32              | Small floating point value             | `\(\pm 10^{-38}\)` to `\(\pm 10^{38}\)`
+| `double`    | 64              | Large floating point value             | `\(\pm 10^{-308}\)` to `\(\pm 10^{308}\)`
+
+---
+
+## R types vs C++ types
+
+All of the basic types in R are vectors by default, in C++ the types we just discussed are all scalar. So it is necessary to have one more level of abstraction to translate between the two. Rcpp provides for this with several built in classes:
+
+| C++ type (scalar)      |  Rcpp Class              | R type (`typeof`) |
+|------------------------|--------------------------|-------------------|
+| `int`                  | `Rcpp::IntegerVector`    | `integer`         |
+| `double`               | `Rcpp::NumericVector`    | `numeric `        |
+| `bool`                 | `Rcpp::LogicalVector`    | `logical`         |
+| `std::string`          | `Rcpp::CharacterVector`  | `character`       |
+| `char`                 | `Rcpp::RawVector`        | `raw `            |
+| `std::complex&lt;double&gt;` | `Rcpp::ComplexVector`    | `complex `        |
+|                        | `Rcpp::List`             | `list`            |
+|                        | `Rcpp::Environment`      | `environment`     |
+|                        | `Rcpp::Function`         | `function`        |
+|                        | `Rcpp::XPtr`             | `externalptr`     |
+|                        | `Rcpp::S4`               | `S4`              |
+
+---
+
+## Trying things out
+
+Rcpp provides some helpful functions for trying out simple C++ expressions (`evalCpp`), functions (`cppFunction`), or cpp files (`sourceCpp`). It is even possible to include C++ code in RMarkdown documents using the [Rcpp engine](https://bookdown.org/yihui/rmarkdown/language-engines.html#rcpp).
+
+
+```r
+evalCpp("2+2")
+```
+
+```
+## [1] 4
+```
+
+```r
+evalCpp("2+2") %&gt;% typeof()
+```
+
+```
+## [1] "integer"
+```
+
+```r
+evalCpp("2+2.") %&gt;% typeof()
+```
+
+```
+## [1] "double"
+```
+
+---
+
+## What's happening?
+
+.tiny[
+
+```r
+evalCpp("2+2", verbose = TRUE, rebuild = TRUE)
+```
+
+```
+## 
+## Generated code for function definition: 
+## --------------------------------------------------------
+## 
+## #include &lt;Rcpp.h&gt;
+## 
+## using namespace Rcpp;
+## 
+## // [[Rcpp::export]]
+## SEXP get_value(){ return wrap( 2+2 ) ; }
+## 
+## Generated extern "C" functions 
+## --------------------------------------------------------
+## 
+## 
+## #include &lt;Rcpp.h&gt;
+## // get_value
+## SEXP get_value();
+## RcppExport SEXP sourceCpp_1_get_value() {
+## BEGIN_RCPP
+##     Rcpp::RObject rcpp_result_gen;
+##     Rcpp::RNGScope rcpp_rngScope_gen;
+##     rcpp_result_gen = Rcpp::wrap(get_value());
+##     return rcpp_result_gen;
+## END_RCPP
+## }
+## 
+## Generated R functions 
+## -------------------------------------------------------
+## 
+## `.sourceCpp_1_DLLInfo` &lt;- dyn.load('/private/var/folders/k8/4z3ndjqd0nj1xczfp4ktnnzc0000gp/T/RtmpLYvWAG/sourceCpp-x86_64-apple-darwin18.2.0-1.0.1/sourcecpp_29a327d895fb/sourceCpp_5.so')
+## 
+## get_value &lt;- Rcpp:::sourceCppFunction(function() {}, FALSE, `.sourceCpp_1_DLLInfo`, 'sourceCpp_1_get_value')
+## 
+## rm(`.sourceCpp_1_DLLInfo`)
+## 
+## Building shared library
+## --------------------------------------------------------
+## 
+## DIR: /private/var/folders/k8/4z3ndjqd0nj1xczfp4ktnnzc0000gp/T/RtmpLYvWAG/sourceCpp-x86_64-apple-darwin18.2.0-1.0.1/sourcecpp_29a327d895fb
+## 
+## /usr/local/Cellar/r/3.5.3/lib/R/bin/R CMD SHLIB -o 'sourceCpp_5.so' --preclean  'file29a3784f724a.cpp'
+```
+
+```
+## [1] 4
+```
+]
+
+---
+
+## C++ functions as R functions
+
+
+```r
+cppFunction('
+double cpp_mean(double x, double y) {
+  return (x+y)/2;
+}
+')
+cpp_mean
+```
+
+```
+## function (x, y) 
+## .Call(&lt;pointer: 0x10f5ccc40&gt;, x, y)
+```
+
+--
+
+
+```r
+cpp_mean(1,2)
+```
+
+```
+## [1] 1.5
+```
+
+--
+
+
+```r
+cpp_mean(TRUE,2L)
+```
+
+```
+## [1] 1.5
+```
+
+--
+
+
+```r
+cpp_mean(1,"A")
+```
+
+```
+## Error in cpp_mean(1, "A"): Not compatible with requested type: [type=character; target=double].
+```
+
+--
+
+
+```r
+cpp_mean(c(1,2), c(1,2))
+```
+
+```
+## Error in cpp_mean(c(1, 2), c(1, 2)): Expecting a single value: [extent=2].
+```
+
+---
+
+## Using `sourceCpp`
+
+Generally this is the prefered way of working with C++ code and is well supported by RStudio.
+
+* Make sure to include the Rcpp header
+
+.example[
+```cpp
+#include &lt;Rcpp.h&gt;
+```
+]
+
+* If you hate typing `Rcpp::` everywhere, include the namespace
+
+.example[
+```cpp
+using namespace Rcpp;
+```
+]
+
+* Specify any desired plugins with 
+
+.example[
+```cpp
+// [[Rcpp::plugins(cpp11)]]
+```
+]
+
+* Prefix any functions that will be exported with R with 
+
+.example[
+```cpp
+// [[Rcpp::export]]
+```
+]
+
+* Testing code can be included using an R code block:
+
+.example[
+```cpp
+/*** R
+# This R code will be run automatically
+*/
+```
+]
+
+---
+
+## Example
+
+The following would be included in a file called `mean.cpp` or something similar.
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+//[[Rcpp::plugins(cpp11)]]
+
+//[[Rcpp::export]]
+double cpp_mean(double x, double y) {
+  return (x+y)/2;
+}
+
+/*** R
+x &lt;- runif(1e5)
+bench::mark(
+  cpp_mean(1, 2),
+  mean(c(1, 2))
+)
+*/
+```
+
+---
+
+## `for` loops
+
+In C &amp; C++ `for` loops are traditionally constructed as,
+
+```c
+for(initialization; end condition; increment) {
+  //...loop code ..
+}
+```
+
+--
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+//[[Rcpp::export]]
+double cpp_mean(Rcpp::NumericVector x) {
+  double sum = 0.0;
+  for(int i=0; i != x.size(); i++) {
+    sum += x[i];
+  }
+  return sum/x.size();
+}
+```
+
+
+```r
+cpp_mean(1:10)
+```
+
+```
+## [1] 5.5
+```
+
+---
+
+## Range based for loops (C++11)
+
+Since the adoption of the C++11 standard there is an alternative for loop syntax, 
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+//[[Rcpp::plugins(cpp11)]]
+
+//[[Rcpp::export]]
+double cpp11_mean(Rcpp::NumericVector x) {
+  double sum = 0.0;
+  for(auto v : x) {
+    sum += v;
+  }
+  
+  return sum/x.size();
+}
+```
+
+
+```r
+cpp11_mean(1:10)
+```
+
+```
+## [1] 5.5
+```
+
+--
+
+&lt;br/&gt;
+
+
+```r
+ls(envir = Rcpp:::.plugins)
+```
+
+```
+##  [1] "cpp0x"         "cpp11"         "cpp14"         "cpp17"        
+##  [5] "cpp1y"         "cpp1z"         "cpp2a"         "cpp98"        
+##  [9] "openmp"        "unwindProtect"
+```
+
+---
+
+## Rcpp Sugar
+
+Rcpp also attempts to provide many of the base R functions within the C++ scope, generally there are refered to as Rcpp Sugar, more can be found [here](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-sugar.pdf) or by examining the Rcpp source.
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+//[[Rcpp::plugins(cpp11)]]
+
+//[[Rcpp::export]]
+double rcpp_mean(Rcpp::NumericVector x) {
+  return Rcpp::mean(x);
+}
+```
+
+
+```r
+rcpp_mean(1:10)
+```
+
+```
+## [1] 5.5
+```
+
+---
+
+## Edge cases
+
+.columns[
+.col[
+
+```r
+x = c(1:10,NA)
+typeof(x)
+```
+
+```
+## [1] "integer"
+```
+
+```r
+mean(x)
+```
+
+```
+## [1] NA
+```
+
+```r
+cpp_mean(x)
+```
+
+```
+## [1] NA
+```
+
+```r
+cpp11_mean(x)
+```
+
+```
+## [1] NA
+```
+
+```r
+rcpp_mean(x)
+```
+
+```
+## [1] NA
+```
+]
+
+.col[
+
+```r
+y = c(1:10,Inf)
+typeof(y)
+```
+
+```
+## [1] "double"
+```
+
+```r
+mean(y)
+```
+
+```
+## [1] Inf
+```
+
+```r
+cpp_mean(y)
+```
+
+```
+## [1] Inf
+```
+
+```r
+cpp11_mean(y)
+```
+
+```
+## [1] Inf
+```
+
+```r
+rcpp_mean(y)
+```
+
+```
+## [1] Inf
+```
+]
+]
+
+---
+
+## Integer mean
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+//[[Rcpp::plugins(cpp11)]]
+
+//[[Rcpp::export]]
+double cpp_imean(Rcpp::IntegerVector x) {
+  double sum = 0.0;
+  for(int i=0; i != x.size(); i++) {
+    sum += x[i];
+  }
+  
+  return sum/x.size();
+}
+
+//[[Rcpp::export]]
+double cpp11_imean(Rcpp::IntegerVector x) {
+  double sum = 0.0;
+  for(auto v : x) {
+    sum += v;
+  }
+  
+  return sum/x.size();
+}
+
+//[[Rcpp::export]]
+double rcpp_imean(Rcpp::IntegerVector x) {
+  return Rcpp::mean(x);
+}
+```
+
+
+---
+
+## Integer edge cases
+
+.midi[
+.columns[
+.col[
+
+```r
+x = c(1:10,NA)
+typeof(x)
+```
+
+```
+## [1] "integer"
+```
+
+```r
+mean(x)
+```
+
+```
+## [1] NA
+```
+
+```r
+cpp_imean(x)
+```
+
+```
+## [1] -195225781
+```
+
+```r
+cpp11_imean(x)
+```
+
+```
+## [1] -195225781
+```
+
+```r
+rcpp_imean(x)
+```
+
+```
+## [1] NA
+```
+]
+
+.col[
+
+```r
+y = c(1:10,Inf)
+typeof(y)
+```
+
+```
+## [1] "double"
+```
+
+```r
+mean(y)
+```
+
+```
+## [1] Inf
+```
+
+```r
+cpp_imean(y)
+```
+
+```
+## Warning in cpp_imean(y): NAs introduced by coercion to integer range
+```
+
+```
+## [1] -195225781
+```
+
+```r
+cpp11_imean(y)
+```
+
+```
+## Warning in cpp11_imean(y): NAs introduced by coercion to integer range
+```
+
+```
+## [1] -195225781
+```
+
+```r
+rcpp_imean(y)
+```
+
+```
+## Warning in rcpp_imean(y): NAs introduced by coercion to integer range
+```
+
+```
+## [1] NA
+```
+]
+]
+]
+
+---
+
+## Missing values - C++ Scalars
+
+From Hadley's [Adv-R](http://adv-r.had.co.nz) [Rcpp chapter](http://adv-r.had.co.nz/Rcpp.html#rcpp-na),
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+Rcpp::List scalar_missings() {
+  int int_s          = NA_INTEGER;
+  Rcpp::String chr_s = NA_STRING;
+  bool lgl_s         = NA_LOGICAL;
+  double num_s       = NA_REAL;
+
+  return Rcpp::List::create(int_s, chr_s, lgl_s, num_s);
+}
+```
+
+
+```r
+scalar_missings()
+```
+
+```
+## [[1]]
+## [1] NA
+## 
+## [[2]]
+## [1] NA
+## 
+## [[3]]
+## [1] TRUE
+## 
+## [[4]]
+## [1] NA
+```
+
+---
+
+## Missing values - Rcpp Vectors
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+Rcpp::List vector_missing() {
+  return Rcpp::List::create(
+    Rcpp::NumericVector::create(NA_REAL),
+    Rcpp::IntegerVector::create(NA_INTEGER),
+    Rcpp::LogicalVector::create(NA_LOGICAL),
+    Rcpp::CharacterVector::create(NA_STRING)
+  );
+}
+```
+
+
+```r
+vector_missing()
+```
+
+```
+## [[1]]
+## [1] NA
+## 
+## [[2]]
+## [1] NA
+## 
+## [[3]]
+## [1] NA
+## 
+## [[4]]
+## [1] NA
+```
+
+
+
+
+---
+
+## Performance
+
+.midi[
+
+```r
+r_mean = function(x) {
+  sum = 0
+  for(v in x) {
+    sum = sum + v
+  }
+  sum / length(x)
+}
+```
+
+
+```r
+y = seq_len(1e6)
+bench::mark(
+  mean(y),
+  cpp_mean(y),
+  cpp11_mean(y),
+  rcpp_mean(y),
+  r_mean(y)
+) 
+```
+
+```
+## # A tibble: 5 x 10
+##   expression     min    mean  median     max `itr/sec` mem_alloc  n_gc
+##   &lt;chr&gt;      &lt;bch:t&gt; &lt;bch:t&gt; &lt;bch:t&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt; &lt;dbl&gt;
+## 1 mean(y)     5.81ms  6.58ms  6.42ms  8.17ms     152.         0B     0
+## 2 cpp_mean(…  5.49ms  7.99ms  7.48ms 16.75ms     125.     7.63MB    11
+## 3 cpp11_mea…  2.12ms   2.9ms  2.83ms   4.8ms     344.     7.63MB    20
+## 4 rcpp_mean…  2.81ms  3.93ms  3.83ms   7.3ms     255.     7.63MB    14
+## 5 r_mean(y)   31.9ms 35.78ms 35.94ms 39.87ms      28.0  100.19KB     0
+## # … with 2 more variables: n_itr &lt;int&gt;, total_time &lt;bch:tm&gt;
+```
+]
+
+---
+
+## `bench::press`
+
+
+```r
+b = bench::press(
+  n = 10^c(3:7),
+  {
+    y = seq_len(n)
+    bench::mark(
+      mean(y),
+      cpp_mean(y),
+      cpp11_mean(y),
+      rcpp_mean(y),
+      r_mean(y)
+    )
+  }
+)
+```
+
+```
+## Running with:
+##          n
+```
+
+```
+## 1     1000
+```
+
+```
+## 2    10000
+```
+
+```
+## 3   100000
+```
+
+```
+## 4  1000000
+```
+
+```
+## 5 10000000
+```
+
+---
+class: middle
+
+&lt;img src="Lec08_files/figure-html/unnamed-chunk-28-1.png" width="100%" /&gt;
+
+---
+
+## Creating a `list`
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+Rcpp::List make_list(int n) {
+  return Rcpp::List::create(
+    Rcpp::Named("norm") = Rcpp::rnorm(n, 0, 1),
+    Rcpp::Named("beta") = Rcpp::rbeta(n, 1, 1),
+    Rcpp::IntegerVector::create(1,2,3,4,5, NA_INTEGER)
+  );
+}
+```
+
+
+```r
+make_list(10)
+```
+
+```
+## $norm
+##  [1] -1.4571593 -0.5890910 -0.3553319 -1.8817167 -1.0387151 -0.9843522
+##  [7]  1.7666458 -1.6976358  0.9262356  0.4120744
+## 
+## $beta
+##  [1] 0.5718434 0.3707151 0.4487789 0.7104076 0.5235477 0.6740764 0.9356531
+##  [8] 0.2474596 0.8789587 0.8653678
+## 
+## [[3]]
+## [1]  1  2  3  4  5 NA
+```
+
+---
+
+## Creating a `data.frame`
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+Rcpp::DataFrame make_df(int n) {
+  return Rcpp::DataFrame::create(
+    Rcpp::Named("norm") = Rcpp::rnorm(n, 0, 1),
+    Rcpp::Named("beta") = Rcpp::rbeta(n, 1, 1)
+  );
+}
+```
+
+
+```r
+make_df(10)
+```
+
+```
+##          norm       beta
+## 1   1.3253697 0.50683178
+## 2   0.6427004 0.01043097
+## 3   0.9097914 0.76920733
+## 4   0.6597730 0.05330513
+## 5  -0.1640834 0.56876709
+## 6  -0.7922707 0.26508582
+## 7  -0.6660425 0.34764589
+## 8  -0.5000887 0.43290857
+## 9  -0.5694419 0.78583149
+## 10  1.4558494 0.66066330
+```
+
+---
+
+## Creating a `tbl`
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+Rcpp::DataFrame make_tbl(int n) {
+  Rcpp::DataFrame df = Rcpp::DataFrame::create(
+    Rcpp::Named("norm") = Rcpp::rnorm(n, 0, 1),
+    Rcpp::Named("beta") = Rcpp::rbeta(n, 1, 1)
+  );
+  df.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+  
+  return df;
+}
+```
+
+
+```r
+make_tbl(10)
+```
+
+```
+## # A tibble: 10 x 2
+##      norm  beta
+##     &lt;dbl&gt; &lt;dbl&gt;
+##  1  0.613 0.551
+##  2 -1.04  0.792
+##  3 -0.385 0.380
+##  4 -0.500 0.462
+##  5  1.61  0.473
+##  6  0.782 0.154
+##  7  0.964 0.697
+##  8 -1.23  0.450
+##  9  1.61  0.986
+## 10  0.299 0.179
+```
+
+---
+
+## Printing
+
+R has some weird behavior when it comes to printing text from C++, Rcpp has function that resolves this, `Rcout` 
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void n_hello(int n) {
+  for(int i=0; i!=n; ++i) {
+    Rcpp::Rcout &lt;&lt; i+1 &lt;&lt; ". Hello world!\n";
+  }
+}
+```
+
+
+```r
+n_hello(5)
+```
+
+```
+## 1. Hello world!
+## 2. Hello world!
+## 3. Hello world!
+## 4. Hello world!
+## 5. Hello world!
+```
+
+---
+
+## Printing `NA`s
+
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void print_na() {
+  Rcpp::Rcout &lt;&lt; "NA_INTEGER : " &lt;&lt; NA_INTEGER &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "NA_STRING  : " &lt;&lt; NA_STRING  &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "NA_LOGICAL : " &lt;&lt; NA_LOGICAL &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "NA_REAL    : " &lt;&lt; NA_REAL    &lt;&lt; "\n";
+}
+```
+
+
+```r
+print_na()
+```
+
+```
+## NA_INTEGER : -2147483648
+## NA_STRING  : 0x7fa860003e00
+## NA_LOGICAL : -2147483648
+## NA_REAL    : nan
+```
+
+---
+
+## SEXP Conversion
+
+Rcpp attributes provides a bunch of convenience tools that handle much of the conversion from R SEXP's to C++ / Rcpp types and back. Some times it is necessary to handle this directly.
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+SEXP as_wrap(SEXP input) {
+  Rcpp::NumericVector r = Rcpp::as&lt;Rcpp::NumericVector&gt;(input);
+  Rcpp::NumericVector rev_r = Rcpp::rev(r);
+  
+  return Rcpp::wrap(rev_r);
+}
+```
+
+
+```r
+as_wrap(1:10)
+```
+
+```
+##  [1] 10  9  8  7  6  5  4  3  2  1
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

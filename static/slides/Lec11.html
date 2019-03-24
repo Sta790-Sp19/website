@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Armadillo</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Colin Rundel" />
+    <meta name="date" content="2019-03-19" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Armadillo
+### Colin Rundel
+### 2019-03-19
+
+---
+
+exclude: true
+
+
+
+
+```r
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+---
+
+## Armadillo
+
+&lt;br/&gt;
+
+&lt;img src="imgs/arma.png" width="66%" style="display: block; margin: auto;" /&gt;
+
+&lt;br/&gt;
+
+* Developed by Dr. Conrad Sanderson and Dr Ryan Curtin 
+
+* Template based linear algebra library with high level syntax (like R or Matlab)
+
+* Heavy lifting is (mostly) handled by LAPACK (i.e. benefits from OpenBLAS)
+
+* Supports vectors, matrices, and cubes in dense or sparse format
+
+* Some builtin expression optimization via template meta-programming
+
+* Header only or shared library versions available
+
+---
+
+## Basic types
+
+Armadillo has 4 basic (dense) templated types:
+
+.center-column[
+```c++
+arma::Col&lt;type&gt;,
+arma::Row&lt;type&gt;, 
+arma::Mat&lt;type&gt;, 
+arma::Cube&lt;type&gt;
+```
+]
+
+These types can be specialized using one of the following data types:
+
+.center-column[
+```c++
+float, double,
+std::complex&lt;float&gt;, std::complex&lt;double&gt;, 
+short, int, long, 
+unsigned short, unsigned int, unsigned long
+```
+]
+
+---
+
+## typedef Shortcuts
+
+For convenience the following typedefs have been defined:
+
+* Vectors:
+
+.center-column[
+```c++
+arma::vec     = arma::colvec     =  arma::Col&lt;double&gt;
+arma::dvec    = arma::dcolvec    =  arma::Col&lt;double&gt;
+arma::fvec    = arma::fcolvec    =  arma::Col&lt;float&gt;
+arma::cx_vec  = arma::cx_colvec  =  arma::Col&lt;cx_double&gt;
+arma::cx_dvec = arma::cx_dcolvec =  arma::Col&lt;cx_double&gt;
+arma::cx_fvec = arma::cx_fcolvec =  arma::Col&lt;cx_float&gt;
+arma::uvec    = arma::ucolvec    =  arma::Col&lt;uword&gt;
+arma::ivec    = arma::icolvec    =  arma::Col&lt;sword&gt;
+```
+]
+
+* Matrices
+
+.center-column[
+```c++
+arma::mat     = arma::Mat&lt;double&gt;
+arma::dmat    = arma::Mat&lt;double&gt;
+arma::fmat    = arma::Mat&lt;float&gt;
+arma::cx_mat  = arma::Mat&lt;cx_double&gt;
+arma::cx_dmat = arma::Mat&lt;cx_double&gt;
+arma::cx_fmat = arma::Mat&lt;cx_float&gt;
+arma::umat    = arma::Mat&lt;uword&gt;
+arma::imat    = arma::Mat&lt;sword&gt;
+```
+]
+
+---
+
+## RcppArmadillo
+
+* Written and maintained by Dirk Eddelbuettel, Romain Francois, Doug Bates and Binxiang Ni
+
+* Provides the header only version of Armadillo along with additional wrappers
+  * Wrappers provide easy conversion between Rcpp types and Armadillo types
+  * Enables use of Rcpp attributes and related tools
+  
+&lt;br/&gt;  
+  
+* Requirements - include the following in your C++ code
+
+.center-column[
+```c++
+// [[Rcpp::depends(RcppArmadillo)]]
+
+#include &lt;RcppArmadillo.h&gt;
+```
+]
+
+---
+
+## Example Program
+
+
+```cpp
+// [[Rcpp::depends(RcppArmadillo)]]
+
+#include &lt;RcppArmadillo.h&gt;
+
+// [[Rcpp::export]]
+void test_randu() {
+  arma::mat A = arma::randu&lt;arma::mat&gt;(4,5);
+  Rcpp::Rcout &lt;&lt; A &lt;&lt; "\n";
+}
+```
+
+
+```r
+test_randu()
+```
+
+```
+##    0.2784   0.1081   0.1102   0.9330   0.0741
+##    0.0976   0.4692   0.4514   0.3798   0.4071
+##    0.2892   0.7233   0.9054   0.2519   0.6407
+##    0.2051   0.4325   0.4188   0.2002   0.7786
+```
+
+---
+
+## Class attributes
+
+| Attribute      | Description                                                               |
+|----------------|---------------------------------------------------------------------------|
+| `.n_rows`      | number of rows; present in Mat, Col, Row, Cube, field and SpMat           |
+| `.n_cols`      | number of columns; present in Mat, Col, Row, Cube, field and SpMat        |
+| `.n_elem`      | total number of elements; present in Mat, Col, Row, Cube, field and SpMat |
+| `.n_slices`    | number of slices; present in Cube and field                               |
+
+---
+
+
+```cpp
+// [[Rcpp::depends(RcppArmadillo)]]
+
+#include &lt;RcppArmadillo.h&gt;
+
+// [[Rcpp::export]]
+void test_attr(arma::mat m) {
+  Rcpp::Rcout &lt;&lt; "m.n_rows = " &lt;&lt; m.n_rows &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "m.n_cols = " &lt;&lt; m.n_cols &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "m.n_elem = " &lt;&lt; m.n_elem &lt;&lt; "\n";
+}
+```
+
+.columns[
+.col[
+
+```r
+test_attr(matrix(0, 3, 3))
+```
+
+```
+## m.n_rows = 3
+## m.n_cols = 3
+## m.n_elem = 9
+```
+
+```r
+test_attr(matrix(1, 4, 5))
+```
+
+```
+## m.n_rows = 4
+## m.n_cols = 5
+## m.n_elem = 20
+```
+]
+
+.col[
+
+```r
+test_attr(1:10)
+```
+
+```
+## Error in test_attr(1:10): Not a matrix.
+```
+
+```r
+test_attr(as.matrix(1:10))
+```
+
+```
+## m.n_rows = 10
+## m.n_cols = 1
+## m.n_elem = 10
+```
+]
+]
+
+---
+
+## Element access
+
+For an  `arma::vec v`,
+
+| Call        |  Description                                        |
+|-------------|-----------------------------------------------------|
+| `v(i)`      | Access the `i`-th element with bounds checking        |
+| `v.at(i)`   | Access the `i`-th element without bounds checking     |
+| `v[i]`      | Access the `i`-th element without bounds checking     |
+
+For an `arma::mat m`,
+
+| Call        | type    |  Description                                        |
+|-------------|---------|-----------------------------------------------------|
+| `m(i)`      | `mat`   | Access the `i`-th element, treating object as flat and in column major order |
+| `m(i,j)`    | `mat`   | Access the element in `i`-th row and `j`-th column with bounds checking      |
+| `m.at(i,j)` | `mat`   | Access the element in `i`-th row and `j`-th column without bounds checking   |
+
+---
+
+## Element access - Cubes
+
+For an `arma::cube c`,
+
+| Call        | type    |  Description                                        |
+|-------------|---------|-----------------------------------------------------|
+| `c(i)`      | `cube`  | Access the i-th element, treating object as flat and in column major order |
+| `c(i,j,k)`   | `cube` | Access the element in `i`-th row, `j`-th column, and `k`-th slice with bounds checking      |
+| `c.at(i,j,k)`| `cube` | Access the element in `i`-th row, `j`-th column, and `k`-th slice without bounds checking   |
+
+
+
+
+---
+
+## Data Organization
+
+&lt;img src="imgs/colmajor.jpg" width="66%" style="display: block; margin: auto;" /&gt;
+
+
+.footnote[[Image source](https://scc.ustc.edu.cn/zlsc/tc4600/intel/2017.0.098/mkl/common/mkl_userguide/GUID-ABCC618B-43C4-4DCD-ADA2-6F061B5116CD.html)
+]
+
+---
+
+
+```cpp
+// [[Rcpp::depends(RcppArmadillo)]]
+#include &lt;RcppArmadillo.h&gt;
+
+// [[Rcpp::export]]
+void test_order(arma::mat m) {
+  for(int i=0; i!=m.n_elem; ++i) {
+    Rcpp::Rcout &lt;&lt; m(i) &lt;&lt; " ";
+  }
+  Rcpp::Rcout &lt;&lt; "\n";
+}
+```
+
+
+```r
+m = matrix(1:9, 3, 3)
+c(m)
+```
+
+```
+## [1] 1 2 3 4 5 6 7 8 9
+```
+
+```r
+test_order(m)
+```
+
+```
+## 1 2 3 4 5 6 7 8 9
+```
+
+```r
+c(t(m))
+```
+
+```
+## [1] 1 4 7 2 5 8 3 6 9
+```
+
+```r
+test_order(t(m))
+```
+
+```
+## 1 4 7 2 5 8 3 6 9
+```
+
+
+---
+
+## `fastLm` example
+
+
+```cpp
+// [[Rcpp::depends(RcppArmadillo)]]
+#include &lt;RcppArmadillo.h&gt;
+
+// [[Rcpp::export]]
+Rcpp::List fastLm(const arma::mat&amp; X, const arma::colvec&amp; y) {
+    int n = X.n_rows, k = X.n_cols;
+        
+    arma::colvec coef = arma::solve(X, y);    // fit model y ~ X
+    arma::colvec res  = y - X*coef;           // residuals
+
+    // std.errors of coefficients
+    double s2 = std::inner_product(res.begin(), res.end(), res.begin(), 0.0)/(n - k);
+                                                        
+    arma::colvec std_err = arma::sqrt(s2 * arma::diagvec(arma::pinv(arma::trans(X)*X)));
+
+    return Rcpp::List::create(
+      Rcpp::Named("coefficients") = coef,
+      Rcpp::Named("stderr")       = std_err,
+      Rcpp::Named("df.residual")  = n - k
+    );
+}
+```
+
+---
+.smaller[
+
+```r
+library(dplyr)
+n=1e5
+d = tibble(
+  x1 = rnorm(n),
+  x2 = rnorm(n),
+  x3 = rnorm(n),
+  x4 = rnorm(n),
+  x5 = rnorm(n),
+) %&gt;%
+  mutate(
+    y = 3 + x1 - x2 + 2*x3 -2*x4 + 3*x5 - rnorm(n)
+  )
+
+res = bench::press(
+  size = c(100, 1000, 10000, 100000),
+  {
+    d = d[seq_len(size),]
+    X = model.matrix(y ~ ., d)
+    y = as.matrix(d$y)
+    
+    bench::mark(
+      lm(y~., data=d),
+      lm.fit(X,y),
+      .lm.fit(X,y),
+      fastLm(X,y),
+      check = FALSE
+    )
+  }
+)
+```
+
+```
+## Running with:
+##     size
+```
+
+```
+## 1    100
+```
+
+```
+## 2   1000
+```
+
+```
+## 3  10000
+```
+
+```
+## 4 100000
+```
+]
+
+---
+
+&lt;img src="Lec11_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class: middle
+
+# MVN Example
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

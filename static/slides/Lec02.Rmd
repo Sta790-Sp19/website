@@ -1,0 +1,433 @@
+---
+title: "Docker"
+author: "Colin Rundel"
+date: "2019-01-22"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+
+---
+exclude: true
+
+```{setup r, message=FALSE, warning=FALSE, include=FALSE}
+options(crayon.enabled = TRUE)
+```
+
+---
+
+## Installation - Ubuntu / Debian
+
+.ubuntu[
+```shell
+# Remove system packages
+sudo apt-get remove docker docker-engine docker.io containerd runc
+
+# Utililty Packages
+sudo apt-get install apt-transport-https ca-certificates curl \
+    gnupg2 software-properties-common
+
+# Add apt repo signing key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Add apt repo
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) stable"
+   
+# Install Docker
+sudo apt-get update
+sudo apt-get install docker-ce
+```
+]
+
+---
+
+## Installation - RHEL / Centos
+
+.rhel[
+```shell
+# Remove system packages
+sudo yum remove docker docker-client docker-client-latest docker-common \
+  docker-latest docker-latest-logrotate docker-logrotate docker-engine
+     
+# Utility Packages                
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+
+# Add yum repo
+sudo yum-config-manager \
+  --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+# Install Docker  
+sudo yum install docker-ce
+
+# Start Docker
+sudo systemctl start docker
+```
+]
+
+---
+
+## Troubleshooting - daemon
+
+.small[
+```shell
+$ sudo docker run hello-world
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+```
+]
+
+--
+
+This occurs whent he docker daemon is not running, this can be fixed by enabling the docker service / daemon, 
+
+.columns[
+
+.small[ 
+```shell
+# Make sure the daemon runs automatically in the future
+$ sudo systemctl enable docker
+
+# Start the daemon
+$ sudo systemctl start docker
+
+# Commands will differ if you are not using systemd
+```
+]
+
+.tiny[ 
+```shell
+$ sudo docker run hello-world
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+1b930d010525: Pull complete 
+Digest: sha256:2557e3c07ed1e38f26e389462d03ed943586f744621577a99efb77324b0fe535
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+```
+] 
+
+]
+
+---
+
+## Troubleshoot - permissions
+
+.smaller[
+```shell
+$ docker run hello-world
+
+docker: Got permission denied while trying to connect to the Docker daemon socket at 
+unix:///var/run/docker.sock: Post http://%2Fvar%2Frun%2Fdocker.sock/v1.39/containers/create: 
+dial unix /var/run/docker.sock: connect: permission denied.
+See 'docker run --help'.
+```
+]
+
+--
+
+You must either be root or be a member of the docker group to use docker. Currently, your vm may or may not have a docker group and your account is likely not a member. 
+
+If you are tired of typing sudo + your password there is an easy fix,
+
+
+--
+
+.smaller[
+```shell
+# Make sure the docker group exists
+$ sudo groupadd docker
+
+# Add your user to the docker group
+$ sudo usermod -aG docker $USER
+
+# Check memberships
+$ groups
+
+# If docker is not listed you should log off and log back in
+```
+]
+
+--
+
+.tiny[
+```shell
+$ docker run hello-world
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+```
+]
+
+---
+class: middle
+
+# Getting Started
+
+---
+background-image: url(imgs/Lec02/docker_sketch.png)
+background-position: center
+background-size: contain
+
+---
+
+## Getting images
+
+```shell
+$ docker pull ubuntu
+Using default tag: latest
+latest: Pulling from library/ubuntu
+84ed7d2f608f: Pull complete 
+be2bf1c4a48d: Pull complete 
+a5bdc6303093: Pull complete 
+e9055237d68d: Pull complete 
+Digest: sha256:868fd30a0e47b8d8ac485df174795b5e2fe8a6c8f056cc707b232d65b8a1ab68
+Status: Downloaded newer image for ubuntu:latest
+```
+
+--
+
+```shell
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+hello-world         latest              fce289e99eb9        2 weeks ago         1.84kB
+ubuntu              latest              1d9c17228a9e        3 weeks ago         86.7MB
+```
+
+---
+background-image: url(imgs/Lec02/dockerhub_ubuntu.png)
+background-position: center
+background-size: contain
+
+---
+
+## More versions
+
+```shell
+$ docker pull ubuntu:18.10
+18.10: Pulling from library/ubuntu
+d222a4da264e: Pull complete 
+fc8aef08d7f5: Pull complete 
+dc25173478e9: Pull complete 
+860140c5e05a: Pull complete 
+Digest: sha256:79c90229315b26cf37b577db41418874de1c22fb80c3827c80ea624dd993d905
+Status: Downloaded newer image for ubuntu:18.10
+
+$ docker pull ubuntu:18.04
+18.04: Pulling from library/ubuntu
+Digest: sha256:868fd30a0e47b8d8ac485df174795b5e2fe8a6c8f056cc707b232d65b8a1ab68
+Status: Downloaded newer image for ubuntu:18.04
+```
+
+```shell
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+hello-world         latest              fce289e99eb9        2 weeks ago         1.84kB
+ubuntu              18.10               d4452947e3fa        3 weeks ago         73.7MB
+ubuntu              18.04               1d9c17228a9e        3 weeks ago         86.7MB
+ubuntu              latest              1d9c17228a9e        3 weeks ago         86.7MB
+```
+
+---
+
+## Running something
+
+.smaller[ .columns[
+
+.col[
+```shell
+$ docker run --rm ubuntu cat /etc/os-release
+
+NAME="Ubuntu"
+VERSION="18.04.1 LTS (Bionic Beaver)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 18.04.1 LTS"
+VERSION_ID="18.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=bionic
+UBUNTU_CODENAME=bionic
+```
+]
+
+.col[
+```shell
+$ docker run --rm ubuntu:18.10 cat /etc/os-release
+
+NAME="Ubuntu"
+VERSION="18.10 (Cosmic Cuttlefish)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 18.10"
+VERSION_ID="18.10"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=cosmic
+UBUNTU_CODENAME=cosmic
+```
+]
+
+] ]
+
+--
+
+.tiny[ .columns[
+
+.col[
+```shell
+$ docker run --rm fedora cat /etc/os-release
+
+Unable to find image 'fedora:latest' locally
+latest: Pulling from library/fedora
+0be2a68855d7: Pull complete 
+Digest: sha256:7b921a4a008ee83c06d2cde9f21d3aa8de4635b0c4ec159f31caee83ad220b21
+Status: Downloaded newer image for fedora:latest
+NAME=Fedora
+VERSION="29 (Container Image)"
+ID=fedora
+VERSION_ID=29
+VERSION_CODENAME=""
+PLATFORM_ID="platform:f29"
+PRETTY_NAME="Fedora 29 (Container Image)"
+ANSI_COLOR="0;34"
+LOGO=fedora-logo-icon
+CPE_NAME="cpe:/o:fedoraproject:fedora:29"
+HOME_URL="https://fedoraproject.org/"
+DOCUMENTATION_URL="https://docs.fedoraproject.org/en-US/fedora/f29/system-administrators-guide/"
+SUPPORT_URL="https://fedoraproject.org/wiki/Communicating_and_getting_help"
+BUG_REPORT_URL="https://bugzilla.redhat.com/"
+REDHAT_BUGZILLA_PRODUCT="Fedora"
+REDHAT_BUGZILLA_PRODUCT_VERSION=29
+REDHAT_SUPPORT_PRODUCT="Fedora"
+REDHAT_SUPPORT_PRODUCT_VERSION=29
+PRIVACY_POLICY_URL="https://fedoraproject.org/wiki/Legal:PrivacyPolicy"
+VARIANT="Container Image"
+VARIANT_ID=container
+```
+]
+
+.col[
+```shell
+$ docker run --rm rhel cat /etc/os-release
+
+Unable to find image 'rhel:latest' locally
+docker: Error response from daemon: pull access denied for rhel, repository does not exist or may require 'docker login'.
+See 'docker run --help'.
+[cr173@vcm-8196 ~]$ docker run --rm centos cat /etc/os-release
+Unable to find image 'centos:latest' locally
+latest: Pulling from library/centos
+a02a4930cb5d: Pull complete 
+Digest: sha256:184e5f35598e333bfa7de10d8fb1cebb5ee4df5bc0f970bf2b1e7c7345136426
+Status: Downloaded newer image for centos:latest
+NAME="CentOS Linux"
+VERSION="7 (Core)"
+ID="centos"
+ID_LIKE="rhel fedora"
+VERSION_ID="7"
+PRETTY_NAME="CentOS Linux 7 (Core)"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:centos:centos:7"
+HOME_URL="https://www.centos.org/"
+BUG_REPORT_URL="https://bugs.centos.org/"
+
+CENTOS_MANTISBT_PROJECT="CentOS-7"
+CENTOS_MANTISBT_PROJECT_VERSION="7"
+REDHAT_SUPPORT_PRODUCT="centos"
+REDHAT_SUPPORT_PRODUCT_VERSION="7"
+```
+]
+
+] ]
+
+
+---
+class: middle
+
+# Interactive demo
+
+---
+
+## docker run
+
+```shell
+$ docker run [OPTIONS] IMAGE[:TAG|@DIGEST] [COMMAND] [ARG...]
+```
+
+### Important options:
+
+| Option         | Description                                                      |         
+|----------------|:-----------------------------------------------------------------|
+| `--name`       | Give your container a name                                       |
+| `--rm`         | Automatically remove the container when it exits                 |
+| `-i -t`        | Allow for interaction with container (STDIN & tty specifically)  |
+| `-p host:cont` | Publish a container's port                                       |
+| `-v host:cont` | Share filesystems                                                |
+| `-e "VAR=VAL"` | Define environmental variables                                   |
+
+.footnote[See https://docs.docker.com/engine/reference/run/ for more details]
+
+---
+
+## Other docker commands
+
+| command                             | Description                                  |         
+|-------------------------------------|:---------------------------------------------|
+| `docker pull NAME[:TAG]`            | Pull docker image (usually from DockerHub)   |
+| `docker images`                     | List docker images                           |
+| `docker rmi IMAGE`                  | Remove an image                              |
+| `docker container ls [--all]`       | List (all) docker containers                 |
+| `docker rm CONTAINER`               | Remove a container                           |
+| `docker stop CONTAINER`             | Stop a running container                     |
+| `docker start CONTAINER`            | Start a stopped container                    |
+| `docker attach CONTAINER`           | Attach to a running container                |
+| `docker commit CONTAINER REPO[:TAG]`| Create an image from a container             |
+| `docker rename CONTAINER NAME`      | Rename a container                           |
+

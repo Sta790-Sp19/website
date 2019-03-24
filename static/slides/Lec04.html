@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Singularity</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Colin Rundel" />
+    <meta name="date" content="2019-01-24" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Singularity
+### Colin Rundel
+### 2019-01-24
+
+---
+
+exclude: true
+
+
+
+---
+class: middle
+
+# DockerHub
+
+---
+background-image: url(imgs/Lec04/dockerhub.png)
+background-position: center
+background-size: contain
+
+---
+
+## Login
+
+```console
+$ docker login
+Login with your Docker ID to push and pull images from Docker Hub. 
+If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: rundel
+Password:
+Login Succeeded
+```
+
+---
+
+## Tagging
+
+```console
+$ docker pull ubuntu:18.10
+18.10: Pulling from library/ubuntu
+d99447cbf437: Pull complete
+2098e7a4835a: Pull complete
+fbffa09488c3: Pull complete
+dd1585ab64de: Pull complete
+Digest: sha256:cbf9640471a632684d0ce725312c56f18d9ff750e376a2a19613e242463b1b97
+Status: Downloaded newer image for ubuntu:18.10
+
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu              18.10               88fdd57278f5        5 days ago          73.7MB
+```
+
+--
+
+```console
+$ docker tag ubuntu:18.10 rundel/my_ubuntu
+$ docker tag ubuntu:18.10 rundel/my_ubuntu:18.10
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu              18.10               88fdd57278f5        5 days ago          73.7MB
+rundel/my_ubuntu    18.10               88fdd57278f5        5 days ago          73.7MB
+rundel/my_ubuntu    latest              88fdd57278f5        5 days ago          73.7MB
+```
+
+---
+
+## Pushing
+
+```console
+$ docker push rundel/my_ubuntu
+The push refers to repository [docker.io/rundel/my_ubuntu]
+31df8d000b89: Mounted from library/ubuntu
+b9c1204d5462: Mounted from library/ubuntu
+1a0c4e842904: Mounted from library/ubuntu
+e0240c49f339: Mounted from library/ubuntu
+18.10: digest: sha256:a206be19fa0ac314b4bd6d7217e76153191db3fa035a2a61b7694a2e2bc25673 size: 1150
+31df8d000b89: Layer already exists
+b9c1204d5462: Layer already exists
+1a0c4e842904: Layer already exists
+e0240c49f339: Layer already exists
+latest: digest: sha256:a206be19fa0ac314b4bd6d7217e76153191db3fa035a2a61b7694a2e2bc25673 size: 1150
+```
+
+---
+background-image: url(imgs/Lec04/dockerhub_repos.png)
+background-position: center
+background-size: contain
+
+---
+background-image: url(imgs/Lec04/dockerhub_repo_ex.png)
+background-position: center
+background-size: contain
+
+
+---
+class: middle
+
+# Singularity
+
+---
+
+## Install - RHEL / Fedora
+
+.tiny[
+.rhel[
+```console
+*$ sudo yum install singularity
+Resolving Dependencies
+--&gt; Running transaction check
+---&gt; Package singularity.x86_64 0:2.6.1-1.1.el7 will be installed
+--&gt; Processing Dependency: singularity-runtime = 2.6.1-1.1.el7 for package: singularity-2.6.1-1.1.el7.x86_64
+--&gt; Processing Dependency: squashfs-tools for package: singularity-2.6.1-1.1.el7.x86_64
+--&gt; Processing Dependency: libsingularity-runtime.so.1()(64bit) for package: singularity-2.6.1-1.1.el7.x86_64
+--&gt; Processing Dependency: libsingularity-image.so.1()(64bit) for package: singularity-2.6.1-1.1.el7.x86_64
+--&gt; Running transaction check
+---&gt; Package singularity-runtime.x86_64 0:2.6.1-1.1.el7 will be installed
+--&gt; Processing Dependency: /usr/bin/python3 for package: singularity-runtime-2.6.1-1.1.el7.x86_64
+--&gt; Processing Dependency: libarchive.so.13()(64bit) for package: singularity-runtime-2.6.1-1.1.el7.x86_64
+---&gt; Package squashfs-tools.x86_64 0:4.3-0.21.gitaae0aff4.el7 will be installed
+--&gt; Running transaction check
+---&gt; Package libarchive.x86_64 0:3.1.2-10.el7_2 will be installed
+---&gt; Package python34.x86_64 0:3.4.9-1.el7 will be installed
+--&gt; Processing Dependency: python34-libs(x86-64) = 3.4.9-1.el7 for package: python34-3.4.9-1.el7.x86_64
+--&gt; Processing Dependency: libpython3.4m.so.1.0()(64bit) for package: python34-3.4.9-1.el7.x86_64
+--&gt; Running transaction check
+---&gt; Package python34-libs.x86_64 0:3.4.9-1.el7 will be installed
+--&gt; Finished Dependency Resolution
+
+Dependencies Resolved
+
+============================================================================================================================================
+ Package                         Arch               Version                                Repository                                  Size
+============================================================================================================================================
+Installing:
+ singularity                     x86_64             `2.6.1-1.1.el7`                          patchmonkey-epel-el7                       169 k
+Installing for dependencies:
+ libarchive                      x86_64             3.1.2-10.el7_2                         patchmonkey-rhel-7-server-rpms             319 k
+ python34                        x86_64             3.4.9-1.el7                            patchmonkey-epel-el7                        51 k
+ python34-libs                   x86_64             3.4.9-1.el7                            patchmonkey-epel-el7                       8.3 M
+ singularity-runtime             x86_64             2.6.1-1.1.el7                          patchmonkey-epel-el7                       259 k
+ squashfs-tools                  x86_64             4.3-0.21.gitaae0aff4.el7               patchmonkey-rhel-7-server-rpms             101 k
+
+Transaction Summary
+============================================================================================================================================
+Install  1 Package (+5 Dependent packages)
+
+Total download size: 9.1 M
+Installed size: 32 M
+Is this ok [y/d/N]:y
+...
+
+$ singularity --version
+*2.6.1-dist
+```
+]
+ ]
+
+---
+
+## Install - Ubuntu / Debian
+
+.smaller[ .ubuntu[
+```console
+*$ sudo apt install singularity-container
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+The following additional packages will be installed:
+  squashfs-tools
+The following NEW packages will be installed:
+  singularity-container squashfs-tools
+0 upgraded, 2 newly installed, 0 to remove and 9 not upgraded.
+Need to get 418 kB of archives.
+After this operation, 2,561 kB of additional disk space will be used.
+Do you want to continue? [Y/n] y
+Get:1 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 squashfs-tools amd64 1:4.3-6ubuntu0.18.04.1 [110 kB]
+Get:2 http://archive.ubuntu.com/ubuntu bionic/universe amd64 singularity-container amd64 `2.4.2-4` [307 kB]
+Fetched 418 kB in 1s (473 kB/s)
+Selecting previously unselected package squashfs-tools.
+(Reading database ... 75617 files and directories currently installed.)
+Preparing to unpack .../squashfs-tools_1%3a4.3-6ubuntu0.18.04.1_amd64.deb ...
+Unpacking squashfs-tools (1:4.3-6ubuntu0.18.04.1) ...
+Selecting previously unselected package singularity-container.
+Preparing to unpack .../singularity-container_2.4.2-4_amd64.deb ...
+Unpacking singularity-container (2.4.2-4) ...
+Setting up squashfs-tools (1:4.3-6ubuntu0.18.04.1) ...
+Processing triggers for libc-bin (2.27-3ubuntu1) ...
+Processing triggers for man-db (2.8.3-2ubuntu0.1) ...
+Setting up singularity-container (2.4.2-4) ...
+Processing triggers for libc-bin (2.27-3ubuntu1) ...
+
+$ singularity --version
+*2.4.2-dist
+```
+] ]
+
+.footnote[ Make sure the versions match with whatever system you will be using eventually -  DCC and DSS use v2.6.1 which is not compatible with v3 images. ]
+
+---
+
+## Singularity - `pull`
+
+.tiny[
+
+```console
+*$ singularity pull docker://godlovedc/lolcow
+WARNING: pull for Docker Hub is not guaranteed to produce the
+WARNING: same image on repeated pull. Use Singularity Registry
+WARNING: (shub://) to pull exactly equivalent images.
+Docker image path: index.docker.io/godlovedc/lolcow:latest
+Cache folder set to /home/cr173/.singularity/docker
+[6/6] |===================================| 100.0%
+Importing: base Singularity environment
+Exploding layer: sha256:9fb6c798fa41e509b58bccc5c29654c3ff4648b608f5daa67c1aab6a7d02c118.tar.gz
+Exploding layer: sha256:3b61febd4aefe982e0cb9c696d415137384d1a01052b50a85aae46439e15e49a.tar.gz
+Exploding layer: sha256:9d99b9777eb02b8943c0e72d7a7baec5c782f8fd976825c9d3fb48b3101aacc2.tar.gz
+Exploding layer: sha256:d010c8cf75d7eb5d2504d5ffa0d19696e8d745a457dd8d28ec6dd41d3763617e.tar.gz
+Exploding layer: sha256:7fac07fb303e0589b9c23e6f49d5dc1ff9d6f3c8c88cabe768b430bdb47f03a9.tar.gz
+Exploding layer: sha256:8e860504ff1ee5dc7953672d128ce1e4aa4d8e3716eb39fe710b849c64b20945.tar.gz
+Exploding layer: sha256:736a219344fbca3099ce5bd1d2dbfea74b22b830bac0e85ecca812c2983390cd.tar.gz
+WARNING: Building container as an unprivileged user. If you run this container as root
+WARNING: it may be missing some functionality.
+Building Singularity image...
+Singularity container built: ./lolcow.simg
+Cleaning up...
+Done. Container is at: ./lolcow.simg
+
+*$ ls -lh
+total 216M
+-rwxr-xr-x. 1 cr173 cr173 88M Jan 28 15:29 lolcow.simg
+```
+]
+
+--
+
+.tiny[
+```console
+*$ rm lolcow.simg
+*$ sudo singularity pull docker://godlovedc/lolcow
+[sudo] password for cr173:
+WARNING: pull for Docker Hub is not guaranteed to produce the
+WARNING: same image on repeated pull. Use Singularity Registry
+WARNING: (shub://) to pull exactly equivalent images.
+Docker image path: index.docker.io/godlovedc/lolcow:latest
+Cache folder set to /root/.singularity/docker
+[6/6] |===================================| 100.0%
+Importing: base Singularity environment
+Exploding layer: sha256:9fb6c798fa41e509b58bccc5c29654c3ff4648b608f5daa67c1aab6a7d02c118.tar.gz
+Exploding layer: sha256:3b61febd4aefe982e0cb9c696d415137384d1a01052b50a85aae46439e15e49a.tar.gz
+Exploding layer: sha256:9d99b9777eb02b8943c0e72d7a7baec5c782f8fd976825c9d3fb48b3101aacc2.tar.gz
+Exploding layer: sha256:d010c8cf75d7eb5d2504d5ffa0d19696e8d745a457dd8d28ec6dd41d3763617e.tar.gz
+Exploding layer: sha256:7fac07fb303e0589b9c23e6f49d5dc1ff9d6f3c8c88cabe768b430bdb47f03a9.tar.gz
+Exploding layer: sha256:8e860504ff1ee5dc7953672d128ce1e4aa4d8e3716eb39fe710b849c64b20945.tar.gz
+Exploding layer: sha256:736a219344fbca3099ce5bd1d2dbfea74b22b830bac0e85ecca812c2983390cd.tar.gz
+Building Singularity image...
+Singularity container built: ./lolcow.simg
+Cleaning up...
+Done. Container is at: ./lolcow.simg
+```
+]
+
+---
+
+## Singularity images
+
+.smaller[
+```console
+$ ./lolcow.simg
+ ________________________________________
+/ Expect a letter from a friend who will \
+\ ask a favor of you.                    /
+ ----------------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+```
+]
+
+--
+
+.smaller[
+```console
+$ singularity run lolcow.simg
+ ___________________________________
+&lt; You will outgrow your usefulness. &gt;
+ -----------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+```
+]
+
+.smaller[
+
+```console
+$ scp lolcow.simg cr173@saxon.stat.duke.edu:~/
+cr173@saxon.stat.duke.edu's password:
+lolcow.simg                                                                       100%   88MB  29.3MB/s   00:03
+
+cr173@saxon [~]$ ./lolcow.simg
+ ______________________________________
+/ In the first place, God made idiots; \
+| this was for practice; then he made  |
+| school boards.                       |
+|                                      |
+\ -- Mark Twain                        /
+ --------------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+```
+]
+
+---
+
+## Docker + Singularity
+
+```console
+singularity shell docker://ubuntu:latest
+singularity run docker://ubuntu:latest
+singularity exec docker://ubuntu:latest echo "Hello Dinosaur!"
+
+singularity pull docker://ubuntu:latest
+singularity build ubuntu.img docker://ubuntu:latest
+```
+
+---
+
+## Rocker + Singularity
+
+.tiny[
+```console
+$ sudo singularity pull docker://rocker/r-ver:3.5.2
+WARNING: pull for Docker Hub is not guaranteed to produce the
+WARNING: same image on repeated pull. Use Singularity Registry
+WARNING: (shub://) to pull exactly equivalent images.
+Docker image path: index.docker.io/rocker/r-ver:3.5.2
+Cache folder set to /root/.singularity/docker
+Importing: base Singularity environment
+Exploding layer: sha256:ab1fc7e4bf9195e554669fafa47f69befe22053d7100f5f7002cb9254a36f37c.tar.gz
+Exploding layer: sha256:e33fe2c28b351a4ef51f2daef5574ea550b1801640d1558487c470d137999f1f.tar.gz
+Exploding layer: sha256:cb28bea49c48d8ceac137ebcc5e39b3d6d1278a07b228c7ba2d51a66b73b0804.tar.gz
+Building Singularity image...
+Singularity container built: ./r-ver-3.5.2.simg
+Cleaning up...
+Done. Container is at: ./r-ver-3.5.2.simg
+```
+]
+
+--
+
+.tiny[ .columns[
+
+```console
+$ R -e "1+1"
+
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+&gt; 1+1
+[1] 2
+&gt;
+&gt;
+```
+
+```console
+$ ./r-ver-3.5.2.simg -e "1+1"
+
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+&gt; 1+1
+[1] 2
+&gt;
+&gt;
+```
+]]
+
+---
+
+## Singularity Commands
+
+&lt;br/&gt;
+
+| Cmd     | Args                                       | Description                                   |
+|:--------|:-------------------------------------------|:----------------------------------------------|
+| `exec`  | `&lt;container&gt;.simg &lt;cmd&gt;`                   | Execute arbitrary command (`&lt;cmd&gt;`)           |
+| `run`   | `&lt;container&gt;.simg`                         | Execute cmd defined by "runscript"            |
+| `shell` | `&lt;container&gt;.simg`                         | Spawn an interactive shell                    |
+| `pull`  | `shub://&lt;repo&gt;[:&lt;tag&gt;]`                    | Retrieve image from Singularity Hub           |
+| `pull`  | `docker://&lt;repo&gt;[:&lt;tag&gt;]`                  | Retrieve image from Docker Hub                |
+| `build` | `&lt;container&gt;.simg shub://&lt;repo&gt;[:&lt;tag&gt;]`   | Build image from Singularity Hub              |
+| `build` | `&lt;container&gt;.simg docker://&lt;repo&gt;[:&lt;tag&gt;]` | Build image from Docker Hub                   |
+| `build` | `&lt;container&gt;.simg &lt;recipe&gt;`                | Build image from Recipe file                  |
+
+---
+
+## A note about bind paths / volumes
+
+When using docker none of the host system's directories / files are mounted by your docker container. It was necessary to use `-v` to define these mount points when using `docker run`.
+
+Singularity, by default, will mount
+
+.center[`$HOME`, `/tmp`, `/proc`, `/sys`, and `/dev` ]
+
+into your container (this can be changed by the system admin).
+
+Additional bind paths can be specified when using `run`, `exec`, and `shell` using the `--bind` or `-B` using the format `src[:dest[:opts]]`.
+
+For example,
+
+.center[
+`singularity run --bind /data r-ver-3.5.2.simg`
+]
+
+
+
+---
+
+## Using local images
+
+* Option 1 - Push to DockerHub
+
+.small[
+```console
+$ docker tag ubuntu:18.10 rundel/my_ubuntu
+
+$ docker push rundel/my_ubuntu
+
+$ sudo singularity pull docker://rundel/my_ubuntu
+[sudo] password for cr173:
+WARNING: pull for Docker Hub is not guaranteed to produce the
+WARNING: same image on repeated pull. Use Singularity Registry
+WARNING: (shub://) to pull exactly equivalent images.
+Docker image path: index.docker.io/rundel/my_ubuntu:latest
+Cache folder set to /root/.singularity/docker
+Importing: base Singularity environment
+Exploding layer: sha256:d99447cbf437c2effb31c859937c17df2fa3907b3b81728f3feb51b3f1ba13d9.tar.gz
+Exploding layer: sha256:2098e7a4835a5899119608afbc48931e5f1283eff68dbfe3c2a1db18f82a9538.tar.gz
+Exploding layer: sha256:fbffa09488c329de5d0bf50cabf62965a2db9b030788da7eaab17676ed317db3.tar.gz
+Exploding layer: sha256:dd1585ab64dee292fa9d6b5cf9a1ec42711beb7bf08511a26313abd7084f68a8.tar.gz
+Exploding layer: sha256:c6a9ef4b9995d615851d7786fbc2fe72f72321bee1a87d66919b881a0336525a.tar.gz
+Building Singularity image...
+Singularity container built: ./my_ubuntu.simg
+Cleaning up...
+Done. Container is at: ./my_ubuntu.simg
+
+$ ls -l
+total 380032
+-rwxr-xr-x. 1 root root  28422175 Jan 28 16:48 my_ubuntu.simg
+```
+]
+
+---
+
+* Option 2 - `docker2singularity`
+
+.small[
+```console
+$ docker run \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  `-v ~/:/output` \
+  --privileged -t --rm \
+  singularityware/docker2singularity \
+  `ubuntu:18.10`
+  
+Image Format: squashfs
+Docker Image: ubuntu:18.10
+
+Inspected Size: 74 MB
+
+(1/10) Creating a build sandbox...
+(2/10) Exporting filesystem...
+(3/10) Creating labels...
+(4/10) Adding run script...
+(5/10) Setting ENV variables...
+(6/10) Adding mount points...
+(7/10) Fixing permissions...
+(8/10) Stopping and removing the container...
+(9/10) Building squashfs container...
+Building image from sandbox: /tmp/ubuntu_18.10-2019-01-22-e2b4e04eb0f1.build
+Building Singularity image...
+Singularity container built: /tmp/ubuntu_18.10-2019-01-22-e2b4e04eb0f1.simg
+Cleaning up...
+(10/10) Moving the image to the output folder...
+     28,422,175 100%  144.78MB/s    0:00:00 (xfr#1, to-chk=0/1)
+Final Size: 60MB
+
+$ ls -l
+total 380032
+-rwxr-xr-x. 1 root root  28422175 Jan 28 16:41 ubuntu_18.10-2019-01-22-e2b4e04eb0f1.simg
+```
+]
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

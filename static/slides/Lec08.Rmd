@@ -1,0 +1,610 @@
+---
+title: "Intro to C++ and Rcpp"
+author: "Colin Rundel"
+date: "2019-02-26"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      countIncrementalSlides: false
+
+---
+exclude: true
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(Rcpp)
+```
+
+---
+
+## Types
+
+<br/>
+
+| Type        | Size (bits*)    | Description                            | Value Range
+|-------------|:---------------:|----------------------------------------|---------------------
+| `bool`      | *               | Logical value: `true` or `false`       | 
+| `char`      | 8               | Character (ASCII or UTF8)              | $\pm 127$
+| `short int` | 16              | Small integers                         | $\pm 3.27 \cdot 10^4$
+| `int`       | 32              | Medium integers                        | $\pm 2.14 \cdot 10^9$
+| `long int`  | 64              | Large integers                         | $\pm 9.22 \cdot 10^18$
+| `float`     | 32              | Small floating point value             | $\pm 10^{-38}$ to $\pm 10^{38}$
+| `double`    | 64              | Large floating point value             | $\pm 10^{-308}$ to $\pm 10^{308}$
+
+---
+
+## R types vs C++ types
+
+All of the basic types in R are vectors by default, in C++ the types we just discussed are all scalar. So it is necessary to have one more level of abstraction to translate between the two. Rcpp provides for this with several built in classes:
+
+| C++ type (scalar)      |  Rcpp Class              | R type (`typeof`) |
+|------------------------|--------------------------|-------------------|
+| `int`                  | `Rcpp::IntegerVector`    | `integer`         |
+| `double`               | `Rcpp::NumericVector`    | `numeric `        |
+| `bool`                 | `Rcpp::LogicalVector`    | `logical`         |
+| `std::string`          | `Rcpp::CharacterVector`  | `character`       |
+| `char`                 | `Rcpp::RawVector`        | `raw `            |
+| `std::complex<double>` | `Rcpp::ComplexVector`    | `complex `        |
+|                        | `Rcpp::List`             | `list`            |
+|                        | `Rcpp::Environment`      | `environment`     |
+|                        | `Rcpp::Function`         | `function`        |
+|                        | `Rcpp::XPtr`             | `externalptr`     |
+|                        | `Rcpp::S4`               | `S4`              |
+
+---
+
+## Trying things out
+
+Rcpp provides some helpful functions for trying out simple C++ expressions (`evalCpp`), functions (`cppFunction`), or cpp files (`sourceCpp`). It is even possible to include C++ code in RMarkdown documents using the [Rcpp engine](https://bookdown.org/yihui/rmarkdown/language-engines.html#rcpp).
+
+```{r}
+evalCpp("2+2")
+
+evalCpp("2+2") %>% typeof()
+
+evalCpp("2+2.") %>% typeof()
+```
+
+---
+
+## What's happening?
+
+.tiny[
+```{r}
+evalCpp("2+2", verbose = TRUE, rebuild = TRUE)
+```
+]
+
+---
+
+## C++ functions as R functions
+
+```{r, error=TRUE}
+cppFunction('
+double cpp_mean(double x, double y) {
+  return (x+y)/2;
+}
+')
+cpp_mean
+```
+
+--
+
+```{r}
+cpp_mean(1,2)
+```
+
+--
+
+```{r}
+cpp_mean(TRUE,2L)
+```
+
+--
+
+```{r error=TRUE}
+cpp_mean(1,"A")
+```
+
+--
+
+```{r error=TRUE}
+cpp_mean(c(1,2), c(1,2))
+```
+
+---
+
+## Using `sourceCpp`
+
+Generally this is the prefered way of working with C++ code and is well supported by RStudio.
+
+* Make sure to include the Rcpp header
+
+.example[
+```cpp
+#include <Rcpp.h>
+```
+]
+
+* If you hate typing `Rcpp::` everywhere, include the namespace
+
+.example[
+```cpp
+using namespace Rcpp;
+```
+]
+
+* Specify any desired plugins with 
+
+.example[
+```cpp
+// [[Rcpp::plugins(cpp11)]]
+```
+]
+
+* Prefix any functions that will be exported with R with 
+
+.example[
+```cpp
+// [[Rcpp::export]]
+```
+]
+
+* Testing code can be included using an R code block:
+
+.example[
+```cpp
+/*** R
+# This R code will be run automatically
+*/
+```
+]
+
+---
+
+## Example
+
+The following would be included in a file called `mean.cpp` or something similar.
+
+```{Rcpp}
+#include <Rcpp.h>
+
+//[[Rcpp::plugins(cpp11)]]
+
+//[[Rcpp::export]]
+double cpp_mean(double x, double y) {
+  return (x+y)/2;
+}
+
+/*** R
+x <- runif(1e5)
+bench::mark(
+  cpp_mean(1, 2),
+  mean(c(1, 2))
+)
+*/
+```
+
+---
+
+## `for` loops
+
+In C & C++ `for` loops are traditionally constructed as,
+
+```c
+for(initialization; end condition; increment) {
+  //...loop code ..
+}
+```
+
+--
+
+```{Rcpp}
+#include <Rcpp.h>
+//[[Rcpp::export]]
+double cpp_mean(Rcpp::NumericVector x) {
+  double sum = 0.0;
+  for(int i=0; i != x.size(); i++) {
+    sum += x[i];
+  }
+  return sum/x.size();
+}
+```
+
+```{r}
+cpp_mean(1:10)
+```
+
+---
+
+## Range based for loops (C++11)
+
+Since the adoption of the C++11 standard there is an alternative for loop syntax, 
+
+```{Rcpp}
+#include <Rcpp.h>
+//[[Rcpp::plugins(cpp11)]]
+
+//[[Rcpp::export]]
+double cpp11_mean(Rcpp::NumericVector x) {
+  double sum = 0.0;
+  for(auto v : x) {
+    sum += v;
+  }
+  
+  return sum/x.size();
+}
+```
+
+```{r}
+cpp11_mean(1:10)
+```
+
+--
+
+<br/>
+
+```{r}
+ls(envir = Rcpp:::.plugins)
+```
+
+---
+
+## Rcpp Sugar
+
+Rcpp also attempts to provide many of the base R functions within the C++ scope, generally there are refered to as Rcpp Sugar, more can be found [here](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-sugar.pdf) or by examining the Rcpp source.
+
+```{Rcpp}
+#include <Rcpp.h>
+//[[Rcpp::plugins(cpp11)]]
+
+//[[Rcpp::export]]
+double rcpp_mean(Rcpp::NumericVector x) {
+  return Rcpp::mean(x);
+}
+```
+
+```{r}
+rcpp_mean(1:10)
+```
+
+---
+
+## Edge cases
+
+.columns[
+.col[
+```{r}
+x = c(1:10,NA)
+typeof(x)
+
+mean(x)
+cpp_mean(x)
+cpp11_mean(x)
+rcpp_mean(x)
+```
+]
+
+.col[
+```{r}
+y = c(1:10,Inf)
+typeof(y)
+
+mean(y)
+cpp_mean(y)
+cpp11_mean(y)
+rcpp_mean(y)
+```
+]
+]
+
+---
+
+## Integer mean
+
+```{Rcpp}
+#include <Rcpp.h>
+//[[Rcpp::plugins(cpp11)]]
+
+//[[Rcpp::export]]
+double cpp_imean(Rcpp::IntegerVector x) {
+  double sum = 0.0;
+  for(int i=0; i != x.size(); i++) {
+    sum += x[i];
+  }
+  
+  return sum/x.size();
+}
+
+//[[Rcpp::export]]
+double cpp11_imean(Rcpp::IntegerVector x) {
+  double sum = 0.0;
+  for(auto v : x) {
+    sum += v;
+  }
+  
+  return sum/x.size();
+}
+
+//[[Rcpp::export]]
+double rcpp_imean(Rcpp::IntegerVector x) {
+  return Rcpp::mean(x);
+}
+```
+
+
+---
+
+## Integer edge cases
+
+.midi[
+.columns[
+.col[
+```{r}
+x = c(1:10,NA)
+typeof(x)
+
+mean(x)
+cpp_imean(x)
+cpp11_imean(x)
+rcpp_imean(x)
+```
+]
+
+.col[
+```{r}
+y = c(1:10,Inf)
+typeof(y)
+
+mean(y)
+cpp_imean(y)
+cpp11_imean(y)
+rcpp_imean(y)
+```
+]
+]
+]
+
+---
+
+## Missing values - C++ Scalars
+
+From Hadley's [Adv-R](http://adv-r.had.co.nz) [Rcpp chapter](http://adv-r.had.co.nz/Rcpp.html#rcpp-na),
+
+```{Rcpp}
+#include <Rcpp.h>
+
+// [[Rcpp::export]]
+Rcpp::List scalar_missings() {
+  int int_s          = NA_INTEGER;
+  Rcpp::String chr_s = NA_STRING;
+  bool lgl_s         = NA_LOGICAL;
+  double num_s       = NA_REAL;
+
+  return Rcpp::List::create(int_s, chr_s, lgl_s, num_s);
+}
+```
+
+```{r}
+scalar_missings()
+```
+
+---
+
+## Missing values - Rcpp Vectors
+
+```{Rcpp}
+#include <Rcpp.h>
+
+// [[Rcpp::export]]
+Rcpp::List vector_missing() {
+  return Rcpp::List::create(
+    Rcpp::NumericVector::create(NA_REAL),
+    Rcpp::IntegerVector::create(NA_INTEGER),
+    Rcpp::LogicalVector::create(NA_LOGICAL),
+    Rcpp::CharacterVector::create(NA_STRING)
+  );
+}
+```
+
+```{r}
+vector_missing()
+```
+
+
+
+
+---
+
+## Performance
+
+.midi[
+```{r}
+r_mean = function(x) {
+  sum = 0
+  for(v in x) {
+    sum = sum + v
+  }
+  sum / length(x)
+}
+```
+
+```{r}
+y = seq_len(1e6)
+bench::mark(
+  mean(y),
+  cpp_mean(y),
+  cpp11_mean(y),
+  rcpp_mean(y),
+  r_mean(y)
+) 
+```
+]
+
+---
+
+## `bench::press`
+
+```{r cache=TRUE}
+b = bench::press(
+  n = 10^c(3:7),
+  {
+    y = seq_len(n)
+    bench::mark(
+      mean(y),
+      cpp_mean(y),
+      cpp11_mean(y),
+      rcpp_mean(y),
+      r_mean(y)
+    )
+  }
+)
+```
+
+---
+class: middle
+
+```{r echo=FALSE, out.width="100%", dpi=150, fig.height=5}
+b %>%
+  unnest() %>%
+  group_by(n, expression) %>%
+  summarize(time = median(time)) %>%
+  ungroup() %>%
+  mutate(n = format(n, scientific = FALSE, trim=TRUE)) %>%
+  ggplot(aes(x = n, y = time, color = expression)) +
+    geom_point() +
+    facet_wrap(~n, scale="free", ncol=5) +
+    theme(legend.position="bottom") +
+    labs(x = "", color="")
+```
+
+---
+
+## Creating a `list`
+
+```{Rcpp}
+#include <Rcpp.h>
+
+// [[Rcpp::export]]
+Rcpp::List make_list(int n) {
+  return Rcpp::List::create(
+    Rcpp::Named("norm") = Rcpp::rnorm(n, 0, 1),
+    Rcpp::Named("beta") = Rcpp::rbeta(n, 1, 1),
+    Rcpp::IntegerVector::create(1,2,3,4,5, NA_INTEGER)
+  );
+}
+```
+
+```{r}
+make_list(10)
+```
+
+---
+
+## Creating a `data.frame`
+
+```{Rcpp}
+#include <Rcpp.h>
+
+// [[Rcpp::export]]
+Rcpp::DataFrame make_df(int n) {
+  return Rcpp::DataFrame::create(
+    Rcpp::Named("norm") = Rcpp::rnorm(n, 0, 1),
+    Rcpp::Named("beta") = Rcpp::rbeta(n, 1, 1)
+  );
+}
+```
+
+```{r}
+make_df(10)
+```
+
+---
+
+## Creating a `tbl`
+
+```{Rcpp}
+#include <Rcpp.h>
+
+// [[Rcpp::export]]
+Rcpp::DataFrame make_tbl(int n) {
+  Rcpp::DataFrame df = Rcpp::DataFrame::create(
+    Rcpp::Named("norm") = Rcpp::rnorm(n, 0, 1),
+    Rcpp::Named("beta") = Rcpp::rbeta(n, 1, 1)
+  );
+  df.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+  
+  return df;
+}
+```
+
+```{r}
+make_tbl(10)
+```
+
+---
+
+## Printing
+
+R has some weird behavior when it comes to printing text from C++, Rcpp has function that resolves this, `Rcout` 
+
+```{Rcpp}
+#include <Rcpp.h>
+
+// [[Rcpp::export]]
+void n_hello(int n) {
+  for(int i=0; i!=n; ++i) {
+    Rcpp::Rcout << i+1 << ". Hello world!\n";
+  }
+}
+```
+
+```{r}
+n_hello(5)
+```
+
+---
+
+## Printing `NA`s
+
+
+```{Rcpp}
+#include <Rcpp.h>
+
+// [[Rcpp::export]]
+void print_na() {
+  Rcpp::Rcout << "NA_INTEGER : " << NA_INTEGER << "\n";
+  Rcpp::Rcout << "NA_STRING  : " << NA_STRING  << "\n";
+  Rcpp::Rcout << "NA_LOGICAL : " << NA_LOGICAL << "\n";
+  Rcpp::Rcout << "NA_REAL    : " << NA_REAL    << "\n";
+}
+```
+
+```{r}
+print_na()
+```
+
+---
+
+## SEXP Conversion
+
+Rcpp attributes provides a bunch of convenience tools that handle much of the conversion from R SEXP's to C++ / Rcpp types and back. Some times it is necessary to handle this directly.
+
+```{Rcpp}
+#include <Rcpp.h>
+
+// [[Rcpp::export]]
+SEXP as_wrap(SEXP input) {
+  Rcpp::NumericVector r = Rcpp::as<Rcpp::NumericVector>(input);
+  Rcpp::NumericVector rev_r = Rcpp::rev(r);
+  
+  return Rcpp::wrap(rev_r);
+}
+```
+
+```{r}
+as_wrap(1:10)
+```

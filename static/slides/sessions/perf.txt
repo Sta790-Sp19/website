@@ -1,0 +1,94 @@
+  tau.sq IG hyperpriors shape=2.00000 and scale=0.10000
+  phi Unif hyperpriors a=0.05773 and b=0.05774
+-------------------------------------------------
+    Sampling
+-------------------------------------------------
+Batch: 100 of 300, 33.33%
+  parameter acceptance  tuning
+  sigma.sq  64.0    0.85960
+  tau.sq    40.0    0.36375
+  phi   82.0    0.85960
+-------------------------------------------------
+Batch: 200 of 300, 66.67%
+  parameter acceptance  tuning
+  sigma.sq  46.0    1.38917
+  tau.sq    18.0    0.34949
+  phi   60.0    2.33662
+-------------------------------------------------
+Batch: 300 of 300, 100.00%
+  parameter acceptance  tuning
+  sigma.sq  42.0    1.50487
+  tau.sq    34.0    0.32913
+  phi   40.0    4.00966
+-------------------------------------------------
+[ perf record: Woken up 5 times to write data ]
+[ perf record: Captured and wrote 2.388 MB perf.data (61537 samples) ]
+cr173@smith [example_prof]$ perf report
+cr173@smith [example_prof]$ sudo htop
+[sudo] password for cr173:
+cr173@smith [example_prof]$ exit
+logout
+Connection to smith.stat.duke.edu closed.
+rundel@tbBook [~]$ docker ps --all
+CONTAINER ID        IMAGE                  COMMAND             CREATED             STATUS              PORTS               NAMES
+423b31ec38a6        openblasr/geospatial   "bash"              2 hours ago         Up About an hour                        naughty_franklin
+rundel@tbBook [~]$ docker attach naughty_franklin
+[root@423b31ec38a6 /]# cd work/
+[root@423b31ec38a6 work]# ls
+1_lm.R  2_loess.R  3_spbayes.R  data.rds  example_prof.Rproj  perf.data  perf.data.old
+[root@423b31ec38a6 work]# rm perf.data*
+rm: remove regular file 'perf.data'? y
+rm: remove regular file 'perf.data.old'? y
+[root@423b31ec38a6 work]# perf record Rscript 3_spbayes.R
+Couldn't record kernel reference relocation symbol
+Symbol resolution may be skewed if relocation was used (e.g. kexec).
+Check /proc/kallsyms permission or run as root.
+----------------------------------------
+  General model description
+----------------------------------------
+Model fit with 110 observations.
+
+Number of covariates 1 (including intercept if specified).
+
+Using the gaussian spatial correlation model.
+
+Using adaptive MCMC.
+
+  Number of batches 300.
+  Batch length 50.
+  Target acceptance rate 0.43000.
+
+Priors and hyperpriors:
+  beta normal:
+  mu: 0.000
+  cov:
+  1000.000
+
+  sigma.sq IG hyperpriors shape=2.00000 and scale=2.00000
+  tau.sq IG hyperpriors shape=2.00000 and scale=0.10000
+  phi Unif hyperpriors a=0.05773 and b=0.05774
+-------------------------------------------------
+    Sampling
+-------------------------------------------------
+Batch: 100 of 300, 33.33%
+  parameter acceptance  tuning
+  sigma.sq  64.0    0.85960
+  tau.sq    50.0    0.34257
+  phi   88.0    0.85960
+-------------------------------------------------
+Batch: 200 of 300, 66.67%
+  parameter acceptance  tuning
+  sigma.sq  50.0    1.44586
+  tau.sq    36.0    0.36375
+  phi   64.0    2.33662
+-------------------------------------------------
+Batch: 300 of 300, 100.00%
+  parameter acceptance  tuning
+  sigma.sq  36.0    1.50487
+  tau.sq    42.0    0.34949
+  phi   52.0    4.00966
+-------------------------------------------------
+[ perf record: Woken up 7 times to write data ]
+[ perf record: Captured and wrote 2.137 MB perf.data (53819 samples) ]
+[root@423b31ec38a6 work]# perf report
+[root@423b31ec38a6 work]#

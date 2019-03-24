@@ -1,0 +1,716 @@
+Last login: Tue Feb 12 10:54:07 on ttys008
+rundel@tbBook [~]$ ssh cr173@dcc-slogin.oit.duke.edu
+################################################################################
+# You are about to access a Duke University computer network that is intended  #
+# for authorized users only. You should have no expectation of privacy in      #
+# your use of this network. Use of this network constitutes consent to         #
+# monitoring, retrieval, and disclosure of any information stored within the   #
+# network for any purpose including criminal prosecution.                      #
+################################################################################
+cr173@dcc-slogin.oit.duke.edu's password:
+Last login: Mon Feb 11 16:37:49 2019 from vpn-campus-152-3-71-65.ssl.vpn.duke.edu
+cr173@dcc-slogin-03  ~ $
+cr173@dcc-slogin-03  ~ $
+cr173@dcc-slogin-03  ~ $ sinfo show partition
+PARTITION              AVAIL  TIMELIMIT  NODES  STATE NODELIST
+scavenger                 up 90-00:00:0     47    mix dcc-biostat-[01-03],dcc-compeb-[01-12],dcc-dailabs-[01-02,04],dcc-dhvi-[02-03],dcc-econ-[02,17,21-22],dcc-gcb-[03,62-67],dcc-jirtle-[04-06,09],dcc-khauserlab-01,dcc-kumarlab-01,dcc-lefkowitz-01,dcc-mcglynnlab-01,dcc-nicolab-01,dcc-noor-[01-02],dcc-rodrigolab-01,dcc-savageresearch-01,dcc-shawlab-01,dcc-tmolab-02,dcc-wychem-01
+scavenger                 up 90-00:00:0     16  alloc dcc-compeb-[13-14],dcc-dhvi-01,dcc-econ-20,dcc-hashimilab-02,dcc-jirtle-[01-03],dcc-owzarteam-01,dcc-pfister-01,dcc-rausherlab-[01-02],dcc-symposium-01,dcc-tmolab-03,dcc-yoderlab-[01,03]
+scavenger                 up 90-00:00:0     59   idle dcc-aryalab-01,dcc-biodept-[01,03],dcc-bragg-[01-05],dcc-cagpm-[01-02],dcc-carin-[01-25],dcc-chg-[01-05],dcc-dailabs-[03,05],dcc-econ-[01,03,18-19,23],dcc-gcb-[01-02,04-09],dcc-jirtle-[07-08],dcc-savageresearch-02,dcc-schmidlab-01
+artai-gpu                 up    3:00:00      3    mix dcc-dsplus-gpu-[01-02,05]
+artai-gpu                 up    3:00:00      2  alloc dcc-dsplus-gpu-[04,06]
+artai-gpu                 up    3:00:00      7   idle dcc-dsplus-gpu-[03,07-12]
+aryalab                   up 90-00:00:0      1   idle dcc-aryalab-01
+biodept                   up 90-00:00:0      2   idle dcc-biodept-[01,03]
+biostat                   up 90-00:00:0      3    mix dcc-biostat-[01-03]
+brownlab-gpu              up 7-00:00:00      4   idle dcc-brownlab-gpu-[01-04]
+cagpm                     up 90-00:00:0      2   idle dcc-cagpm-[01-02]
+carin                     up 90-00:00:0     25   idle dcc-carin-[01-25]
+carin-gpu                 up 7-00:00:00      6    mix dcc-carin-gpu-[01,06-08,10-11]
+carin-gpu                 up 7-00:00:00      6   idle dcc-carin-gpu-[02-05,09,12]
+chg                       up 90-00:00:0      5   idle dcc-chg-[01-05]
+collinslab                up 90-00:00:0      4    mix dcc-collinslab-gpu-[01-04]
+common*                   up 90-00:00:0    156    mix dcc-core-[05,07-13,17-52,55-56,58-61,63-64,75,77,80,82,85-86,88-89,91,95,99,106-108,110-112,117-118,122-127,130-136,138-140,142-146,149-150,152,161,163-164,167,169-171,173-183,185-189,192-193,196-201,203-211,213-214,216-228,230-232,234,238-239]
+common*                   up 90-00:00:0     70  alloc dcc-core-[01-04,06,14-16,53-54,57,62,65,74,76,78-79,81,83-84,87,90,92-94,96-98,100,109,113-116,119-121,128-129,137,141,147-148,151,153-160,162,165-166,168,172,184,190-191,194-195,202,212,215,229,233,235-237]
+common-large              up 90-00:00:0      1    mix dcc-core-101
+compeb                    up 90-00:00:0     12    mix dcc-compeb-[01-12]
+compeb                    up 90-00:00:0      2  alloc dcc-compeb-[13-14]
+dailabs                   up 90-00:00:0      3    mix dcc-dailabs-[01-02,04]
+dailabs                   up 90-00:00:0      2   idle dcc-dailabs-[03,05]
+dbchem                    up 90-00:00:0      4    mix dcc-dbchem-[01-02,04,18]
+dbchem                    up 90-00:00:0     14  alloc dcc-dbchem-[03,05-17]
+dhvi                      up 90-00:00:0      2    mix dcc-dhvi-[02-03]
+dhvi                      up 90-00:00:0      1  alloc dcc-dhvi-01
+dhvi-gpu                  up 90-00:00:0     16  alloc dcc-dhvi-gpu-[01-08,10-16,18]
+dhvi-gpu                  up 90-00:00:0      4   idle dcc-dhvi-gpu-[09,17,19-20]
+strucbio-cryosparc-gpu    up 7-00:00:00      1   idle dcc-dhvi-strucbio-gpu-01
+dhvi-strucbio-gpu         up 7-00:00:00      4   idle dcc-dhvi-strucbio-gpu-[02-05]
+dolbowlab                 up 90-00:00:0      1   idle dcc-dolbowlab-01
+donglab                   up 90-00:00:0      3   idle dcc-donglab-[01-03]
+dsplus-gpu                up 7-00:00:00      3    mix dcc-dsplus-gpu-[01-02,05]
+dsplus-gpu                up 7-00:00:00      2  alloc dcc-dsplus-gpu-[04,06]
+dsplus-gpu                up 7-00:00:00      7   idle dcc-dsplus-gpu-[03,07-12]
+ece-gpu-high              up    6:00:00     16   idle dcc-ece-gpu-[05-20]
+ece-gpu-low               up    6:00:00     16   idle dcc-ece-gpu-[05-20]
+econ                      up 90-00:00:0      4    mix dcc-econ-[02,17,21-22]
+econ                      up 90-00:00:0      1  alloc dcc-econ-20
+econ                      up 90-00:00:0      5   idle dcc-econ-[01,03,18-19,23]
+gcb                       up 90-00:00:0      7    mix dcc-gcb-[03,62-67]
+gcb                       up 90-00:00:0      8   idle dcc-gcb-[01-02,04-09]
+gpu-common                up 2-00:00:00      2  alloc dcc-gpu-[31-32]
+hashimilab                up 90-00:00:0      1  alloc dcc-hashimilab-02
+herringlab                up 90-00:00:0      1   idle dcc-herringlab-01
+herringlab-low            up 90-00:00:0      1   idle dcc-herringlab-01
+hpc                       up 90-00:00:0      1  alloc dcc-symposium-01
+jirtle                    up 90-00:00:0      4    mix dcc-jirtle-[04-06,09]
+jirtle                    up 90-00:00:0      3  alloc dcc-jirtle-[01-03]
+jirtle                    up 90-00:00:0      2   idle dcc-jirtle-[07-08]
+khauserlab                up 90-00:00:0      1    mix dcc-khauserlab-01
+kumarlab                  up 90-00:00:0      1    mix dcc-kumarlab-01
+lefkowitz                 up 90-00:00:0      1    mix dcc-lefkowitz-01
+mcglynnlab                up 90-00:00:0      1    mix dcc-mcglynnlab-01
+nicolab                   up 90-00:00:0      1    mix dcc-nicolab-01
+noor                      up 90-00:00:0      2    mix dcc-noor-[01-02]
+nsoe-it                   up 90-00:00:0      1   idle dcc-nsoe-it-01
+owzarteam                 up 90-00:00:0      1  alloc dcc-owzarteam-01
+pcharbon                  up 90-00:00:0      2    mix dcc-pcharbon-[18,20]
+pcharbon                  up 90-00:00:0     18  alloc dcc-pcharbon-[01-17,19]
+pfisterlab                up 90-00:00:0      1  alloc dcc-pfister-01
+psklab                    up 90-00:00:0      1   idle dcc-psklab-01
+randleslab                up 90-00:00:0     21   idle dcc-randleslab-[01-21]
+randleslab-gpu            up 90-00:00:0      7    mix dcc-ib-a-rlab-gpu-ad29-[26,28,32,34],dcc-ib-a-rlab-gpu-ae29-[26,28,30]
+randleslab-gpu            up 90-00:00:0      3   idle dcc-ib-a-rlab-gpu-ad29-30,dcc-ib-a-rlab-gpu-ae29-[32,34]
+randleslab-high           up 90-00:00:0     54    mix dcc-ib-a-rlab-ad29-[01-18,20,23-25],dcc-ib-a-rlab-ae29-[01-25],dcc-ib-a-rlab-gpu-ad29-[26,28,32,34],dcc-ib-a-rlab-gpu-ae29-[26,28,30]
+randleslab-high           up 90-00:00:0      6   idle dcc-ib-a-rlab-ad29-[19,21-22],dcc-ib-a-rlab-gpu-ad29-30,dcc-ib-a-rlab-gpu-ae29-[32,34]
+randleslab-ib             up 90-00:00:0     54    mix dcc-ib-a-rlab-ad29-[01-18,20,23-25],dcc-ib-a-rlab-ae29-[01-25],dcc-ib-a-rlab-gpu-ad29-[26,28,32,34],dcc-ib-a-rlab-gpu-ae29-[26,28,30]
+randleslab-ib             up 90-00:00:0      6   idle dcc-ib-a-rlab-ad29-[19,21-22],dcc-ib-a-rlab-gpu-ad29-30,dcc-ib-a-rlab-gpu-ae29-[32,34]
+randleslab-ib-low         up 90-00:00:0     54    mix dcc-ib-a-rlab-ad29-[01-18,20,23-25],dcc-ib-a-rlab-ae29-[01-25],dcc-ib-a-rlab-gpu-ad29-[26,28,32,34],dcc-ib-a-rlab-gpu-ae29-[26,28,30]
+randleslab-ib-low         up 90-00:00:0      6   idle dcc-ib-a-rlab-ad29-[19,21-22],dcc-ib-a-rlab-gpu-ad29-30,dcc-ib-a-rlab-gpu-ae29-[32,34]
+rausherlab                up 90-00:00:0      2  alloc dcc-rausherlab-[01-02]
+rodrigolab                up 90-00:00:0      1    mix dcc-rodrigolab-01
+savageresearch            up 90-00:00:0      1    mix dcc-savageresearch-01
+savageresearch            up 90-00:00:0      1   idle dcc-savageresearch-02
+shawlab                   up 90-00:00:0      1    mix dcc-shawlab-01
+schmidlab                 up 90-00:00:0      1   idle dcc-schmidlab-01
+statdept                  up 90-00:00:0      1   idle dcc-statdept-01
+statdept-low              up 90-00:00:0      1   idle dcc-statdept-01
+tcfdg                     up 90-00:00:0      5   idle dcc-bragg-[01-05]
+tmolab                    up 90-00:00:0      1    mix dcc-tmolab-02
+tmolab                    up 90-00:00:0      1  alloc dcc-tmolab-03
+ultrasound                up 90-00:00:0     11   idle dcc-ultrasound-[01-11]
+ultrasound-gpu            up 90-00:00:0      4   idle dcc-ultrasound-gpu-[01-04]
+volfovskylab              up 90-00:00:0      1   idle dcc-volfovskylab-01
+volfovskylab-low          up 90-00:00:0      1   idle dcc-volfovskylab-01
+wmglab                    up 90-00:00:0      1   comp dcc-peterchev-09
+wmglab                    up 90-00:00:0     11    mix dcc-peterchev-01,dcc-wmglab-[02-03,17,24-26,29-30,36-37]
+wmglab                    up 90-00:00:0     14  alloc dcc-peterchev-[05-06],dcc-wmglab-[15-16,18-23,31-34]
+wmglab                    up 90-00:00:0     11   idle dcc-peterchev-[02-04,07-08],dcc-wmglab-[01,04-05,27-28,35]
+wychem                    up 90-00:00:0      1    mix dcc-wychem-01
+yoderlab                  up 90-00:00:0      2  alloc dcc-yoderlab-[01,03]
+cr173@dcc-slogin-03  ~ $
+cr173@dcc-slogin-03  ~ $ srun --partition=statdept --account=statdept --pty bash
+srun: job 46524561 queued and waiting for resources
+srun: job 46524561 has been allocated resources
+cr173@dcc-statdept-01  ~ $ exit
+exit
+cr173@dcc-slogin-03  ~ $ srun --partition=herringlab-low --account=statdept --pty bash
+srun: job 46524573 queued and waiting for resources
+srun: job 46524573 has been allocated resources
+cr173@dcc-herringlab-01  ~ $ top
+top - 11:56:16 up 139 days, 21:17,  0 users,  load average: 0.47, 0.42, 0.41
+Tasks: 623 total,   1 running, 622 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+%Node0 :  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+KiB Mem : 75938112+total, 74440166+free,  5180136 used,  9799324 buff/cache
+KiB Swap:  2097148 total,  2097148 free,        0 used. 75066035+avail Mem
+
+   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+ 79175 cr173     20   0  172836   2868   1624 R   0.8  0.0   0:00.05 top
+     1 root      20   0   54644   6860   4008 S   0.0  0.0  47:41.66 systemd
+     2 root      20   0       0      0      0 S   0.0  0.0   0:02.94 kthreadd
+     3 root      20   0       0      0      0 S   0.0  0.0   0:00.10 ksoftirqd/0
+     5 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/0:0H
+     7 root      rt   0       0      0      0 S   0.0  0.0   0:00.28 migration/0
+     8 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcu_bh
+     9 root      20   0       0      0      0 S   0.0  0.0  60:23.47 rcu_sched
+    10 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 lru-add-drain
+    11 root      rt   0       0      0      0 S   0.0  0.0   0:23.72 watchdog/0
+    12 root      rt   0       0      0      0 S   0.0  0.0   0:22.24 watchdog/1
+    13 root      rt   0       0      0      0 S   0.0  0.0   0:00.27 migration/1
+    14 root      20   0       0      0      0 S   0.0  0.0   0:00.08 ksoftirqd/1
+    16 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/1:0H
+    17 root      rt   0       0      0      0 S   0.0  0.0   0:21.64 watchdog/2
+    18 root      rt   0       0      0      0 S   0.0  0.0   0:00.26 migration/2
+    19 root      20   0       0      0      0 S   0.0  0.0   0:00.07 ksoftirqd/2
+    21 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/2:0H
+    22 root      rt   0       0      0      0 S   0.0  0.0   0:21.43 watchdog/3
+    23 root      rt   0       0      0      0 S   0.0  0.0   0:00.27 migration/3
+    24 root      20   0       0      0      0 S   0.0  0.0   0:00.09 ksoftirqd/3
+    26 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/3:0H
+    27 root      rt   0       0      0      0 S   0.0  0.0   0:22.23 watchdog/4
+    28 root      rt   0       0      0      0 S   0.0  0.0   0:00.29 migration/4
+    29 root      20   0       0      0      0 S   0.0  0.0   0:00.08 ksoftirqd/4
+    31 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/4:0H
+    32 root      rt   0       0      0      0 S   0.0  0.0   0:21.93 watchdog/5
+    33 root      rt   0       0      0      0 S   0.0  0.0   0:00.28 migration/5
+cr173@dcc-herringlab-01  ~ $ exit
+exit
+cr173@dcc-slogin-03  ~ $ srun --partition=herringlab-low --account=statdept --pty bash
+
+▽
+#!/usr/bin/bash
+cr173@dcc-slogin-03  ~ $ srun --partition=statdept --account=statdept -c60 --pty bash
+srun: job 46524593 queued and waiting for resources
+srun: job 46524593 has been allocated resources
+cr173@dcc-statdept-01  ~ $ exit
+exit
+cr173@dcc-slogin-03  ~ $ vim multi_part.sh
+cr173@dcc-slogin-03  ~ $ ls
+cov_mat.R  example_pm25    ex_pm25.simg          multi_part.sh  rocker_bayes.simg  tidyverse.simg
+cov.rds    example_sbatch  gerrymandering-xsede  parttest       r-ver.simg
+cr173@dcc-slogin-03  ~ $ mkdir tmp
+cr173@dcc-slogin-03  ~ $ mv multi_part.sh tmp/
+cr173@dcc-slogin-03  ~ $ l;s
+-bash: l: command not found
+-bash: s: command not found
+cr173@dcc-slogin-03  ~ $ cd tmp/
+cr173@dcc-slogin-03  ~/tmp $ ls
+multi_part.sh
+cr173@dcc-slogin-03  ~/tmp $ sbatch multi_part.sh
+Submitted batch job 46525215
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[3-10] statdept- multi_pa    cr173 PD       0:00      1 (None)
+        46525215_1 herringla multi_pa    cr173  R       0:02      1 dcc-herringlab-01
+        46525215_2 herringla multi_pa    cr173  R       0:02      1 dcc-herringlab-01
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[3-10] statdept- multi_pa    cr173 PD       0:00      1 (None)
+        46525215_1 herringla multi_pa    cr173  R       0:05      1 dcc-herringlab-01
+        46525215_2 herringla multi_pa    cr173  R       0:05      1 dcc-herringlab-01
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[3-10] statdept- multi_pa    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[3-10] statdept- multi_pa    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[3-10] statdept- multi_pa    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[5-10] statdept- multi_pa    cr173 PD       0:00      1 (None)
+        46525215_3 herringla multi_pa    cr173  R       0:02      1 dcc-herringlab-01
+        46525215_4 herringla multi_pa    cr173  R       0:02      1 dcc-herringlab-01
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[5-10] statdept- multi_pa    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[5-10] statdept- multi_pa    cr173 PD       0:00      1 (None)
+
+▽
+#!/usr/bin/bash
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[7-10] statdept- multi_pa    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[7-10] statdept- multi_pa    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-03  ~/tmp $ ls
+multi_part.sh  slurm-46525215_1.out  slurm-46525215_2.out  slurm-46525215_3.out  slurm-46525215_4.out  slurm-46525215_5.out  slurm-46525215_6.out
+cr173@dcc-slogin-03  ~/tmp $ grep "" *.out
+slurm-46525215_1.out:dcc-herringlab-01
+slurm-46525215_2.out:dcc-herringlab-01
+slurm-46525215_3.out:dcc-herringlab-01
+slurm-46525215_4.out:dcc-herringlab-01
+slurm-46525215_5.out:dcc-herringlab-01
+slurm-46525215_6.out:dcc-herringlab-01
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[9-10] statdept- multi_pa    cr173 PD       0:00      1 (Resources)
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[9-10] statdept- multi_pa    cr173 PD       0:00      1 (Resources)
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[9-10] statdept- multi_pa    cr173 PD       0:00      1 (Resources)
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[9-10] statdept- multi_pa    cr173 PD       0:00      1 (Resources)
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[9-10] statdept- multi_pa    cr173 PD       0:00      1 (Resources)
+cr173@dcc-slogin-03  ~/tmp $ ls
+multi_part.sh         slurm-46525215_2.out  slurm-46525215_4.out  slurm-46525215_6.out  slurm-46525215_8.out
+slurm-46525215_1.out  slurm-46525215_3.out  slurm-46525215_5.out  slurm-46525215_7.out
+cr173@dcc-slogin-03  ~/tmp $ cp multi_part.sh small_multi_part.sh
+cr173@dcc-slogin-03  ~/tmp $ vim small_multi_part.sh
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   46525215_[9-10] statdept- multi_pa    cr173 PD       0:00      1 (Resources)
+cr173@dcc-slogin-03  ~/tmp $ sbatch small_multi_part.sh
+Submitted batch job 46525236
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+  46525236_[1-200] statdept- small_mu    cr173 PD       0:00      1 (Resources)
+cr173@dcc-slogin-03  ~/tmp $ grep "" *.out
+slurm-46525215_1.out:dcc-herringlab-01
+slurm-46525215_2.out:dcc-herringlab-01
+slurm-46525215_3.out:dcc-herringlab-01
+slurm-46525215_4.out:dcc-herringlab-01
+slurm-46525215_5.out:dcc-herringlab-01
+slurm-46525215_6.out:dcc-herringlab-01
+slurm-46525215_7.out:dcc-volfovskylab-01
+slurm-46525215_8.out:dcc-volfovskylab-01
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+ 46525236_[25-200] statdept- small_mu    cr173 PD       0:00      1 (Resources)
+cr173@dcc-slogin-03  ~/tmp $ ls
+multi_part.sh         slurm-46525215_2.out  slurm-46525215_4.out  slurm-46525215_6.out  slurm-46525215_8.out
+slurm-46525215_1.out  slurm-46525215_3.out  slurm-46525215_5.out  slurm-46525215_7.out  small_multi_part.sh
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+       46525236_29 herringla small_mu    cr173 CG       0:04      1 dcc-herringlab-01
+ 46525236_[49-200] statdept- small_mu    cr173 PD       0:00      1 (Resources)
+       46525236_43 herringla small_mu    cr173  R       0:03      1 dcc-herringlab-01
+       46525236_44 herringla small_mu    cr173  R       0:03      1 dcc-herringlab-01
+       46525236_45 herringla small_mu    cr173  R       0:03      1 dcc-herringlab-01
+       46525236_46 herringla small_mu    cr173  R       0:03      1 dcc-herringlab-01
+       46525236_47 herringla small_mu    cr173  R       0:03      1 dcc-herringlab-01
+       46525236_48 herringla small_mu    cr173  R       0:03      1 dcc-herringlab-01
+       46525236_28 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+       46525236_30 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+       46525236_33 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+       46525236_34 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+       46525236_35 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+       46525236_36 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+       46525236_37 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+       46525236_38 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+       46525236_39 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+       46525236_40 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+       46525236_41 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+       46525236_42 herringla small_mu    cr173  R       0:04      1 dcc-herringlab-01
+cr173@dcc-slogin-03  ~/tmp $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+ 46525236_[73-200] statdept- small_mu    cr173 PD       0:00      1 (Resources)
+cr173@dcc-slogin-03  ~/tmp $ ls
+multi_part.sh          slurm-46525236_13.out  slurm-46525236_26.out  slurm-46525236_39.out  slurm-46525236_51.out  slurm-46525236_64.out
+slurm-46525215_10.out  slurm-46525236_14.out  slurm-46525236_27.out  slurm-46525236_3.out   slurm-46525236_52.out  slurm-46525236_65.out
+slurm-46525215_1.out   slurm-46525236_15.out  slurm-46525236_28.out  slurm-46525236_40.out  slurm-46525236_53.out  slurm-46525236_66.out
+slurm-46525215_2.out   slurm-46525236_16.out  slurm-46525236_29.out  slurm-46525236_41.out  slurm-46525236_54.out  slurm-46525236_67.out
+slurm-46525215_3.out   slurm-46525236_17.out  slurm-46525236_2.out   slurm-46525236_42.out  slurm-46525236_55.out  slurm-46525236_68.out
+slurm-46525215_4.out   slurm-46525236_18.out  slurm-46525236_30.out  slurm-46525236_43.out  slurm-46525236_56.out  slurm-46525236_69.out
+slurm-46525215_5.out   slurm-46525236_19.out  slurm-46525236_31.out  slurm-46525236_44.out  slurm-46525236_57.out  slurm-46525236_6.out
+slurm-46525215_6.out   slurm-46525236_1.out   slurm-46525236_32.out  slurm-46525236_45.out  slurm-46525236_58.out  slurm-46525236_70.out
+slurm-46525215_7.out   slurm-46525236_20.out  slurm-46525236_33.out  slurm-46525236_46.out  slurm-46525236_59.out  slurm-46525236_71.out
+slurm-46525215_8.out   slurm-46525236_21.out  slurm-46525236_34.out  slurm-46525236_47.out  slurm-46525236_5.out   slurm-46525236_72.out
+slurm-46525215_9.out   slurm-46525236_22.out  slurm-46525236_35.out  slurm-46525236_48.out  slurm-46525236_60.out  slurm-46525236_7.out
+slurm-46525236_10.out  slurm-46525236_23.out  slurm-46525236_36.out  slurm-46525236_49.out  slurm-46525236_61.out  slurm-46525236_8.out
+slurm-46525236_11.out  slurm-46525236_24.out  slurm-46525236_37.out  slurm-46525236_4.out   slurm-46525236_62.out  slurm-46525236_9.out
+slurm-46525236_12.out  slurm-46525236_25.out  slurm-46525236_38.out  slurm-46525236_50.out  slurm-46525236_63.out  small_multi_part.sh
+cr173@dcc-slogin-03  ~/tmp $ grep "" *.out
+slurm-46525215_10.out:dcc-statdept-01
+slurm-46525215_1.out:dcc-herringlab-01
+slurm-46525215_2.out:dcc-herringlab-01
+slurm-46525215_3.out:dcc-herringlab-01
+slurm-46525215_4.out:dcc-herringlab-01
+slurm-46525215_5.out:dcc-herringlab-01
+slurm-46525215_6.out:dcc-herringlab-01
+slurm-46525215_7.out:dcc-volfovskylab-01
+slurm-46525215_8.out:dcc-volfovskylab-01
+slurm-46525215_9.out:dcc-statdept-01
+slurm-46525236_10.out:dcc-herringlab-01
+slurm-46525236_11.out:dcc-herringlab-01
+slurm-46525236_12.out:dcc-herringlab-01
+slurm-46525236_13.out:dcc-herringlab-01
+slurm-46525236_14.out:dcc-herringlab-01
+slurm-46525236_15.out:dcc-herringlab-01
+slurm-46525236_16.out:dcc-herringlab-01
+slurm-46525236_17.out:dcc-herringlab-01
+slurm-46525236_18.out:dcc-herringlab-01
+slurm-46525236_19.out:dcc-herringlab-01
+slurm-46525236_1.out:dcc-herringlab-01
+slurm-46525236_20.out:dcc-herringlab-01
+slurm-46525236_21.out:dcc-herringlab-01
+slurm-46525236_22.out:dcc-herringlab-01
+slurm-46525236_23.out:dcc-herringlab-01
+slurm-46525236_24.out:dcc-herringlab-01
+slurm-46525236_25.out:dcc-herringlab-01
+slurm-46525236_26.out:dcc-herringlab-01
+slurm-46525236_27.out:dcc-herringlab-01
+slurm-46525236_28.out:dcc-herringlab-01
+slurm-46525236_29.out:dcc-herringlab-01
+slurm-46525236_2.out:dcc-herringlab-01
+slurm-46525236_30.out:dcc-herringlab-01
+slurm-46525236_31.out:dcc-herringlab-01
+slurm-46525236_32.out:dcc-herringlab-01
+slurm-46525236_33.out:dcc-herringlab-01
+slurm-46525236_34.out:dcc-herringlab-01
+slurm-46525236_35.out:dcc-herringlab-01
+slurm-46525236_36.out:dcc-herringlab-01
+slurm-46525236_37.out:dcc-herringlab-01
+slurm-46525236_38.out:dcc-herringlab-01
+slurm-46525236_39.out:dcc-herringlab-01
+slurm-46525236_3.out:dcc-herringlab-01
+slurm-46525236_40.out:dcc-herringlab-01
+slurm-46525236_41.out:dcc-herringlab-01
+slurm-46525236_42.out:dcc-herringlab-01
+slurm-46525236_43.out:dcc-herringlab-01
+slurm-46525236_44.out:dcc-herringlab-01
+slurm-46525236_45.out:dcc-herringlab-01
+slurm-46525236_46.out:dcc-herringlab-01
+slurm-46525236_47.out:dcc-herringlab-01
+slurm-46525236_48.out:dcc-herringlab-01
+slurm-46525236_49.out:dcc-herringlab-01
+slurm-46525236_4.out:dcc-herringlab-01
+slurm-46525236_50.out:dcc-herringlab-01
+slurm-46525236_51.out:dcc-herringlab-01
+slurm-46525236_52.out:dcc-herringlab-01
+slurm-46525236_53.out:dcc-herringlab-01
+slurm-46525236_54.out:dcc-herringlab-01
+slurm-46525236_55.out:dcc-herringlab-01
+slurm-46525236_56.out:dcc-herringlab-01
+slurm-46525236_57.out:dcc-herringlab-01
+slurm-46525236_58.out:dcc-herringlab-01
+slurm-46525236_59.out:dcc-herringlab-01
+slurm-46525236_5.out:dcc-herringlab-01
+slurm-46525236_60.out:dcc-herringlab-01
+slurm-46525236_61.out:dcc-herringlab-01
+slurm-46525236_62.out:dcc-herringlab-01
+slurm-46525236_63.out:dcc-herringlab-01
+slurm-46525236_64.out:dcc-herringlab-01
+slurm-46525236_65.out:dcc-herringlab-01
+slurm-46525236_66.out:dcc-herringlab-01
+slurm-46525236_67.out:dcc-herringlab-01
+slurm-46525236_68.out:dcc-herringlab-01
+slurm-46525236_69.out:dcc-herringlab-01
+slurm-46525236_6.out:dcc-herringlab-01
+slurm-46525236_70.out:dcc-herringlab-01
+slurm-46525236_71.out:dcc-herringlab-01
+slurm-46525236_72.out:dcc-herringlab-01
+slurm-46525236_7.out:dcc-herringlab-01
+slurm-46525236_8.out:dcc-herringlab-01
+slurm-46525236_9.out:dcc-herringlab-01
+cr173@dcc-slogin-03  ~/tmp $
+cr173@dcc-slogin-03  ~/tmp $ cd /opt/apps/
+cr173@dcc-slogin-03  /opt/apps $ ls
+admin             cloog-0.18.1            images        matlabR2015a                         openmm         R-3.0.3         slurm
+amber11           cuda-5.5                include       matlabR2016a                         openmm5.2      rhel6           staging
+amber12           cufflinks-2.1.1         intel         mcl                                  pb_mpi1.5a     rhel7           stata
+anaconda3         dev                     intelcsl      modulefiles                          perl-5.16.2    rldev           stata13
+bayenv2           doc                     isl           mpc-0.9                              perl-5.20.1    sas             th224
+beagle            drv6                    jellyfish     mpfr-3.0.0                           Python-2.7.1   sbgrid          tophat
+BEASTv1.7.5       EMBOSS-6.6.0            lib           NAMD_2.10_Source                     Python-2.7.10  sbgrid-linux64  tophat-2.0.10
+BEASTv1.8.0       etc                     lib64         novocraft                            Python-2.7.3   sbin            tophat-bowtie
+bedtools2-2.19.1  gcc                     libexec       nwchem                               Python-2.7.5   sdg             trinityrnaseq-2.1.1
+bin               GenomeAnalysisTK-2.3-9  log4cpp       nwchem-6.3r2                         Python-3.3.2   sge_data
+boost_1_55_0      gmp-4.3.2               mathematica8  nwchem-6.3.revision2-src.2013-10-17  Python-3.3.3   share
+bwa-0.7.9a        icm-3.8-0               MATLAB        nwchem-src-2013-02-06                Queue-2.3-9    signalp-4.1
+chem              ima2                    matlabR2014a  nwchem-trunk                         R-2.15.2       sing
+cr173@dcc-slogin-03  /opt/apps $ module list
+No Modulefiles Currently Loaded.
+cr173@dcc-slogin-03  /opt/apps $ module show
+
+cr173@dcc-slogin-03  /opt/apps $ cd ~/example_pm25/
+cr173@dcc-slogin-03  ~/example_pm25 $ git pull
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (1/1), done.
+remote: Total 3 (delta 2), reused 3 (delta 2), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From https://github.com/Sta790-Sp19/example_pm25
+   af5771b..ac0acd6  parallel   -> origin/parallel
+Updating af5771b..ac0acd6
+Fast-forward
+ 1_matrix_mult.R | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+cr173@dcc-slogin-03  ~/example_pm25 $
+cr173@dcc-slogin-03  ~/example_pm25 $ ls
+1_matrix_mult.R  2_matrix_chol.R  3_spbayes.R  data  gp_pm25.Rproj
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -c4 singularity exec ../r-ver.simg Rscript 1_matrix_mult.R 1 1
+srun: job 46528435 queued and waiting for resources
+srun: job 46528435 has been allocated resources
+[[1]]
+   user  system elapsed
+ 55.444   8.162  16.057
+
+Run time: 16.09171s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -c4 singularity exec ../r-ver.simg Rscript 1_matrix_mult.R 1 1
+srun: job 46528443 queued and waiting for resources
+srun: job 46528443 has been allocated resources
+[[1]]
+   user  system elapsed
+ 54.122   6.936  15.416
+
+Run time: 15.45001s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n2 -c4 singularity exec ../r-ver.simg Rscript 1_matrix_mult.R 1 1
+srun: job 46528444 queued and waiting for resources
+srun: job 46528444 has been allocated resources
+[[1]]
+   user  system elapsed
+ 61.399  40.480  23.674
+
+Run time: 23.71334s
+[[1]]
+   user  system elapsed
+ 59.794  28.852  23.955
+
+Run time: 23.99171s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n4 -c4 singularity exec ../r-ver.simg Rscript 1_matrix_mult.R 1 1
+srun: job 46528913 queued and waiting for resources
+srun: job 46528913 has been allocated resources
+[[1]]
+   user  system elapsed
+ 70.205  36.423  25.881
+
+Run time: 25.92368s
+[[1]]
+   user  system elapsed
+ 66.367  30.787  25.973
+
+Run time: 26.01245s
+[[1]]
+   user  system elapsed
+ 69.295  32.250  25.964
+
+Run time: 26.00382s
+[[1]]
+   user  system elapsed
+ 72.462  36.299  26.090
+
+Run time: 26.1311s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n1 -c4 singularity exec ../r-ver.simg Rscript 1_matrix_mult.R 1 1
+srun: job 46528966 queued and waiting for resources
+srun: job 46528966 has been allocated resources
+[[1]]
+   user  system elapsed
+ 60.335  12.179  18.281
+
+Run time: 18.31571s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n1 -c8 singularity exec ../r-ver.simg Rscript 1_matrix_mult.R 2 2
+srun: job 46529019 queued and waiting for resources
+srun: job 46529019 has been allocated resources
+[[1]]
+   user  system elapsed
+ 57.202  22.536  22.792
+
+[[2]]
+   user  system elapsed
+ 60.254  41.032  22.767
+
+Run time: 22.85356s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n1 -c8 singularity exec ../r-ver.simg Rscript 1_matrix_mult.R 2 2
+srun: job 46529055 queued and waiting for resources
+srun: job 46529055 has been allocated resources
+[[1]]
+   user  system elapsed
+ 57.397  20.834  18.305
+
+[[2]]
+   user  system elapsed
+ 55.666  11.224  16.636
+
+Run time: 18.37081s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n2 -c4 singularity exec ../r-ver.simg Rscript 1_matrix_mult.R 1 1
+srun: job 46529076 queued and waiting for resources
+srun: job 46529076 has been allocated resources
+[[1]]
+   user  system elapsed
+ 58.253  25.514  19.650
+
+Run time: 19.69007s
+[[1]]
+   user  system elapsed
+ 57.277  19.418  20.191
+
+Run time: 20.22706s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -N2 -c4 singularity exec ../r-ver.simg Rscript 1_matrix_mult.R 1 1
+srun: Requested partition configuration not available now
+srun: job 46529081 queued and waiting for resources
+^Csrun: Job allocation 46529081 has been revoked
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=common -N2 -c4 singularity exec ../r-ver.simg Rscript 1_matrix_mult.R 1 1
+srun: job 46529133 queued and waiting for resources
+srun: job 46529133 has been allocated resources
+[[1]]
+   user  system elapsed
+ 57.790  16.816  18.818
+
+Run time: 18.94174s
+[[1]]
+   user  system elapsed
+273.878 159.388 108.800
+
+Run time: 109.2411s
+cr173@dcc-slogin-03  ~/example_pm25 $
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=common -n1 -c4 singularity exec ../r-ver.simg Rscript 2_matrix_chol.R 1 1
+srun: job 46531056 queued and waiting for resources
+^Csrun: Job allocation 46531056 has been revoked
+srun: Force Terminated job 46531056
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n1 -c4 singularity exec ../r-ver.simg Rscript 2_matrix_chol.R 1 1
+srun: job 46531094 queued and waiting for resources
+srun: job 46531094 has been allocated resources
+Error in parallel::mclapply(seq_len(niter), function(x) { :
+  object 'niter' not found
+Calls: print -> <Anonymous>
+Execution halted
+srun: error: dcc-statdept-01: task 0: Exited with exit code 1
+cr173@dcc-slogin-03  ~/example_pm25 $ git pull
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (1/1), done.
+remote: Total 3 (delta 2), reused 3 (delta 2), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From https://github.com/Sta790-Sp19/example_pm25
+   ac0acd6..b3ed741  parallel   -> origin/parallel
+Updating ac0acd6..b3ed741
+Fast-forward
+ 2_matrix_chol.R | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n1 -c4 singularity exec ../r-ver.simg Rscript 2_matrix_chol.R 1 1
+srun: job 46531223 queued and waiting for resources
+^Lsrun: job 46531223 has been allocated resources
+[[1]]
+   user  system elapsed
+ 11.651  13.285   6.481
+
+Run time: 6.520751s
+cr173@dcc-slogin-03  ~/example_pm25 $
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n1 -c4 singularity exec ../r-ver.simg Rscript 2_matrix_chol.R 1 1
+srun: job 46531280 queued and waiting for resources
+srun: job 46531280 has been allocated resources
+[[1]]
+   user  system elapsed
+ 11.452  12.522   6.237
+
+Run time: 6.275233s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n2 -c4 singularity exec ../r-ver.simg Rscript 2_matrix_chol.R 1 1
+srun: job 46531404 queued and waiting for resources
+srun: job 46531404 has been allocated resources
+[[1]]
+   user  system elapsed
+ 11.247  11.364   5.492
+
+Run time: 5.534253s
+[[1]]
+   user  system elapsed
+ 12.098  15.184   6.504
+
+Run time: 6.544704s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n1 -c4 singularity exec ../r-ver.simg Rscript 2_matrix_chol.R 1 1
+srun: job 46531547 queued and waiting for resources
+srun: job 46531547 has been allocated resources
+[[1]]
+   user  system elapsed
+ 10.662   8.744   5.076
+
+Run time: 5.114331s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n1 -c4 singularity exec ../r-ver.simg Rscript 2_matrix_chol.R 1 1
+srun: job 46531588 queued and waiting for resources
+srun: job 46531588 has been allocated resources
+[[1]]
+   user  system elapsed
+ 12.330  17.458   7.675
+
+Run time: 7.713274s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n1 -c8 singularity exec ../r-ver.simg Rscript 2_matrix_chol.R 2 2
+srun: job 46531632 queued and waiting for resources
+srun: job 46531632 has been allocated resources
+[[1]]
+   user  system elapsed
+ 11.292  11.221   5.662
+
+[[2]]
+   user  system elapsed
+ 11.036  10.398   5.737
+
+Run time: 5.802528s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n1 -c16 singularity exec ../r-ver.simg Rscript 2_matrix_chol.R 4 4
+srun: job 46531709 queued and waiting for resources
+srun: job 46531709 has been allocated resources
+[[1]]
+   user  system elapsed
+ 11.845  14.806   6.611
+
+[[2]]
+   user  system elapsed
+ 11.736  13.967   6.770
+
+[[3]]
+   user  system elapsed
+ 11.754  14.032   6.720
+
+[[4]]
+   user  system elapsed
+ 11.877  14.378   6.750
+
+Run time: 6.844206s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -n4 -c4 singularity exec ../r-ver.simg Rscript 2_matrix_chol.R 1 1
+srun: job 46531880 queued and waiting for resources
+srun: job 46531880 has been allocated resources
+[[1]]
+   user  system elapsed
+ 14.180  21.611   5.807
+
+Run time: 5.850246s
+[[1]]
+   user  system elapsed
+ 16.722  24.541   5.894
+
+Run time: 5.936519s
+[[1]]
+   user  system elapsed
+ 15.978  24.564   7.211
+
+Run time: 7.487923s
+[[1]]
+   user  system elapsed
+ 14.829  24.813   6.594
+
+Run time: 6.882702s
+cr173@dcc-slogin-03  ~/example_pm25 $
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -c16
+1_matrix_mult.R  2_matrix_chol.R  3_spbayes.R      data/            .git/            .gitignore       gp_pm25.Rproj
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -c16 singularity exec ../
+.bash_history         cov_mat.R             ex_pm25.simg          parttest/             .singularity/         .viminfo
+.bash_logout          cov.rds               gerrymandering-xsede/ .pki/                 .ssh/                 .zshrc
+.bash_profile         example_pm25/         .gitignore            rocker_bayes.simg     tidyverse.simg
+.bashrc               example_sbatch/       .kshrc                r-ver.simg            tmp/
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -c16 singularity exec ../ex
+example_pm25/   example_sbatch/ ex_pm25.simg
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=statdept --account=statdept -c16 singularity exec ../ex_pm25.simg Rscript 3_spbayes.R 1 1
+srun: job 46532562 queued and waiting for resources
+srun: job 46532562 has been allocated resources
+Start iter 1
+End iter 1
+Run time: 150.9296s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=volfovskylab-low --account=volfovskylab-low -c32 singularity exec ../ex_pm25.simg Rscript 3_spbayes.R 1 1
+srun: error: Unable to allocate resources: Invalid account or account/partition combination specified
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=volfovsky-low --account=volfovsky-low -c32 singularity exec ../ex_pm25.simg Rscript 3_spbayes.R 1 1
+srun: error: invalid partition specified: volfovsky-low
+srun: error: Unable to allocate resources: Invalid partition name specified
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=volfovskylab-low --account=statdept -c32 singularity exec ../ex_pm25.simg Rscript 3_spbayes.R 1 1
+srun: job 46533829 queued and waiting for resources
+srun: job 46533829 has been allocated resources
+Start iter 1
+End iter 1
+Run time: 54.98369s
+cr173@dcc-slogin-03  ~/example_pm25 $ srun --partition=common -N4 -c4 singularity exec ../ex_pm25.simg Rscript 3_spbayes.R 1 1
+srun: job 46534517 queued and waiting for resources
+srun: job 46534517 has been allocated resources
+Start iter 1
+Start iter 1
+Start iter 1
+Start iter 1
+End iter 1
+Run time: 84.15221s
+End iter 1
+Run time: 87.11683s
+End iter 1
+Run time: 88.24731s
+ ^Csrun: interrupt (one more within 1 sec to abort)
+srun: step:46534517.0 task 3: running
+srun: step:46534517.0 tasks 0-2: exited
+srun: Force Terminated job 46534517
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: error: dcc-core-52: task 3: Terminated
+cr173@dcc-slogin-03  ~/example_pm25 $

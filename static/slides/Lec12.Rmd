@@ -1,0 +1,235 @@
+---
+title: "Armadillo - Sparse Matrices"
+author: "Colin Rundel"
+date: "2019-03-21"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      countIncrementalSlides: false
+
+---
+exclude: true
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(Rcpp)
+
+options(tibble.width = 110, width = 110)
+```
+
+```{r global_options}
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+---
+class: middle
+
+# mvnrom Example
+
+---
+class: middle
+
+# Sparse Matrices
+
+---
+
+## Sparse Matrices in R
+
+.small[
+```{r}
+i = 1:9
+j = 9:1
+x = 1:9
+
+sp_m = Matrix::sparseMatrix(i=i, j=j, x=x, dims=c(9,9))
+
+sp_m
+
+str(sp_m)
+```
+]
+
+---
+
+.small[
+```{r}
+tsp_m = Matrix::sparseMatrix(i=i, j=j, x=x, giveCsparse=FALSE)
+
+tsp_m
+
+str(tsp_m)
+```
+]
+
+---
+
+.smaller[
+```{r}
+big_sp_m = Matrix::rsparsematrix(10000, 10000, 0.001)
+
+big_sp_m
+```
+]
+
+---
+
+.small[
+```{r}
+pryr::object_size(big_sp_m)
+pryr::object_size(as.matrix(big_sp_m))
+```
+
+<br/>
+
+```{r}
+system.time(sum(big_sp_m))
+system.time(sum(as.matrix(big_sp_m))) - system.time(as.matrix(big_sp_m))
+```
+]
+
+---
+
+## RcppArmadillo and Sparse Matrices
+
+.smaller[
+```{Rcpp}
+// [[Rcpp::depends(RcppArmadillo)]]
+#include <RcppArmadillo.h>
+
+// [[Rcpp::export]]
+arma::sp_mat test_sp_sqrt(arma::sp_mat m) {
+  return arma::sqrt(m);
+}
+```
+
+```{r}
+max = 10
+n = 10
+i = sample(seq_len(max), n, replace = TRUE)
+j = sample(seq_len(max), n, replace = TRUE)
+x = sample(seq_len(max), n, replace = TRUE)
+
+m = Matrix::sparseMatrix(i=i, j=j, x=x, dims=c(max, max))
+```
+
+.columns[
+.col[
+```{r}
+m
+```
+]
+.col[
+```{r}
+test_sp_sqrt(m)
+```
+] ]
+]
+
+---
+.smaller[
+```{r}
+mt = Matrix::sparseMatrix(i=i, j=j, x=x, dims=c(max, max), giveCsparse = FALSE)
+```
+
+.columns[
+.col[
+```{r}
+mt
+```
+]
+.col[
+```{r}
+test_sp_sqrt(mt)
+```
+] ]
+]
+
+---
+
+## Sparsity and Performance - Matrix Multiply
+
+.smaller[
+```{Rcpp}
+// [[Rcpp::depends(RcppArmadillo)]]
+#include <RcppArmadillo.h>
+
+// [[Rcpp::export]]
+arma::sp_mat test_sp_mm(arma::sp_mat const& x, arma::sp_mat const& y) {
+  return x * y;
+}
+
+// [[Rcpp::export]]
+arma::mat test_mm(arma::mat const& x, arma::mat const& y) {
+  return x * y;
+}
+```
+
+```{r, cache=FALSE}
+res = bench::press(
+  prop = c(0.001, 0.01, 0.10, 0.25, 0.5),
+  {
+    sp_m = Matrix::rsparsematrix(1000, 1000, density = prop)
+    m = as.matrix(sp_m)
+    bench::mark(
+      R_sp_mm = sp_m %*% sp_m,
+      R_mm = m %*% m,
+      arma_sp_mm = test_sp_mm(sp_m, sp_m),
+      arma_mm = test_mm(m, m),
+      check = FALSE
+    )
+  }
+)
+```
+]
+
+---
+
+```{r echo=FALSE, fig.align="center", fig.width=10, fig.height=7}
+plot(res)
+```
+---
+
+## Sparsity and Performance - Element Op
+
+.smaller[
+```{Rcpp}
+// [[Rcpp::depends(RcppArmadillo)]]
+#include <RcppArmadillo.h>
+
+// [[Rcpp::export]]
+arma::sp_mat test_sp_sqrt(arma::sp_mat const& x) {
+  return arma::sqrt(x);
+}
+
+// [[Rcpp::export]]
+arma::mat test_sqrt(arma::mat const& x) {
+  return arma::sqrt(x);
+}
+```
+
+```{r, cache=FALSE}
+res = bench::press(
+  prop = c(0.001, 0.01, 0.10, 0.25, 0.5),
+  {
+    sp_m = Matrix::rsparsematrix(1000, 1000, density = prop)
+    m = as.matrix(sp_m)
+    bench::mark(
+      R_sp_sqrt = sqrt(sp_m),
+      R_sqrt = sqrt(m),
+      arma_sp_sqrt = test_sp_sqrt(sp_m),
+      arma_sqrt = test_sqrt(m),
+      check = FALSE
+    )
+  }
+)
+```
+]
+
+---
+
+```{r echo=FALSE, fig.align="center", fig.width=10, fig.height=7}
+plot(res)
+```

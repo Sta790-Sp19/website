@@ -1,0 +1,529 @@
+---
+title: "Duke Cluster + Slurm"
+author: "Colin Rundel"
+date: "2019-02-05"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      highlightSpans: true
+      countIncrementalSlides: false
+
+---
+exclude: true
+
+```{setup r, message=FALSE, warning=FALSE, include=FALSE}
+options(crayon.enabled = TRUE)
+```
+
+---
+
+## Duke Compute Cluster
+
+* 667 compute nodes with approximately 14209 CPU cores (as of March 2018)
+
+* Composed on University, Department, and Lab owned nodes
+  
+  * e.g. Stats currently owns 1 node, and Amy + Alex also own one each.
+  
+* Access priority is determined by ownership - managed via Slurm
+
+* All nodes run RHEL 7
+
+---
+
+## Access
+
+Connect via login node(s):
+
+.center[
+```
+ssh netid@dcc-slogin.oit.duke.edu
+```
+]
+
+if for any reason that isn't working, it is just a load balancer in front of 
+
+.center[
+```
+dcc-slogin-01.oit.duke.edu 
+dcc-slogin-02.oit.duke.edu
+dcc-slogin-03.oit.duke.edu
+```
+]
+
+Connections may only originate from within the Duke Network - therefore if you are off campus you need to connect to a Stats (or OIT) machine first or use the VPN.
+
+---
+
+## Filesystem
+
+* `/dscrhome` - Home directories
+  * 250 GB **group quota**
+  * Two week tape backup
+
+<br/>
+
+* `/work` - Scratch directories
+  * 400 TB shared scratch space
+  * **Temporary** storage for large data files
+  * Subject to purges based on file age and/or utilizationlevels
+  * Not backed-up
+
+---
+
+## Home + Groups
+
+```console
+Last login: Mon Feb  4 10:48:03 on ttys003
+rundel@tbBook [~]$ ssh cr173@dcc-slogin.oit.duke.edu
+################################################################################
+# You are about to access a Duke University computer network that is intended  #
+# for authorized users only. You should have no expectation of privacy in      #
+# your use of this network. Use of this network constitutes consent to         #
+# monitoring, retrieval, and disclosure of any information stored within the   #
+# network for any purpose including criminal prosecution.                      #
+################################################################################
+Last login: Fri Jan 25 15:30:05 2019 from 10.197.214.137
+Last login by user cr173: Fri Jan 25 15:30 - 15:42 (00:12) from: 10.197.214.137
+cr173@dcc-slogin-03  ~ $ pwd
+/dscrhome/cr173
+cr173@dcc-slogin-03  ~ $ groups
+dukeusers dscr rundellab sta790
+```
+
+---
+
+## `work` directory
+
+For this course I have created
+
+.large[ .center[
+`/work/sta790`
+] ]
+
+this folder is writable by everyone in this class and you should create a person directory for yourself
+
+```console
+cr173@dcc-slogin-02  /work/sta790 $ ls -la
+total 162
+drwxrwxr-x.   2 cr173 sta790     0 Feb  4 11:15 .
+drwxrwxrwt. 543 root  root   13715 Feb  4 11:05 ..
+```
+
+```console
+cr173@dcc-slogin-02  /work/sta790 $ mkdir cr173
+cr173@dcc-slogin-02  /work/sta790 $ ls -la
+total 194
+drwxrwxr-x.   3 cr173 sta790    23 Feb  4 11:15 .
+drwxrwxrwt. 543 root  root   13715 Feb  4 11:05 ..
+drwxr-xr-x.   2 cr173 sta790     0 Feb  4 11:15 cr173
+cr173@dcc-slogin-02  /work/sta790 $
+```
+
+---
+class: middle
+
+# Slurm
+
+---
+
+## Slurm commands
+
+<br/><br/><br/>
+
+| Command  | Description                                 |
+|:---------|:--------------------------------------------|
+| srun     | Obtain a job allocation and run application |
+| sbatch   | Submit a batch job                          |
+| squeue   | Show lists of jobs                          |
+| scancel  | Delete one or more batch jobs               |
+| sinfo    | Show info about machines                    |
+| scontrol | Show cluster configuration information      |
+| sacctmgr | Show slurm account information              |
+
+---
+
+## Slurm Partitions
+
+* `common` - for jobs that will run on the DCC core nodes (up to 64 GB RAM).
+
+* `common-large` - for jobs that will run on the DCC core nodes (64-240 GB GB RAM).
+
+* `gpu-common` - for jobs that will run on DCC GPU nodes.
+
+* Group partitions (e.g. `statdept`, `herringlab`, etc.), for jobs that will run on lab-owned nodes
+
+---
+
+## `scontrol` - partitions
+
+.shell[
+```console
+cr173@dcc-slogin-03  ~ $ scontrol show partition
+...
+PartitionName=statdept
+   AllowGroups=ALL AllowAccounts=statdept AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-statdept-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=70 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=statdept-low
+   AllowGroups=ALL AllowAccounts=herringlab,volfovskylab,statdept AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-statdept-01
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=70 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+...
+```
+]
+
+---
+
+## `scontrol` - partitions
+
+.shell[
+```console
+cr173@dcc-slogin-03  ~ $ scontrol show partition
+...
+PartitionName=volfovskylab
+   AllowGroups=ALL AllowAccounts=volfovskylab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-volfovskylab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=70 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=volfovskylab-low
+   AllowGroups=ALL AllowAccounts=herringlab,volfovskylab,statdept AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-volfovskylab-01
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=70 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+...
+```
+]
+
+---
+
+## `scontrol` - node
+
+.shell[
+```console
+cr173@dcc-slogin-03  ~ $ scontrol show node dcc-statdept-01
+NodeName=dcc-statdept-01 Arch=x86_64 CoresPerSocket=1
+   CPUAlloc=0 CPUTot=70 CPULoad=0.42
+   AvailableFeatures=(null)
+   ActiveFeatures=(null)
+   Gres=mathematica:8
+   NodeAddr=dcc-statdept-01 NodeHostName=dcc-statdept-01 Version=18.08
+   OS=Linux 3.10.0-862.11.6.el7.x86_64 #1 SMP Fri Aug 10 16:55:11 UTC 2018
+   RealMemory=741583 AllocMem=0 FreeMem=688114 Sockets=70 Boards=1
+   State=IDLE ThreadsPerCore=1 TmpDisk=25587 Weight=1 Owner=N/A MCS_label=N/A
+   Partitions=statdept,statdept-low
+   BootTime=2018-09-25T16:19:24 SlurmdStartTime=2018-09-25T23:05:00
+   CfgTRES=cpu=70,mem=741583M,billing=70
+   AllocTRES=
+   CapWatts=n/a
+   CurrentWatts=0 LowestJoules=0 ConsumedJoules=0
+   ExtSensorsJoules=n/s ExtSensorsWatts=0 ExtSensorsTemp=n/s
+```
+]
+
+---
+
+## `sacctmgr` - account details
+
+.shell[
+```console
+cr173@dcc-slogin-02  ~ $ sacctmgr list user | grep cr173
+     cr173     sta790      None
+
+cr173@dcc-slogin-02  ~ $ sacctmgr show assoc u=cr173
+   Cluster    Account       User  Partition     Share GrpJobs       GrpTRES GrpSubmit     GrpWall   GrpTRESMins MaxJobs       MaxTRES MaxTRESPerNode MaxSubmit     MaxWall   MaxTRESMins                  QOS   Def QOS GrpTRESRunMin
+---------- ---------- ---------- ---------- --------- ------- ------------- --------- ----------- ------------- ------- ------------- -------------- --------- ----------- ------------- -------------------- --------- -------------
+       dcc     sta790      cr173                    1               cpu=500                                         500                                                                                normal
+       dcc  rundellab      cr173                    1               cpu=500                                         400                                                                                normal
+
+```
+]
+
+---
+
+## `srun` & `sbatch`
+
+<br/>
+
+| Short | Long               | Default  | Description                               |
+|-------|------------------- |----------|-------------------------------------------|
+| `-p`  | `--partition`      |          | Which partition to use                    |
+| `-o`  | `--output`         | *        | Where to send stdout                      |
+| `-e`  | `--error`          | *        | Where to send stderr                      |
+| `-N`  |                    | 1        | How many nodes (machines)                 |
+| `-n`  | `--ntasks`         | 1        | How many parallel tasks (jobs)            |
+| `-c`  | `--cpus-per-task`  | 1        | CPUs per task                             |
+|       | `--mem`            | ? M      | Real memory required per node             |
+|       | `--mem-per-cpu `   | ? M      | Minimum memory required per allocated CPU |
+| `-a`  | `--array`          | *        | Submit a job array (sbatch only)          |
+|       | `--pty`            | -        | Execute task in pseudo terminal mode      |
+
+---
+
+## Interactive jobs - `common`
+
+.small[ .shell[
+```console
+cr173@dcc-slogin-02  /work/sta790 $ srun -p common --pty bash -i
+srun: job 44977524 queued and waiting for resources
+srun: job 44977524 has been allocated resources
+cr173@dcc-core-80  /work/sta790 $
+cr173@dcc-core-80  /work/sta790 $ free -h
+              total        used        free      shared  buff/cache   available
+Mem:           125G         25G        4.2G        404K         95G         99G
+Swap:          2.0G         61M        1.9G
+cr173@dcc-core-80  /work/sta790 $ lscpu
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                16
+On-line CPU(s) list:   0-15
+Thread(s) per core:    1
+Core(s) per socket:    1
+Socket(s):             16
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-2699 v4 @ 2.20GHz
+Stepping:              0
+CPU MHz:               2194.917
+BogoMIPS:              4389.83
+Hypervisor vendor:     VMware
+Virtualization type:   full
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              56320K
+NUMA node0 CPU(s):     0-15
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm fsgsbase smep arat
+```
+] ]
+
+---
+
+## Interactive jobs - `common-large`
+
+.small[ .shell[
+```console
+cr173@dcc-slogin-02  /work/sta790 $ srun -p common-large --pty bash -i
+srun: job 44977527 queued and waiting for resources
+srun: job 44977527 has been allocated resources
+cr173@dcc-core-101  /work/sta790 $ free -h
+              total        used        free      shared  buff/cache   available
+Mem:           235G        6.4G         72G        456K        156G        228G
+Swap:          2.0G        248M        1.8G
+cr173@dcc-core-101  /work/sta790 $ lscpu
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                24
+On-line CPU(s) list:   0-23
+Thread(s) per core:    1
+Core(s) per socket:    1
+Socket(s):             24
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-2670 v3 @ 2.30GHz
+Stepping:              0
+CPU MHz:               2294.686
+BogoMIPS:              4589.37
+Hypervisor vendor:     VMware
+Virtualization type:   full
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              30720K
+NUMA node0 CPU(s):     0-23
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts nopl xtopology tsc_reliable nonstop_tsc aperfmperf eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm epb fsgsbase tsc_adjust bmi1 avx2 smep bmi2 invpcid xsaveopt dtherm ida arat pln pts
+```
+] ]
+
+---
+
+## Interactive job - `gpu-common`
+
+.small[ .shell[
+```console
+cr173@dcc-slogin-02  /work/sta790 $ srun -p gpu-common --pty bash -i
+srun: job 44977537 queued and waiting for resources
+...
+```
+] ]
+
+---
+
+## Nodes (-N) vs Tasks (-n)
+
+.shell[
+```console
+cr173@dcc-slogin-02  ~ $ srun -N4 -p common /bin/hostname
+srun: job 45160611 queued and waiting for resources
+srun: job 45160611 has been allocated resources
+dcc-core-133
+dcc-core-134
+dcc-core-132
+dcc-core-135
+```
+
+```console
+cr173@dcc-slogin-02  ~ $ srun -n4 -p common /bin/hostname
+srun: job 45160612 queued and waiting for resources
+srun: job 45160612 has been allocated resources
+dcc-core-10
+dcc-core-10
+dcc-core-09
+dcc-core-08
+```
+]
+
+---
+
+.shell[
+```console
+cr173@dcc-slogin-02  ~ $ srun -n4 -p common -l /bin/hostname
+srun: job 45160670 queued and waiting for resources
+srun: job 45160670 has been allocated resources
+3: dcc-core-10
+1: dcc-core-09
+2: dcc-core-10
+0: dcc-core-08
+```
+
+```console
+cr173@dcc-slogin-02  ~ $ srun -n4 -c2 -p common -l /bin/hostname
+srun: job 45160860 queued and waiting for resources
+srun: job 45160860 has been allocated resources
+0: dcc-core-134
+1: dcc-core-135
+3: dcc-core-137
+2: dcc-core-136
+```
+]
+
+---
+
+## Memory
+
+.small[ .shell[
+```console
+cr173@dcc-slogin-02  ~ $ srun -p common --mem 1G --pty bash -i
+srun: job 45161227 queued and waiting for resources
+srun: job 45161227 has been allocated resources
+cr173@dcc-core-06  ~ $ /opt/apps/R-3.0.3/bin/R --quiet -e "m = matrix(rnorm(1), 10000, 10000); dim(m)"
+> m = matrix(rnorm(1), 10000, 10000); dim(m)
+[1] 10000 10000
+>
+>
+cr173@dcc-core-06  ~ $ /opt/apps/R-3.0.3/bin/R --quiet -e "m = matrix(rnorm(1), 12000, 12000); dim(m)"
+> m = matrix(rnorm(1), 12000, 12000)
+Killed
+```
+] ]
+
+--
+
+<br/>
+
+```{r}
+m = matrix(rnorm(1), 12000, 12000)
+pryr::object_size(m)
+```
+
+---
+
+## Job info
+
+.shell[
+```console
+cr173@dcc-slogin-03  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45163831 gpu-commo     bash    cr173 PD       0:00      1 (None)
+          45161415    common     bash    cr173  R       5:53      1 dcc-core-06
+```
+
+```console
+cr173@dcc-slogin-03  ~ $ scontrol show job 45161415
+JobId=45161415 JobName=bash
+   UserId=cr173(1051944) GroupId=dukeusers(1000000) MCS_label=N/A
+   Priority=9998 Nice=0 Account=sta790 QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=0 Reboot=0 ExitCode=0:0
+   RunTime=00:04:47 TimeLimit=90-00:00:00 TimeMin=N/A
+   SubmitTime=2019-02-05T09:57:20 EligibleTime=2019-02-05T09:57:20
+   AccrueTime=2019-02-05T09:57:20
+   StartTime=2019-02-05T09:57:33 EndTime=2019-05-06T10:57:33 Deadline=N/A
+   PreemptTime=None SuspendTime=None SecsPreSuspend=0
+   LastSchedEval=2019-02-05T09:57:33
+   Partition=common AllocNode:Sid=dcc-slogin-03:120222
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=dcc-core-06
+   BatchHost=dcc-core-06
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   TRES=cpu=1,mem=1G,node=1,billing=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=1G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=bash
+   WorkDir=/hpchome/rundellab/cr173
+   Power=
+```
+]
+
+--- 
+
+## Killing jobs
+
+.shell[
+```console
+cr173@dcc-slogin-03  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45163831 gpu-commo     bash    cr173 PD       0:00      1 (None)
+          45161415    common     bash    cr173  R       5:53      1 dcc-core-06
+cr173@dcc-slogin-03  ~ $ scancel 45163831
+cr173@dcc-slogin-03  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45161415    common     bash    cr173  R       6:20      1 dcc-core-06
+cr173@dcc-slogin-03  ~ $ scancel 45161415
+cr173@dcc-slogin-03  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45161415    common     bash    cr173 CG       6:57      1 dcc-core-06
+cr173@dcc-slogin-03  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+```
+]

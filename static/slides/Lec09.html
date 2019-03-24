@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>std::vector and Rcpp Vectors</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Colin Rundel" />
+    <meta name="date" content="2019-02-28" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# std::vector and Rcpp Vectors
+### Colin Rundel
+### 2019-02-28
+
+---
+
+exclude: true
+
+
+
+
+```r
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+---
+
+## C Vectors
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void c_vec() {
+  int v[8];
+  
+  for(int i=0; i!=8; i++) {
+    Rcpp::Rcout &lt;&lt; "v[" &lt;&lt; i &lt;&lt; "] = " &lt;&lt; v[i] &lt;&lt; "\n";  
+  }
+}
+```
+
+
+```r
+c_vec()
+```
+
+```
+## v[0] = -395604624
+## v[1] = 1048126214
+## v[2] = 126299560
+## v[3] = 1
+## v[4] = 0
+## v[5] = 0
+## v[6] = 0
+## v[7] = 0
+```
+
+---
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void c_vec_bad() {
+  int v[8];
+  
+  for(int i=0; i!=12; i++) {
+    Rcpp::Rcout &lt;&lt; "v[" &lt;&lt; i &lt;&lt; "] = " &lt;&lt; v[i] &lt;&lt; "\n";  
+  }
+}
+```
+
+
+```r
+c_vec_bad()
+```
+
+```
+## v[0] = 0
+## v[1] = 0
+## v[2] = 0
+## v[3] = 32689
+## v[4] = -818741133
+## v[5] = 1048126214
+## v[6] = 126299560
+## v[7] = 1
+## v[8] = -818741133
+## v[9] = 1048126214
+## v[10] = 126299560
+## v[11] = 1
+```
+
+---
+
+## C dynamic vectors
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void c_vec_dyn(int n) {
+  int *v = (int *)calloc(n, sizeof(int));
+  
+  for(int i=0; i!=n; i++) {
+    Rcpp::Rcout &lt;&lt; "v[" &lt;&lt; i &lt;&lt; "] = " &lt;&lt; v[i] &lt;&lt; "\n";  
+  }
+  Rcpp::Rcout &lt;&lt; "\n";
+  
+  free(v);
+}
+```
+
+
+```r
+c_vec_dyn(2)
+```
+
+```
+## v[0] = 0
+## v[1] = 0
+```
+
+```r
+c_vec_dyn(3)
+```
+
+```
+## v[0] = 0
+## v[1] = 0
+## v[2] = 0
+```
+
+---
+
+## C++ dynamic vectors
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void cpp_vec_dyn(int n) {
+  int *v = new int[n]();
+  
+  for(int i=0; i!=n; i++) {
+    Rcpp::Rcout &lt;&lt; "v[" &lt;&lt; i &lt;&lt; "] = " &lt;&lt; v[i] &lt;&lt; "\n";  
+  }
+  Rcpp::Rcout &lt;&lt; "\n";
+  
+  delete[] v;
+}
+```
+
+
+```r
+cpp_vec_dyn(2)
+```
+
+```
+## v[0] = 0
+## v[1] = 0
+```
+
+```r
+cpp_vec_dyn(3)
+```
+
+```
+## v[0] = 0
+## v[1] = 0
+## v[2] = 0
+```
+
+---
+
+## C++ stl vectors
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void cpp_stl_vec(int n) {
+  std::vector&lt;int&gt; v(n);
+  
+  for(int i=0; i!=n; i++) {
+    Rcpp::Rcout &lt;&lt; "v[" &lt;&lt; i &lt;&lt; "] = " &lt;&lt; v[i] &lt;&lt; "\n";  
+  }
+  Rcpp::Rcout &lt;&lt; "\n";
+}
+```
+
+
+```r
+cpp_stl_vec(2)
+```
+
+```
+## v[0] = 0
+## v[1] = 0
+```
+
+```r
+cpp_stl_vec(3)
+```
+
+```
+## v[0] = 0
+## v[1] = 0
+## v[2] = 0
+```
+
+---
+
+## C++ Templates (very briefly)
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+#include &lt;typeinfo&gt;
+
+template&lt;typename T&gt;
+std::string what_am_i() {
+  T obj;
+  return typeid(obj).name();
+}
+
+// [[Rcpp::export]]
+void template_ex() {
+  Rcpp::Rcout &lt;&lt; "bool       : " &lt;&lt; what_am_i&lt;bool&gt;() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "int        : " &lt;&lt; what_am_i&lt;int&gt;() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "long int   : " &lt;&lt; what_am_i&lt;long int&gt;() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "char       : " &lt;&lt; what_am_i&lt;char&gt;() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "float      : " &lt;&lt; what_am_i&lt;float&gt;() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "double     : " &lt;&lt; what_am_i&lt;double&gt;() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "std::string: " &lt;&lt; what_am_i&lt;std::string&gt;() &lt;&lt; "\n";
+}
+```
+
+
+```r
+template_ex()
+```
+
+```
+## bool       : b
+## int        : i
+## long int   : l
+## char       : c
+## float      : f
+## double     : d
+## std::string: NSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE
+```
+
+---
+
+## Initializing std::vector
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::plugins(cpp14)]]
+
+// [[Rcpp::export]]
+Rcpp::List init_int_vec() {
+  std::vector&lt;int&gt; v1 = {1, 2, 3}; // Requires cpp14
+  std::vector&lt;int&gt; v2(2);
+  std::vector&lt;int&gt; v3(2, 1);
+  std::vector&lt;int&gt; v4(v1);
+  std::vector&lt;int&gt; v5(v1.begin(), v1.end());
+  std::vector&lt;int&gt; v6(v1.begin(), v1.end()-1);
+  std::vector&lt;int&gt; v7;
+  v7.push_back(10);
+  v7.push_back(9);
+  v7.push_back(8);
+  
+  return Rcpp::List::create(v1,v2,v3,v4,v5,v6,v7);
+}
+```
+
+
+```r
+str(init_int_vec())
+```
+
+```
+## List of 7
+##  $ : int [1:3] 1 2 3
+##  $ : int [1:2] 0 0
+##  $ : int [1:2] 1 1
+##  $ : int [1:3] 1 2 3
+##  $ : int [1:3] 1 2 3
+##  $ : int [1:2] 1 2
+##  $ : int [1:3] 10 9 8
+```
+
+--- 
+
+## Initializing std::vector
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::plugins(cpp14)]]
+
+// [[Rcpp::export]]
+Rcpp::List init_dbl_vec() {
+  std::vector&lt;double&gt; v1 = {1, 2, 3}; // Requires cpp14
+  std::vector&lt;double&gt; v2(2);
+  std::vector&lt;double&gt; v3(2, 1);
+  std::vector&lt;double&gt; v4(v1);
+  std::vector&lt;double&gt; v5(v1.begin(), v1.end());
+  std::vector&lt;double&gt; v6(v1.begin(), v1.end()-1);
+  std::vector&lt;double&gt; v7;
+  v7.push_back(10);
+  v7.push_back(9);
+  v7.push_back(8);
+  
+  return Rcpp::List::create(v1,v2,v3,v4,v5,v6,v7);
+}
+```
+
+
+```r
+str(init_dbl_vec())
+```
+
+```
+## List of 7
+##  $ : num [1:3] 1 2 3
+##  $ : num [1:2] 0 0
+##  $ : num [1:2] 1 1
+##  $ : num [1:3] 1 2 3
+##  $ : num [1:3] 1 2 3
+##  $ : num [1:2] 1 2
+##  $ : num [1:3] 10 9 8
+```
+
+---
+
+## Translating std::vector
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector from_std_vec(std::vector&lt;int&gt; v) {
+
+  return Rcpp::IntegerVector(v.begin(), v.end());
+}
+
+// [[Rcpp::export]]
+std::vector&lt;int&gt; to_std_vec(Rcpp::IntegerVector rv) {
+
+  return std::vector&lt;int&gt;(rv.begin(), rv.end());
+}
+```
+
+
+```r
+from_std_vec(1:10)
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+```r
+to_std_vec(1:10)
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+---
+
+## Translating std::vectors (SEXPs)
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+SEXP sexp_std_vec(SEXP rv) {
+
+  std::vector&lt;int&gt; v = Rcpp::as&lt; std::vector&lt;int&gt; &gt;(rv);
+  return Rcpp::wrap(v);
+}
+
+// [[Rcpp::export]]
+SEXP sexp_rcpp_vec(SEXP rv) {
+
+  Rcpp::IntegerVector v = Rcpp::as&lt; Rcpp::IntegerVector &gt;(rv);
+  return Rcpp::wrap(v);
+}
+```
+
+
+```r
+sexp_std_vec(1:10)
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+```r
+sexp_rcpp_vec(1:10)
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+---
+
+## std::vector methods - access
+
+.small[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void std_vec_access(std::vector&lt;int&gt; v) {
+  Rcpp::Rcout &lt;&lt; "v.front() = " &lt;&lt; v.front() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "v[0]      = " &lt;&lt; v[0]      &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "v.at(0)   = " &lt;&lt; v.at(0)   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "v.back()  = " &lt;&lt; v.back()  &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "v[5]      = " &lt;&lt; v[5]      &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "v.at(5)   = " &lt;&lt; v.at(5)   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "\n";
+}
+```
+
+
+```r
+std_vec_access(1:6)
+```
+
+```
+## v.front() = 1
+## v[0]      = 1
+## v.at(0)   = 1
+## v.back()  = 6
+## v[5]      = 6
+## v.at(5)   = 6
+```
+
+```r
+std_vec_access(1:5)
+```
+
+```
+## v.front() = 1
+## v[0]      = 1
+## v.at(0)   = 1
+## v.back()  = 5
+## v[5]      = 32689
+## v.at(5)   =
+```
+
+```
+## Error in std_vec_access(1:5): vector
+```
+]
+
+---
+
+## Rcpp vector methods - access
+
+.small[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void rcpp_vec_access(Rcpp::IntegerVector v) {
+  Rcpp::Rcout &lt;&lt; "v[0]      = " &lt;&lt; v[0]      &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "v(0)      = " &lt;&lt; v(0)      &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "v.at(0)   = " &lt;&lt; v.at(0)   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "v[5]      = " &lt;&lt; v[5]      &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "v(5)      = " &lt;&lt; v(5)      &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "v.at(5)   = " &lt;&lt; v.at(5)   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "\n";
+}
+```
+
+
+```r
+rcpp_vec_access(1:6)
+```
+
+```
+## v[0]      = 1
+## v(0)      = 1
+## v.at(0)   = 1
+## v[5]      = 6
+## v(5)      = 6
+## v.at(5)   = 6
+```
+
+```r
+rcpp_vec_access(1:5)
+```
+
+```
+## v[0]      = 1
+## v(0)      = 1
+## v.at(0)   = 1
+## v[5]      = 32689
+## v(5)      =
+```
+
+```
+## Error in rcpp_vec_access(1:5): Index out of bounds: [index=5; extent=5].
+```
+]
+
+---
+
+## Iterators
+
+.tiny[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void iterators(int n) {
+  std::vector&lt;int&gt; sv(n);
+  Rcpp::IntegerVector rv(n);
+  
+  std::iota(sv.begin(), sv.end(), 1);
+  std::iota(rv.begin(), rv.end(), 1);
+  
+  Rcpp::Rcout &lt;&lt; " sv.begin()           : " &lt;&lt; &amp;*sv.begin() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " sv.end()             : " &lt;&lt; &amp;*sv.end()   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " sv.end() - v.begin() : " &lt;&lt;   sv.end() - sv.begin() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "*sv.begin()           : " &lt;&lt;  *sv.begin() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "*sv.end()             : " &lt;&lt;  *sv.end()   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "*(sv.end()-1)         : " &lt;&lt;  *(sv.end()-1)   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " rv.begin()           : " &lt;&lt; &amp;*rv.begin() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " rv.end()             : " &lt;&lt; &amp;*rv.end()   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " rv.end() - v.begin() : " &lt;&lt;   rv.end() - rv.begin() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "*rv.begin()           : " &lt;&lt;  *rv.begin() &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "*rv.end()             : " &lt;&lt;  *rv.end()   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "*(rv.end()-1)         : " &lt;&lt;  *(rv.end()-1)   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "\n";
+}
+```
+]
+
+.smaller[
+
+```r
+iterators(100)
+```
+
+```
+##  sv.begin()           : 0x7fb171432d30
+##  sv.end()             : 0x7fb171432ec0
+##  sv.end() - v.begin() : 100
+## *sv.begin()           : 1
+## *sv.end()             : 0
+## *(sv.end()-1)         : 100
+## 
+##  rv.begin()           : 0x7fb1714b2550
+##  rv.end()             : 0x7fb1714b26e0
+##  rv.end() - v.begin() : 100
+## *rv.begin()           : 1
+## *rv.end()             : 0
+## *(rv.end()-1)         : 100
+```
+]
+
+---
+
+## (More) Iterators
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+// [[Rcpp::plugins(cpp11)]]
+
+// [[Rcpp::export]]
+void iterators2(int n) {
+  std::vector&lt;int&gt; sv(n);
+  
+  std::iota(sv.begin(), sv.end(), 1);
+  
+  auto it = sv.begin();
+  
+  Rcpp::Rcout &lt;&lt; " *(sv.begin())   : " &lt;&lt; *(sv.begin())   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " *(sv.begin()++) : " &lt;&lt; *(sv.begin()++) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " *(++sv.begin()) : " &lt;&lt; *(++sv.begin()) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " *(sv.begin())   : " &lt;&lt; *(sv.begin())   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " *(it)           : " &lt;&lt; *(it)   &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " *(it++)         : " &lt;&lt; *(it++) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " *(++it)         : " &lt;&lt; *(++it) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " *(++it)         : " &lt;&lt; *(++it) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; " *(it++)         : " &lt;&lt; *(it++) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "\n";
+}
+```
+
+
+```r
+iterators2(10)
+```
+
+```
+##  *(sv.begin())   : 1
+##  *(sv.begin()++) : 1
+##  *(++sv.begin()) : 2
+##  *(sv.begin())   : 1
+##  *(it)           : 1
+##  *(it++)         : 1
+##  *(++it)         : 3
+##  *(++it)         : 4
+##  *(it++)         : 4
+```
+]
+
+---
+
+## std::vector methods - growing
+
+.small[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void grow(int n, int m) {
+  std::vector&lt;int&gt; v;
+  
+  for(int i = 0, k = 0; i &lt; n; ++i) {
+    for(int j = 0; j &lt; m; ++j, ++k) {
+      v.push_back(k);
+    }
+    Rcpp::Rcout &lt;&lt; "iter: " &lt;&lt; k
+                &lt;&lt; " size: " &lt;&lt; v.size()
+                &lt;&lt; " capacity: " &lt;&lt; v.capacity()
+                &lt;&lt; "\n";
+  }
+  
+  Rcpp::Rcout &lt;&lt; "\n";
+}
+```
+
+
+```r
+grow(10, 2)
+```
+
+```
+## iter: 2 size: 2 capacity: 2
+## iter: 4 size: 4 capacity: 4
+## iter: 6 size: 6 capacity: 8
+## iter: 8 size: 8 capacity: 8
+## iter: 10 size: 10 capacity: 16
+## iter: 12 size: 12 capacity: 16
+## iter: 14 size: 14 capacity: 16
+## iter: 16 size: 16 capacity: 16
+## iter: 18 size: 18 capacity: 32
+## iter: 20 size: 20 capacity: 32
+```
+]
+
+---
+
+## Growth performance
+
+.smaller[
+.columns[
+.col[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+int std_vec_grow(int n) {
+  std::vector&lt;int&gt; v;
+
+  for(int i = 0; i &lt; n; ++i) {
+    v.push_back(i);
+  }
+  
+  return v.size();
+}
+```
+]
+
+.col[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+int rcpp_grow_back(int n) {
+  Rcpp::IntegerVector v;
+
+  for(int i = 0; i &lt; n; ++i) {
+    v.push_back(i);
+  }
+  
+  return v.size();
+}
+
+// [[Rcpp::export]]
+int rcpp_grow_front(int n) {
+  Rcpp::IntegerVector v;
+
+  for(int i = 0; i &lt; n; ++i) {
+    v.push_front(i);
+  }
+  
+  return v.size();
+}
+```
+] ] ]
+
+---
+
+.small[ 
+
+```r
+bench::mark(
+  std_vec_grow(1e3),
+  rcpp_grow_back(1e3),
+  rcpp_grow_front(1e3)
+)
+```
+
+```
+## # A tibble: 3 x 10
+##   expression                 min     mean   median      max `itr/sec` mem_alloc  n_gc n_itr total_time
+##   &lt;chr&gt;                 &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt; &lt;dbl&gt; &lt;int&gt;   &lt;bch:tm&gt;
+## 1 std_vec_grow(1000)      4.61µs  14.89µs   9.84µs   4.15ms    67171.    2.49KB     0 10000      149ms
+## 2 rcpp_grow_back(1000)  406.67µs   1.15ms 864.51µs   5.05ms      874.    1.96MB    10   231      264ms
+## 3 rcpp_grow_front(1000) 408.92µs 877.05µs 629.64µs   5.13ms     1140.    1.96MB    12   310      272ms
+```
+]
+
+---
+
+## Allocation performance
+
+.smaller[
+.columns[
+.col[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+int std_vec_alloc(int n) {
+  std::vector&lt;int&gt; v(n);
+  for(int i = 0; i &lt; n; ++i) {
+    v[i] = i;
+  }
+  return v.size();
+}
+
+// [[Rcpp::export]]
+int rcpp_alloc(int n) {
+  Rcpp::IntegerVector v(n);
+  for(int i = 0; i &lt; n; ++i) {
+    v[i] = i;
+  }
+  return v.size();
+}
+```
+]
+
+.col[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+int std_vec_alloc_at(int n) {
+  std::vector&lt;int&gt; v(n);
+  for(int i = 0; i &lt; n; ++i) {
+    v.at(i) = i;
+  }
+  return v.size();
+}
+
+// [[Rcpp::export]]
+int rcpp_alloc_at(int n) {
+  Rcpp::IntegerVector v(n);
+  for(int i = 0; i &lt; n; ++i) {
+    v.at(i) = i;
+  }
+  return v.size();
+}
+```
+]
+] ]
+
+.smaller[
+
+```r
+bench::mark(
+  std_vec_alloc(1e6),
+  rcpp_alloc(1e6),
+  std_vec_alloc_at(1e6),
+  rcpp_alloc_at(1e6)
+)
+```
+
+```
+## # A tibble: 4 x 10
+##   expression                   min     mean   median      max `itr/sec` mem_alloc  n_gc n_itr total_time
+##   &lt;chr&gt;                   &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt; &lt;dbl&gt; &lt;int&gt;   &lt;bch:tm&gt;
+## 1 std_vec_alloc(1e+06)    286.49µs 943.41µs 486.09µs  10.17ms     1060.    2.49KB     0   531      501ms
+## 2 rcpp_alloc(1e+06)       375.23µs   2.09ms   1.03ms  11.28ms      479.    3.82MB    13   157      327ms
+## 3 std_vec_alloc_at(1e+06) 528.29µs   1.18ms   1.01ms   5.68ms      846.    2.49KB     0   423      500ms
+## 4 rcpp_alloc_at(1e+06)      5.29ms   7.14ms   6.67ms  12.28ms      140.    3.82MB     5    60      429ms
+```
+]
+
+---
+
+## Translation performance
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+std::vector&lt;int&gt; std_vec_trans(std::vector&lt;int&gt; v) {
+  return v;
+}
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector rcpp_vec_trans(Rcpp::IntegerVector v) {
+  return v;
+}
+```
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+std::vector&lt;int&gt; std_vec_trans_ref(std::vector&lt;int&gt; &amp;v) {
+  return v;
+}
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector rcpp_vec_trans_ref(Rcpp::IntegerVector &amp;v) {
+  return v;
+}
+```
+]
+
+---
+
+.small[
+
+```r
+x = rpois(1e6, 1)
+
+bench::mark(
+  std_vec_trans(x),
+  rcpp_vec_trans(x),
+  std_vec_trans_ref(x),
+  rcpp_vec_trans_ref(x)
+)
+```
+
+```
+## # A tibble: 4 x 10
+##   expression                 min     mean   median      max `itr/sec` mem_alloc  n_gc n_itr total_time
+##   &lt;chr&gt;                 &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt; &lt;dbl&gt; &lt;int&gt;   &lt;bch:tm&gt;
+## 1 std_vec_trans(x)         2.2ms   7.02ms   5.07ms  27.76ms      142.    3.82MB     9    48    337.1ms
+## 2 rcpp_vec_trans(x)       1.68µs   8.08µs   3.54µs   5.72ms   123789.    2.49KB     0 10000     80.8ms
+## 3 std_vec_trans_ref(x)    1.83ms   3.88ms   3.23ms  12.88ms      257.    3.82MB    13    81    314.6ms
+## 4 rcpp_vec_trans_ref(x)   1.32µs   2.56µs   1.72µs   1.02ms   389917.    2.49KB     0 10000     25.6ms
+```
+]
+
+
+---
+
+## Sorting performance
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+std::vector&lt;double&gt; std_vec_sort(std::vector&lt;double&gt; v) {
+  std::sort(v.begin(), v.end());
+  
+  return v;
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector rcpp_vec_sort(Rcpp::NumericVector v) {
+  v.sort();
+  
+  return v;
+}
+```
+
+
+```r
+x = rnorm(1e6)
+
+bench::mark(
+  std_vec_sort(x),
+  rcpp_vec_sort(x)
+)
+```
+
+```
+## # A tibble: 2 x 10
+##   expression            min     mean   median      max `itr/sec` mem_alloc  n_gc n_itr total_time
+##   &lt;chr&gt;            &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt; &lt;dbl&gt; &lt;int&gt;   &lt;bch:tm&gt;
+## 1 std_vec_sort(x)    4.84ms   13.5ms   10.4ms   38.3ms      74.1    7.63MB     9    18      243ms
+## 2 rcpp_vec_sort(x)   7.15ms   11.9ms     11ms   24.5ms      83.8    2.49KB     0    42      501ms
+```
+]
+
+
+---
+
+## Insert performance
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+std::vector&lt;int&gt; std_vec_ins(std::vector&lt;int&gt; v, int n, int pos, int value) {
+  for(int i=0; i&lt;n; ++i) {
+    v.insert(v.begin() + pos, value);
+  }
+  
+  return v;
+}
+```
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector rcpp_vec_ins_it(Rcpp::IntegerVector v, int n, int pos, int value) {
+  for(int i=0; i&lt;n; ++i) {
+    v.insert(v.begin() + pos, value);
+  }
+  
+  return v;
+}
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector rcpp_vec_ins_pos(Rcpp::IntegerVector v, int n, int pos, int value) {
+  for(int i=0; i&lt;n; ++i) {
+    v.insert(pos, value);
+  }
+  
+  return v;
+}
+```
+]
+
+---
+
+.small[
+
+```r
+std_vec_ins(1:4, 5, 2, 0)
+```
+
+```
+## [1] 1 2 0 0 0 0 0 3 4
+```
+]
+
+--
+
+.smaller[
+
+```r
+bench::mark(
+  std_vec_ins(1:4, 5, 2, 0),
+  rcpp_vec_ins_it(1:4, 5, 2, 0),
+  rcpp_vec_ins_pos(1:4, 5, 2, 0)
+)
+```
+
+```
+## # A tibble: 3 x 10
+##   expression                          min     mean   median     max `itr/sec` mem_alloc  n_gc n_itr total_time
+##   &lt;chr&gt;                          &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt; &lt;dbl&gt; &lt;int&gt;   &lt;bch:tm&gt;
+## 1 std_vec_ins(1:4, 5, 2, 0)        2.49µs   12.9µs   6.28µs  5.69ms    77719.     7.7KB     2  9998      129ms
+## 2 rcpp_vec_ins_it(1:4, 5, 2, 0)    2.46µs     11µs   5.19µs  7.59ms    91089.    2.49KB     1  9999      110ms
+## 3 rcpp_vec_ins_pos(1:4, 5, 2, 0)   2.44µs   10.6µs   5.85µs  9.22ms    94254.    2.49KB     1  9999      106ms
+```
+]
+
+--
+
+.smaller[
+
+```r
+x = 1:1e3
+bench::mark(
+  std_vec_ins(x, 500, 500, 0),
+  rcpp_vec_ins_it(x, 500, 500, 0),
+  rcpp_vec_ins_pos(x, 500, 500, 0)
+)
+```
+
+```
+## # A tibble: 3 x 10
+##   expression                          min     mean   median     max `itr/sec` mem_alloc  n_gc n_itr total_time
+##   &lt;chr&gt;                          &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt; &lt;dbl&gt; &lt;int&gt;   &lt;bch:tm&gt;
+## 1 std_vec_ins(x, 500, 500, 0)      27.7µs  80.09µs  47.22µs 11.45ms    12486.   12.35KB     2  5859      469ms
+## 2 rcpp_vec_ins_it(x, 500, 500, …  434.2µs   1.34ms 907.05µs  7.61ms      746.    2.41MB    12   167      224ms
+## 3 rcpp_vec_ins_pos(x, 500, 500,…  511.1µs   1.64ms   1.06ms 12.85ms      609.    2.41MB    10   154      253ms
+```
+]
+
+---
+
+## Erase performance
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+std::vector&lt;int&gt; std_vec_erase(std::vector&lt;int&gt; v, int pos, int n) {
+  for(int i=0; i&lt;n; ++i) {
+    v.erase(v.begin()+pos);
+  }
+  
+  return v;
+}
+
+// [[Rcpp::export]]
+std::vector&lt;int&gt; std_vec_erase_range(std::vector&lt;int&gt; v, int pos, int n) {
+
+  v.erase(v.begin()+pos, v.begin()+pos+n);
+  
+  return v;
+}
+```
+
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector rcpp_vec_erase(Rcpp::IntegerVector v, int pos, int n) {
+  for(int i=0; i&lt;n; ++i) {
+    v.erase(v.begin()+pos);
+  }
+  
+  return v;
+}
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector rcpp_vec_erase_range(Rcpp::IntegerVector v, int pos, int n) {
+
+  v.erase(v.begin()+pos, v.begin()+pos+n);
+  
+  return v;
+}
+```
+]
+
+
+---
+
+.smaller[
+
+```r
+std_vec_erase(1:6, 2, 2)
+```
+
+```
+## [1] 1 2 5 6
+```
+
+```r
+std_vec_erase_range(1:6, 2, 2)
+```
+
+```
+## [1] 1 2 5 6
+```
+]
+
+--
+
+.smaller[
+
+```r
+bench::mark(
+  std_vec_erase(1:6, 2, 2),
+  std_vec_erase_range(1:6, 2, 2),
+  rcpp_vec_erase(1:6, 2, 2),
+  rcpp_vec_erase_range(1:6, 2, 2)
+)
+```
+
+```
+## # A tibble: 4 x 10
+##   expression                          min     mean   median     max `itr/sec` mem_alloc  n_gc n_itr total_time
+##   &lt;chr&gt;                          &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt; &lt;dbl&gt; &lt;int&gt;   &lt;bch:tm&gt;
+## 1 std_vec_erase(1:6, 2, 2)         2.07µs  10.36µs   4.57µs 17.41ms    96509.    7.02KB     0 10000    103.6ms
+## 2 std_vec_erase_range(1:6, 2, 2)    2.1µs   7.34µs   4.96µs  2.46ms   136204.    7.02KB     0 10000     73.4ms
+## 3 rcpp_vec_erase(1:6, 2, 2)        2.38µs  11.21µs   5.35µs  7.54ms    89239.    2.49KB     1  9999      112ms
+## 4 rcpp_vec_erase_range(1:6, 2, …    2.4µs  13.35µs    5.5µs 10.09ms    74895.    2.49KB     1  9999    133.5ms
+```
+]
+
+--
+
+.smaller[
+
+```r
+x = 1:1e3
+bench::mark(
+  std_vec_erase(x, 250, 500),
+  std_vec_erase_range(x, 250, 500),
+  rcpp_vec_erase(x, 250, 500),
+  rcpp_vec_erase_range(x, 250, 500)
+)
+```
+
+```
+## # A tibble: 4 x 10
+##   expression                          min     mean   median     max `itr/sec` mem_alloc  n_gc n_itr total_time
+##   &lt;chr&gt;                          &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt; &lt;dbl&gt; &lt;int&gt;   &lt;bch:tm&gt;
+## 1 std_vec_erase(x, 250, 500)      15.14µs  43.25µs  23.11µs 27.82ms    23123.    8.45KB     1  9999    432.4ms
+## 2 std_vec_erase_range(x, 250, 5…   2.33µs  11.03µs   5.22µs 12.38ms    90641.    4.49KB     1  9999    110.3ms
+## 3 rcpp_vec_erase(x, 250, 500)    350.12µs   1.04ms 665.03µs  9.42ms      965.    1.46MB    11   262    271.6ms
+## 4 rcpp_vec_erase_range(x, 250, …   2.02µs   6.46µs   4.47µs  3.29ms   154679.    4.49KB     1  9999     64.6ms
+```
+]
+
+---
+class: middle
+
+# Rcpp Sugar
+
+---
+
+## RMSE - Rcpp
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+double rcpp_rmse(Rcpp::NumericVector y, Rcpp::NumericVector y_hat) {
+
+  Rcpp::NumericVector diff = y - y_hat;
+
+  return sqrt( Rcpp::sum(diff*diff) / y.size() );
+}
+```
+
+
+```r
+rcpp_rmse(1:10, 1:10)
+```
+
+```
+## [1] 0
+```
+
+```r
+rcpp_rmse(1:10, 10:1)
+```
+
+```
+## [1] 5.744563
+```
+
+```r
+rcpp_rmse(1:10, 1:5)
+```
+
+```
+## [1] 5.602671e+59
+```
+
+```r
+rcpp_rmse(1:5, 1:10)
+```
+
+```
+## [1] 0
+```
+]
+
+---
+
+## RMSE - std::vector
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+double std_vec_rmse(std::vector&lt;double&gt; y, std::vector&lt;double&gt; y_hat) {
+  double sum = 0.0;
+  for(int i=0; i&lt;y.size(); ++i) {
+    double diff = y[i] - y_hat[i];
+    sum += diff * diff;
+  }
+
+  return sqrt( sum / y.size() );
+}
+```
+
+
+```r
+std_vec_rmse(1:10, 1:10)
+```
+
+```
+## [1] 0
+```
+
+```r
+std_vec_rmse(1:10, 10:1)
+```
+
+```
+## [1] 5.744563
+```
+
+```r
+std_vec_rmse(1:10, 1:5)
+```
+
+```
+## [1] 5.744563
+```
+
+```r
+std_vec_rmse(1:5, 1:10)
+```
+
+```
+## [1] 0
+```
+]
+
+---
+
+## Length coercion
+
+.small[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+Rcpp::NumericVector rcpp_len_issue(Rcpp::NumericVector y, Rcpp::NumericVector y_hat) {
+  
+  return y - y_hat;
+}
+```
+
+
+
+```r
+rcpp_len_issue(1:10, 1:10)
+```
+
+```
+##  [1] 0 0 0 0 0 0 0 0 0 0
+```
+
+```r
+rcpp_len_issue(1:10, 10:1)
+```
+
+```
+##  [1] -9 -7 -5 -3 -1  1  3  5  7  9
+```
+
+```r
+rcpp_len_issue(1, 1:10)
+```
+
+```
+## [1] 0
+```
+
+```r
+rcpp_len_issue(1:5, 1:10)
+```
+
+```
+## [1] 0 0 0 0 0
+```
+]
+
+---
+
+## Logical Operators and Predicates
+
+.smaller[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+// [[Rcpp::export]]
+void rcpp_logical() {
+  Rcpp::IntegerVector x = Rcpp::IntegerVector::create(0, 1, NA_INTEGER, 3);
+  Rcpp::LogicalVector l = x &gt; 5;
+  
+  Rcpp::Rcout &lt;&lt; "x                       : " &lt;&lt; x &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "x &gt; 2                   : " &lt;&lt; Rcpp::LogicalVector(x &gt; 2) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "is_na(x)                : " &lt;&lt; Rcpp::LogicalVector(Rcpp::is_na(x)) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "any(is_na(x))           : " &lt;&lt; Rcpp::LogicalVector(Rcpp::any(Rcpp::is_na(x))) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "all(x &lt; 5)              : " &lt;&lt; Rcpp::LogicalVector(Rcpp::all(x &lt; 5)) &lt;&lt; "\n";
+  Rcpp::Rcout &lt;&lt; "ifelse(is_na(x), -1, x) : " &lt;&lt; Rcpp::IntegerVector(Rcpp::ifelse(Rcpp::is_na(x), -1, x)) &lt;&lt; "\n";
+}
+```
+
+
+```r
+rcpp_logical()
+```
+
+```
+## x                       : 0 1 -2147483648 3
+## x &gt; 2                   : 0 0 -2147483648 1
+## is_na(x)                : 0 0 1 0
+## any(is_na(x))           : 1
+## all(x &lt; 5)              : -2147483648
+## ifelse(is_na(x), -1, x) : 0 1 -1 3
+```
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

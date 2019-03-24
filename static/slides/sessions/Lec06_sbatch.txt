@@ -1,0 +1,1233 @@
+
+▽
+#!/bin/bash
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede
+cr173@dcc-slogin-02  ~ $ vim hostname.sh
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh
+cr173@dcc-slogin-02  ~ $ chmod u+x hostname.sh
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh
+cr173@dcc-slogin-02  ~ $ ./hostname.sh
+dcc-slogin-02
+cr173@dcc-slogin-02  ~ $
+cr173@dcc-slogin-02  ~ $ sbatch hostname.sh
+Submitted batch job 45547719
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45547719    common hostname    cr173  R       0:03      1 dcc-core-37
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh  test.err  test.out
+cr173@dcc-slogin-02  ~ $ grep "" test.*
+test.out:dcc-core-37
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ sbatch hostname.sh
+Submitted batch job 45547733
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45547733    common hostname    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45547733    common hostname    cr173  R       0:03      1 dcc-core-37
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45547733    common hostname    cr173  R       0:07      1 dcc-core-37
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45547733    common hostname    cr173  R       0:09      1 dcc-core-37
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45547733    common hostname    cr173  R       0:11      1 dcc-core-37
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh  test.err  test.out
+cr173@dcc-slogin-02  ~ $ more test.out
+dcc-core-37
+cr173@dcc-slogin-02  ~ $
+
+▽
+#!/bin/bash
+cr173@dcc-slogin-02  ~ $ vim hostname.sh
+cr173@dcc-slogin-02  ~ $ more hostname.sh
+#!/bin/bash
+#SBATCH --partition=common
+#SBATCH --output=test.out
+#SBATCH --error=test.err
+#SBATCH --nodes=4
+
+
+▽
+#!/bin/bash
+hostname
+sleep 10s
+
+cr173@dcc-slogin-02  ~ $ sbatch hostname.sh
+Submitted batch job 45548489
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45548489    common hostname    cr173  R       0:01      4 dcc-core-[178-181]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45548489    common hostname    cr173  R       0:16      4 dcc-core-[178-181]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45548489    common hostname    cr173  R       0:20      4 dcc-core-[178-181]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh  test.err  test.out
+cr173@dcc-slogin-02  ~ $ more test.out
+dcc-core-178
+cr173@dcc-slogin-02  ~ $ more hostname.sh
+#!/bin/bash
+#SBATCH --partition=common
+#SBATCH --output=test.out
+#SBATCH --error=test.err
+#SBATCH --nodes=4
+
+hostname
+sleep 10s
+
+cr173@dcc-slogin-02  ~ $ vim hostname.sh
+cr173@dcc-slogin-02  ~ $
+
+▽
+#!/bin/bash
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh  test.err  test.out
+cr173@dcc-slogin-02  ~ $ rm test.*
+cr173@dcc-slogin-02  ~ $ sbatch hostname.sh
+Submitted batch job 45549451
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45549451    common hostname    cr173 PD       0:00      4 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45549451    common hostname    cr173  R       0:06      4 dcc-core-[178-181]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh  test_dcc-core-178_0.err  test_dcc-core-178_0.out
+cr173@dcc-slogin-02  ~ $ vim hostname.sh
+cr173@dcc-slogin-02  ~ $ sbatch --nodes=4 hostname.sh
+Submitted batch job 45549489
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45549489    common hostname    cr173 PD       0:00      4 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45549489    common hostname    cr173  R       0:02      4 dcc-core-[178-181]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45549489    common hostname    cr173  R       0:06      4 dcc-core-[178-181]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45549489    common hostname    cr173  R       0:10      4 dcc-core-[178-181]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh  test_dcc-core-178_0.err  test_dcc-core-178_0.out
+cr173@dcc-slogin-02  ~ $
+
+▽
+#!/bin/bash
+cr173@dcc-slogin-02  ~ $ vim hostname.sh
+cr173@dcc-slogin-02  ~ $ sbatch --nodes=4 hostname.sh
+
+▽
+#!/bin/bash
+cr173@dcc-slogin-02  ~ $ rm test*
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh
+cr173@dcc-slogin-02  ~ $ sbatch --nodes=4 hostname.sh
+Submitted batch job 45550198
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45550198    common hostname    cr173 PD       0:00      4 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45550198    common hostname    cr173 PD       0:00      4 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45550198    common hostname    cr173  R       0:00      4 dcc-core-[178-181]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh  test_dcc-core-178_0.err  test_dcc-core-178_0.out
+cr173@dcc-slogin-02  ~ $ more test_dcc-core-178_0.err
+slurmstepd: error: execve(): hostname;sleep 10s: No such file or directory
+srun: error: dcc-core-178: task 0: Exited with exit code 2
+slurmstepd: error: execve(): hostname;sleep 10s: No such file or directory
+srun: error: dcc-core-179: task 1: Exited with exit code 2
+slurmstepd: error: execve(): hostname;sleep 10s: No such file or directory
+srun: error: dcc-core-181: task 3: Exited with exit code 2
+srun: error: dcc-core-180: task 2: Exited with exit code 2
+slurmstepd: error: execve(): hostname;sleep 10s: No such file or directory
+cr173@dcc-slogin-02  ~ $ vim hostname.sh
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh  test_dcc-core-178_0.err  test_dcc-core-178_0.out
+cr173@dcc-slogin-02  ~ $ rm test_dcc-core-178_0.*
+cr173@dcc-slogin-02  ~ $
+cr173@dcc-slogin-02  ~ $ sbatch --nodes=4 hostname.sh
+Submitted batch job 45550231
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45550231    common hostname    cr173  R       0:00      4 dcc-core-[17-20]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh  test.err  test.out
+cr173@dcc-slogin-02  ~ $ more test.out
+
+▽
+#!/bin/bash
+dcc-core-17
+dcc-core-18
+dcc-core-20
+dcc-core-19
+cr173@dcc-slogin-02  ~ $ sbatch -ntasks=4 hostname.sh
+sbatch: error: Invalid numeric value "tasks=4" for number of tasks.
+cr173@dcc-slogin-02  ~ $ sbatch -n4 hostname.sh
+Submitted batch job 45550297
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45550297    common hostname    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45550297    common hostname    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45550297    common hostname    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+
+▽
+#!/bin/bash
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45550297    common hostname    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname.sh  test.err  test.out
+cr173@dcc-slogin-02  ~ $ more test.out
+dcc-core-135
+dcc-core-135
+dcc-core-136
+dcc-core-136
+cr173@dcc-slogin-02  ~ $ cp hostname.sh hostname_array.sh
+cr173@dcc-slogin-02  ~ $ vim hostname_array.sh
+cr173@dcc-slogin-02  ~ $ sbatch hostname_array.sh
+Submitted batch job 45550716
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+    45550716_[1-2]    common hostname    cr173 PD       0:00      1 (None)
+
+▽
+#!/bin/bash
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45550716_1    common hostname    cr173  R       0:09      1 dcc-core-55
+        45550716_2    common hostname    cr173  R       0:09      1 dcc-core-115
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch        hostname_array.sh  test_45550716_1.err  test_45550716_2.err  test.err
+gerrymandering-xsede  hostname.sh        test_45550716_1.out  test_45550716_2.out  test.out
+cr173@dcc-slogin-02  ~ $ grep "" test_45550716_*.out
+test_45550716_1.out:dcc-core-55
+test_45550716_2.out:dcc-core-115
+cr173@dcc-slogin-02  ~ $ vim hostname_array.sh
+cr173@dcc-slogin-02  ~ $ rm test*
+cr173@dcc-slogin-02  ~ $ sbatch hostname_array.sh
+Submitted batch job 45550950
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+45550950_[1,5,9,13    common hostname    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch        hostname_array.sh  test_45550950_13.err  test_45550950_1.err  test_45550950_5.err  test_45550950_9.err
+gerrymandering-xsede  hostname.sh        test_45550950_13.out  test_45550950_1.out  test_45550950_5.out  test_45550950_9.out
+cr173@dcc-slogin-02  ~ $ grep "" test_4*.out
+test_45550950_13.out:dcc-core-238
+test_45550950_1.out:dcc-core-168
+test_45550950_5.out:dcc-core-192
+test_45550950_9.out:dcc-core-216
+cr173@dcc-slogin-02  ~ $ cp hostname_array.sh hostname_array_tasks.sh
+cr173@dcc-slogin-02  ~ $ vim hostname_array_tasks.sh
+cr173@dcc-slogin-02  ~ $ rm test*
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname_array.sh  hostname_array_tasks.sh  hostname.sh
+cr173@dcc-slogin-02  ~ $ sbatch hostname_array_tasks.sh
+Submitted batch job 45551141
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+    45551141_[1-2]    common hostname    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+    45551141_[1-2]    common hostname    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+    45551141_[1-2]    common hostname    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551141_1    common hostname    cr173  R       0:00      2 dcc-core-[112-113]
+        45551141_2    common hostname    cr173  R       0:00      2 dcc-core-[135-136]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch        hostname_array.sh        hostname.sh          test_45551141_1.out  test_45551141_2.out
+gerrymandering-xsede  hostname_array_tasks.sh  test_45551141_1.err  test_45551141_2.err
+cr173@dcc-slogin-02  ~ $ more test_45551141_1.out
+cr173@dcc-slogin-02  ~ $ more test_45551141_1.err
+cr173@dcc-slogin-02  ~ $ more test_45551141_2.out
+cr173@dcc-slogin-02  ~ $
+
+▽
+#!/bin/bash
+
+▽
+#!/bin/bash
+cr173@dcc-slogin-02  ~ $ vim
+.bash_history            example_sbatch/          hostname_array_tasks.sh  .ssh/                    test_45551141_2.out
+.bash_logout             gerrymandering-xsede/    hostname.sh              test_45551141_1.err      .viminfo
+.bash_profile            .gitignore               .kshrc                   test_45551141_1.out      .zshrc
+.bashrc                  hostname_array.sh        .pki/                    test_45551141_2.err
+cr173@dcc-slogin-02  ~ $ vim hostname_array_tasks.sh
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch        hostname_array.sh        hostname.sh          test_45551141_1.out  test_45551141_2.out
+gerrymandering-xsede  hostname_array_tasks.sh  test_45551141_1.err  test_45551141_2.err
+cr173@dcc-slogin-02  ~ $ rm test*
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch  gerrymandering-xsede  hostname_array.sh  hostname_array_tasks.sh  hostname.sh
+cr173@dcc-slogin-02  ~ $ sbatch hostname_array_tasks.sh
+Submitted batch job 45551209
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551209_1    common hostname    cr173  R       0:00      2 dcc-core-[112-113]
+        45551209_2    common hostname    cr173  R       0:00      2 dcc-core-[135-136]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch        hostname_array.sh        hostname.sh          test_45551209_1.out  test_45551209_2.out
+gerrymandering-xsede  hostname_array_tasks.sh  test_45551209_1.err  test_45551209_2.err
+cr173@dcc-slogin-02  ~ $ more test_45551209_1.out
+cr173@dcc-slogin-02  ~ $ vim hostname_array_tasks.sh
+cr173@dcc-slogin-02  ~ $ rm test_45551209_*
+cr173@dcc-slogin-02  ~ $ sbatch hostname_array_tasks.sh
+Submitted batch job 45551220
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551220_2    common hostname    cr173  R    INVALID      2 dcc-core-[206-207]
+        45551220_1    common hostname    cr173  R       0:00      2 dcc-core-[112-113]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551220_2    common hostname    cr173  R       0:06      2 dcc-core-[206-207]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551220_2    common hostname    cr173  R       0:09      2 dcc-core-[206-207]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551220_2    common hostname    cr173  R       0:15      2 dcc-core-[206-207]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551220_2    common hostname    cr173  R       0:16      2 dcc-core-[206-207]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551220_2    common hostname    cr173  R       0:17      2 dcc-core-[206-207]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551220_2    common hostname    cr173  R       0:17      2 dcc-core-[206-207]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551220_2    common hostname    cr173  R       0:18      2 dcc-core-[206-207]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551220_2    common hostname    cr173  R       0:19      2 dcc-core-[206-207]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551220_2    common hostname    cr173  R       0:20      2 dcc-core-[206-207]
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45551220_2    common hostname    cr173  R       0:21      2 dcc-core-[206-207]
+cr173@dcc-slogin-02  ~ $ ls
+example_sbatch        hostname_array.sh        hostname.sh          test_45551220_1.out  test_45551220_2.out
+gerrymandering-xsede  hostname_array_tasks.sh  test_45551220_1.err  test_45551220_2.err
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ grep "" test*.out
+test_45551220_1.out:dcc-core-112
+test_45551220_1.out:dcc-core-112
+test_45551220_1.out:dcc-core-113
+test_45551220_1.out:dcc-core-113
+test_45551220_2.out:dcc-core-206
+test_45551220_2.out:dcc-core-206
+test_45551220_2.out:dcc-core-206
+test_45551220_2.out:dcc-core-207
+cr173@dcc-slogin-02  ~ $
+
+▽
+#!/bin/bash
+cr173@dcc-slogin-02  ~ $ cp hostname.sh env_var.sh
+cr173@dcc-slogin-02  ~ $ vim env_var.sh
+cr173@dcc-slogin-02  ~ $ echo $PATH
+/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/slurm/bin:/dscrhome/cr173/.local/bin:/dscrhome/cr173/bin
+cr173@dcc-slogin-02  ~ $ env
+XDG_SESSION_ID=96605
+HOSTNAME=dcc-slogin-02
+SELINUX_ROLE_REQUESTED=
+TERM=xterm-256color
+SHELL=/bin/bash
+HISTSIZE=1000
+SSH_CLIENT=10.197.214.137 51805 22
+SELINUX_USE_CURRENT_RANGE=
+QTDIR=/usr/lib64/qt-3.3
+QTINC=/usr/lib64/qt-3.3/include
+SSH_TTY=/dev/pts/87
+QT_GRAPHICSSYSTEM_CHECKED=1
+USER=cr173
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:
+COBBLER_SERVER=10.138.1.97
+MAIL=/var/spool/mail/cr173
+PATH=/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/slurm/bin:/dscrhome/cr173/.local/bin:/dscrhome/cr173/bin
+PWD=/dscrhome/cr173
+LANG=en_US.UTF-8
+MODULEPATH=/opt/apps/modulefiles
+LOADEDMODULES=
+PS1=\[\e[32m\]\u@\h  \[\e[34;1m\]\w $\[\e[0m\]
+SELINUX_LEVEL_REQUESTED=
+HISTCONTROL=ignoreboth
+KRB5CCNAME=FILE:/tmp/krb5cc_1051944_nfeikB
+SHLVL=1
+HOME=/dscrhome/cr173
+LOGNAME=cr173
+QTLIB=/usr/lib64/qt-3.3/lib
+SSH_CONNECTION=10.197.214.137 51805 152.3.100.81 22
+LC_CTYPE=en_US.UTF-8
+MODULESHOME=/usr/share/Modules
+LESSOPEN=||/usr/bin/lesspipe.sh %s
+XDG_RUNTIME_DIR=/run/user/1051944
+BASH_FUNC_module()=() {  eval `/usr/bin/modulecmd bash $*`
+}
+_=/usr/bin/env
+
+▽
+#!/bin/bash
+cr173@dcc-slogin-02  ~ $ echo $SLURM_ARRAY_TASK_ID
+
+cr173@dcc-slogin-02  ~ $ ls
+env_var.sh      gerrymandering-xsede  hostname_array_tasks.sh  test_45551220_1.err  test_45551220_2.err
+example_sbatch  hostname_array.sh     hostname.sh              test_45551220_1.out  test_45551220_2.out
+cr173@dcc-slogin-02  ~ $ sbatch env_var.sh
+Submitted batch job 45551397
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45551397    common env_var.    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45551397    common env_var.    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          45551397    common env_var.    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+env_var.sh      gerrymandering-xsede  hostname_array_tasks.sh  test_45551220_1.err  test_45551220_2.err  test.err
+
+▽
+#!/bin/bash
+example_sbatch  hostname_array.sh     hostname.sh              test_45551220_1.out  test_45551220_2.out  test.out
+cr173@dcc-slogin-02  ~ $ more test.out
+SLURM_ARRAY_TASK_ID:
+SLURM_ARRAY_JOB_ID :
+SLURM_CPUS_ON_NODE : 1
+SLURM_CPUS_PER_TASK:
+SLURM_MEM_PER_CPU  : 2048
+SLURM_MEM_PER_NODE :
+SLURM_NTASKS       :
+SLURMD_NODENAME    : dcc-core-01
+cr173@dcc-slogin-02  ~ $ vim env_var.sh
+cr173@dcc-slogin-02  ~ $ sbatch env_var.sh
+Submitted batch job 45551408
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+    45551408_[0-1]    common env_var.    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+env_var.sh      gerrymandering-xsede  hostname_array_tasks.sh  test_45551220_1.err  test_45551220_2.err  test.err
+example_sbatch  hostname_array.sh     hostname.sh              test_45551220_1.out  test_45551220_2.out  test.out
+cr173@dcc-slogin-02  ~ $ more test.out
+SLURM_ARRAY_TASK_ID: 1
+SLURM_ARRAY_JOB_ID : 45551408
+SLURM_CPUS_ON_NODE : 1
+SLURM_CPUS_PER_TASK:
+SLURM_MEM_PER_CPU  : 2048
+SLURM_MEM_PER_NODE :
+SLURM_NTASKS       :
+SLURMD_NODENAME    : dcc-core-192
+cr173@dcc-slogin-02  ~ $ vim env_var.sh
+cr173@dcc-slogin-02  ~ $ sbatch env_var.sh
+Submitted batch job 45551418
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+    45551418_[0-1]    common env_var.    cr173 PD       0:00      1 (None)
+cr173@dcc-slogin-02  ~ $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cr173@dcc-slogin-02  ~ $ ls
+env_var.sh            hostname_array.sh        test_45551220_1.err  test_45551220_2.out  test_45551418_1.err  test.out
+example_sbatch        hostname_array_tasks.sh  test_45551220_1.out  test_45551418_0.err  test_45551418_1.out
+gerrymandering-xsede  hostname.sh              test_45551220_2.err  test_45551418_0.out  test.err
+cr173@dcc-slogin-02  ~ $ more test_45551418_1.out
+SLURM_ARRAY_TASK_ID: 1
+SLURM_ARRAY_JOB_ID : 45551418
+SLURM_CPUS_ON_NODE : 1
+SLURM_CPUS_PER_TASK:
+SLURM_MEM_PER_CPU  : 2048
+SLURM_MEM_PER_NODE :
+SLURM_NTASKS       :
+SLURMD_NODENAME    : dcc-core-155
+cr173@dcc-slogin-02  ~ $ more test_45551418_2.out
+test_45551418_2.out: No such file or directory
+cr173@dcc-slogin-02  ~ $ more test_45551418_0.out
+SLURM_ARRAY_TASK_ID: 0
+SLURM_ARRAY_JOB_ID : 45551418
+SLURM_CPUS_ON_NODE : 1
+SLURM_CPUS_PER_TASK:
+SLURM_MEM_PER_CPU  : 2048
+SLURM_MEM_PER_NODE :
+SLURM_NTASKS       :
+SLURMD_NODENAME    : dcc-core-115
+cr173@dcc-slogin-02  ~ $
+cr173@dcc-slogin-02  ~ $ ls
+env_var.sh            hostname_array.sh        test_45551220_1.err  test_45551220_2.out  test_45551418_1.err  test.out
+example_sbatch        hostname_array_tasks.sh  test_45551220_1.out  test_45551418_0.err  test_45551418_1.out
+gerrymandering-xsede  hostname.sh              test_45551220_2.err  test_45551418_0.out  test.err
+cr173@dcc-slogin-02  ~ $ rm test*
+cr173@dcc-slogin-02  ~ $ cd /work/sta790/cr173/example_pm25/
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ ls
+analysis.R  command_args_demo.R  data  docker  ex_pm25.simg  gp_pm25.Rproj  results
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ singularity shell ex_pm25.simg
+Singularity: Invoking an interactive shell within container...
+
+Singularity ex_pm25.simg:~> ls
+env_var.sh  example_sbatch  gerrymandering-xsede  hostname_array.sh  hostname_array_tasks.sh  hostname.sh
+Singularity ex_pm25.simg:~> cd /work/
+Singularity ex_pm25.simg:/work> ls
+Singularity ex_pm25.simg:/work> exit
+exit
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ singularity shell -B /work:/work ex_pm25.simg
+Singularity: Invoking an interactive shell within container...
+
+Singularity ex_pm25.simg:/work/sta790/cr173/example_pm25> ls
+analysis.R  command_args_demo.R  data  docker  ex_pm25.simg  gp_pm25.Rproj  results
+Singularity ex_pm25.simg:/work/sta790/cr173/example_pm25> exit
+exit
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ srun
+analysis.R           data/                ex_pm25.simg         .gitignore           results/
+command_args_demo.R  docker/              .git/                gp_pm25.Rproj
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ srun ex_pm25.simg analysis.R 1
+srun: job 45551504 queued and waiting for resources
+srun: job 45551504 has been allocated resources
+Fatal error: cannot open file 'analysis.R': No such file or directory
+srun: error: dcc-core-115: task 0: Exited with exit code 2
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ srun ex_pm25.simg /work/sta790/cr173/analysis.R 1
+srun: job 45551513 queued and waiting for resources
+srun: job 45551513 has been allocated resources
+Fatal error: cannot open file '/work/sta790/cr173/analysis.R': No such file or directory
+srun: error: dcc-core-115: task 0: Exited with exit code 2
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ cp analysis.R ~/
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ srun ex_pm25.simg analysis.R 1
+srun: job 45551520 queued and waiting for resources
+srun: job 45551520 has been allocated resources
+Fatal error: cannot open file 'analysis.R': No such file or directory
+srun: error: dcc-core-115: task 0: Exited with exit code 2
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ srun singularity run -B /work:/work ex_pm25.simg analysis.R 1
+srun: job 45551588 queued and waiting for resources
+srun: job 45551588 has been allocated resources
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: coda
+Loading required package: magic
+Loading required package: abind
+Loading required package: Formula
+Parsed with column specification:
+cols(
+  site = col_character(),
+  date = col_datetime(format = ""),
+  latitude = col_double(),
+  longitude = col_double(),
+  pm25 = col_double()
+)
+----------------------------------------
+  General model description
+----------------------------------------
+Model fit with 110 observations.
+
+Number of covariates 1 (including intercept if specified).
+
+Using the gaussian spatial correlation model.
+
+Using adaptive MCMC.
+
+  Number of batches 1000.
+  Batch length 50.
+  Target acceptance rate 0.43000.
+
+Priors and hyperpriors:
+  beta normal:
+  mu: 0.000
+  cov:
+  1000.000
+
+  sigma.sq IG hyperpriors shape=2.00000 and scale=2.00000
+  tau.sq IG hyperpriors shape=2.00000 and scale=0.10000
+  phi Unif hyperpriors a=0.05773 and b=0.05774
+-------------------------------------------------
+    Sampling
+-------------------------------------------------
+^Csrun: interrupt (one more within 1 sec to abort)
+srun: step:45551588.0 task 0: running
+^Csrun: interrupt (one more within 1 sec to abort)
+srun: step:45551588.0 task 0: running
+Batch: 100 of 1000, 10.00%
+  parameter acceptance  tuning
+  sigma.sq  64.0    0.85960
+  tau.sq    40.0    0.34257
+  phi   80.0    0.85960
+-------------------------------------------------
+Batch: 200 of 1000, 20.00%
+  parameter acceptance  tuning
+  sigma.sq  50.0    1.47507
+  tau.sq    42.0    0.35655
+  phi   70.0    2.33662
+-------------------------------------------------
+srun: Force Terminated job 45551588
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 45551588.0 ON dcc-core-115 CANCELLED AT 2019-02-07T12:36:34 ***
+srun: error: dcc-core-115: task 0: Terminated
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ srun -c8 singularity run -B /work:/work ex_pm25.simg analysis.R 1
+srun: job 45553210 queued and waiting for resources
+srun: job 45553210 has been allocated resources
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: coda
+Loading required package: magic
+Loading required package: abind
+Loading required package: Formula
+Parsed with column specification:
+cols(
+  site = col_character(),
+  date = col_datetime(format = ""),
+  latitude = col_double(),
+  longitude = col_double(),
+  pm25 = col_double()
+)
+----------------------------------------
+  General model description
+----------------------------------------
+Model fit with 110 observations.
+
+Number of covariates 1 (including intercept if specified).
+
+Using the gaussian spatial correlation model.
+
+Using adaptive MCMC.
+
+  Number of batches 1000.
+  Batch length 50.
+  Target acceptance rate 0.43000.
+
+Priors and hyperpriors:
+  beta normal:
+  mu: 0.000
+  cov:
+  1000.000
+
+  sigma.sq IG hyperpriors shape=2.00000 and scale=2.00000
+  tau.sq IG hyperpriors shape=2.00000 and scale=0.10000
+  phi Unif hyperpriors a=0.05773 and b=0.05774
+-------------------------------------------------
+    Sampling
+-------------------------------------------------
+Batch: 100 of 1000, 10.00%
+  parameter acceptance  tuning
+  sigma.sq  68.0    0.85960
+  tau.sq    26.0    0.37110
+  phi   88.0    0.85960
+-------------------------------------------------
+Batch: 200 of 1000, 20.00%
+  parameter acceptance  tuning
+  sigma.sq  58.0    1.56629
+  tau.sq    52.0    0.35655
+  phi   62.0    2.33662
+-------------------------------------------------
+Batch: 300 of 1000, 30.00%
+  parameter acceptance  tuning
+  sigma.sq  40.0    1.44586
+  tau.sq    42.0    0.33578
+  phi   52.0    4.17330
+-------------------------------------------------
+Batch: 400 of 1000, 40.00%
+  parameter acceptance  tuning
+  sigma.sq  42.0    1.47507
+  tau.sq    30.0    0.36375
+  phi   54.0    4.09066
+-------------------------------------------------
+Batch: 500 of 1000, 50.00%
+  parameter acceptance  tuning
+  sigma.sq  42.0    1.41723
+  tau.sq    46.0    0.34949
+  phi   28.0    4.43136
+-------------------------------------------------
+Batch: 600 of 1000, 60.00%
+  parameter acceptance  tuning
+  sigma.sq  38.0    1.47507
+  tau.sq    46.0    0.34949
+  phi   54.0    4.09066
+-------------------------------------------------
+Batch: 700 of 1000, 70.00%
+  parameter acceptance  tuning
+  sigma.sq  46.0    1.47507
+  tau.sq    38.0    0.35655
+  phi   38.0    4.17330
+-------------------------------------------------
+Batch: 800 of 1000, 80.00%
+  parameter acceptance  tuning
+  sigma.sq  42.0    1.47507
+  tau.sq    30.0    0.33578
+  phi   50.0    4.34362
+-------------------------------------------------
+Batch: 900 of 1000, 90.00%
+  parameter acceptance  tuning
+  sigma.sq  40.0    1.59793
+  tau.sq    44.0    0.34949
+  phi   30.0    4.17330
+-------------------------------------------------
+Batch: 1000 of 1000, 100.00%
+  parameter acceptance  tuning
+  sigma.sq  36.0    1.50487
+  tau.sq    46.0    0.34257
+  phi   44.0    4.17330
+-------------------------------------------------
+----------------------------------------
+  General model description
+----------------------------------------
+Model fit with 110 observations.
+
+Prediction at 365 locations.
+
+Number of covariates 1 (including intercept if specified).
+
+Using the gaussian spatial correlation model.
+
+-------------------------------------------------
+    Sampling
+-------------------------------------------------
+Sampled: 100 of 2500, 3.96%
+Sampled: 200 of 2500, 7.96%
+
+▽
+#!/bin/bash
+Sampled: 300 of 2500, 11.96%
+Sampled: 400 of 2500, 15.96%
+Sampled: 500 of 2500, 19.96%
+Sampled: 600 of 2500, 23.96%
+Sampled: 700 of 2500, 27.96%
+Sampled: 800 of 2500, 31.96%
+Sampled: 900 of 2500, 35.96%
+Sampled: 1000 of 2500, 39.96%
+Sampled: 1100 of 2500, 43.96%
+Sampled: 1200 of 2500, 47.96%
+Sampled: 1300 of 2500, 51.96%
+Sampled: 1400 of 2500, 55.96%
+Sampled: 1500 of 2500, 59.96%
+Sampled: 1600 of 2500, 63.96%
+Sampled: 1700 of 2500, 67.96%
+Sampled: 1800 of 2500, 71.96%
+Sampled: 1900 of 2500, 75.96%
+Sampled: 2000 of 2500, 79.96%
+Sampled: 2100 of 2500, 83.96%
+Sampled: 2200 of 2500, 87.96%
+Sampled: 2300 of 2500, 91.96%
+Sampled: 2400 of 2500, 95.96%
+Sampled: 2500 of 2500, 99.96%
+null device
+          1
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ ls
+analysis.R  command_args_demo.R  data  docker  ex_pm25.simg  gp_pm25.Rproj  results
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ ls results/010030010/
+data.rds  pred.pdf  pred.rds  splm.rds
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ vim pm25_array.sh
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $
+
+▽
+#!/bin/bash
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ ls
+analysis.R  command_args_demo.R  data  docker  ex_pm25.simg  gp_pm25.Rproj  pm25_array.sh  results
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ chmod +x pm25_array.sh
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ sbatch pm25_array.sh
+sbatch: unrecognized option '--partion=common'
+Submitted batch job 45553396
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ ^C
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ vim pm25_array.sh
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_1    common pm25_arr    cr173  R       0:14      1 dcc-core-27
+        45553396_2    common pm25_arr    cr173  R       0:14      1 dcc-core-43
+        45553396_3    common pm25_arr    cr173  R       0:14      1 dcc-core-99
+        45553396_4    common pm25_arr    cr173  R       0:14      1 dcc-core-126
+        45553396_5    common pm25_arr    cr173  R       0:14      1 dcc-core-144
+        45553396_6    common pm25_arr    cr173  R       0:14      1 dcc-core-165
+        45553396_7    common pm25_arr    cr173  R       0:14      1 dcc-core-178
+        45553396_8    common pm25_arr    cr173  R       0:14      1 dcc-core-181
+        45553396_9    common pm25_arr    cr173  R       0:14      1 dcc-core-30
+       45553396_10    common pm25_arr    cr173  R       0:14      1 dcc-core-31
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_1    common pm25_arr    cr173  R       0:51      1 dcc-core-27
+        45553396_2    common pm25_arr    cr173  R       0:51      1 dcc-core-43
+        45553396_3    common pm25_arr    cr173  R       0:51      1 dcc-core-99
+        45553396_5    common pm25_arr    cr173  R       0:51      1 dcc-core-144
+        45553396_6    common pm25_arr    cr173  R       0:51      1 dcc-core-165
+        45553396_7    common pm25_arr    cr173  R       0:51      1 dcc-core-178
+        45553396_8    common pm25_arr    cr173  R       0:51      1 dcc-core-181
+        45553396_9    common pm25_arr    cr173  R       0:51      1 dcc-core-30
+       45553396_10    common pm25_arr    cr173  R       0:51      1 dcc-core-31
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ ls
+analysis.R  command_args_demo.R  data  docker  ex_pm25.simg  gp_pm25.Rproj  pm25_array.sh  results
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25 $ cd results/
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ ls
+010030010  site_10.err  site_1.err  site_2.err  site_3.err  site_4.err  site_5.err  site_6.err  site_7.err  site_8.err  site_9.err
+010491003  site_10.out  site_1.out  site_2.out  site_3.out  site_4.out  site_5.out  site_6.out  site_7.out  site_8.out  site_9.out
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ more site_1.out
+----------------------------------------
+  General model description
+----------------------------------------
+Model fit with 110 observations.
+
+Number of covariates 1 (including intercept if specified).
+
+Using the gaussian spatial correlation model.
+
+Using adaptive MCMC.
+
+  Number of batches 1000.
+  Batch length 50.
+  Target acceptance rate 0.43000.
+
+Priors and hyperpriors:
+  beta normal:
+  mu: 0.000
+  cov:
+  1000.000
+
+  sigma.sq IG hyperpriors shape=2.00000 and scale=2.00000
+  tau.sq IG hyperpriors shape=2.00000 and scale=0.10000
+  phi Unif hyperpriors a=0.05773 and b=0.05774
+-------------------------------------------------
+    Sampling
+-------------------------------------------------
+Batch: 100 of 1000, 10.00%
+  parameter acceptance  tuning
+  sigma.sq  66.0    0.85960
+  tau.sq    34.0    0.34949
+  phi   80.0    0.85960
+-------------------------------------------------
+Batch: 200 of 1000, 20.00%
+  parameter acceptance  tuning
+  sigma.sq  48.0    1.53527
+  tau.sq    46.0    0.35655
+  phi   66.0    2.33662
+-------------------------------------------------
+Batch: 300 of 1000, 30.00%
+  parameter acceptance  tuning
+  sigma.sq  30.0    1.56629
+  tau.sq    42.0    0.34949
+  phi   48.0    4.00966
+-------------------------------------------------
+Batch: 400 of 1000, 40.00%
+  parameter acceptance  tuning
+  sigma.sq  52.0    1.66314
+  tau.sq    52.0    0.37110
+  phi   56.0    4.43136
+-------------------------------------------------
+Batch: 500 of 1000, 50.00%
+  parameter acceptance  tuning
+  sigma.sq  52.0    1.56629
+  tau.sq    40.0    0.33578
+  phi   48.0    4.17330
+-------------------------------------------------
+Batch: 600 of 1000, 60.00%
+  parameter acceptance  tuning
+  sigma.sq  32.0    1.47507
+  tau.sq    48.0    0.35655
+  phi   40.0    4.17330
+-------------------------------------------------
+Batch: 700 of 1000, 70.00%
+  parameter acceptance  tuning
+  sigma.sq  50.0    1.56629
+  tau.sq    44.0    0.36375
+  phi   34.0    4.00966
+-------------------------------------------------
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_3    common pm25_arr    cr173  R       1:07      1 dcc-core-99
+        45553396_5    common pm25_arr    cr173  R       1:07      1 dcc-core-144
+        45553396_6    common pm25_arr    cr173  R       1:07      1 dcc-core-165
+        45553396_7    common pm25_arr    cr173  R       1:07      1 dcc-core-178
+        45553396_8    common pm25_arr    cr173  R       1:07      1 dcc-core-181
+        45553396_9    common pm25_arr    cr173  R       1:07      1 dcc-core-30
+       45553396_10    common pm25_arr    cr173  R       1:07      1 dcc-core-31
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_3    common pm25_arr    cr173  R       1:10      1 dcc-core-99
+        45553396_5    common pm25_arr    cr173  R       1:10      1 dcc-core-144
+        45553396_6    common pm25_arr    cr173  R       1:10      1 dcc-core-165
+        45553396_7    common pm25_arr    cr173  R       1:10      1 dcc-core-178
+        45553396_8    common pm25_arr    cr173  R       1:10      1 dcc-core-181
+        45553396_9    common pm25_arr    cr173  R       1:10      1 dcc-core-30
+       45553396_10    common pm25_arr    cr173  R       1:10      1 dcc-core-31
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ ls
+010030010  site_10.err  site_1.err  site_2.err  site_3.err  site_4.err  site_5.err  site_6.err  site_7.err  site_8.err  site_9.err
+010491003  site_10.out  site_1.out  site_2.out  site_3.out  site_4.out  site_5.out  site_6.out  site_7.out  site_8.out  site_9.out
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ ls
+010030010  010690003    site_10.out  site_2.err  site_3.out  site_5.err  site_6.out  site_8.err  site_9.out
+010270001  010731009    site_1.err   site_2.out  site_4.err  site_5.out  site_7.err  site_8.out
+010491003  site_10.err  site_1.out   site_3.err  site_4.out  site_6.err  site_7.out  site_9.err
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ ls
+010030010  010690003    site_10.out  site_2.err  site_3.out  site_5.err  site_6.out  site_8.err  site_9.out
+010270001  010731009    site_1.err   site_2.out  site_4.err  site_5.out  site_7.err  site_8.out
+010491003  site_10.err  site_1.out   site_3.err  site_4.out  site_6.err  site_7.out  site_9.err
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_5    common pm25_arr    cr173  R       1:25      1 dcc-core-144
+        45553396_6    common pm25_arr    cr173  R       1:25      1 dcc-core-165
+        45553396_8    common pm25_arr    cr173  R       1:25      1 dcc-core-181
+        45553396_9    common pm25_arr    cr173  R       1:25      1 dcc-core-30
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_5    common pm25_arr    cr173  R       1:47      1 dcc-core-144
+        45553396_6    common pm25_arr    cr173  R       1:47      1 dcc-core-165
+        45553396_8    common pm25_arr    cr173  R       1:47      1 dcc-core-181
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_6    common pm25_arr    cr173  R       1:52      1 dcc-core-165
+        45553396_8    common pm25_arr    cr173  R       1:52      1 dcc-core-181
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_6    common pm25_arr    cr173  R       1:58      1 dcc-core-165
+        45553396_8    common pm25_arr    cr173  R       1:58      1 dcc-core-181
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_6    common pm25_arr    cr173  R       2:06      1 dcc-core-165
+        45553396_8    common pm25_arr    cr173  R       2:06      1 dcc-core-181
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_6    common pm25_arr    cr173  R       2:38      1 dcc-core-165
+        45553396_8    common pm25_arr    cr173  R       2:38      1 dcc-core-181
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_6    common pm25_arr    cr173  R       2:43      1 dcc-core-165
+        45553396_8    common pm25_arr    cr173  R       2:43      1 dcc-core-181
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ ssh dcc-core-165
+################################################################################
+# You are about to access a Duke University computer network that is intended  #
+# for authorized users only. You should have no expectation of privacy in      #
+# your use of this network. Use of this network constitutes consent to         #
+# monitoring, retrieval, and disclosure of any information stored within the   #
+# network for any purpose including criminal prosecution.                      #
+################################################################################
+cr173@dcc-core-165  ~ $ top
+top - 12:44:26 up 134 days, 23:19,  2 users,  load average: 14.74, 8.77, 6.50
+Tasks: 223 total,   6 running, 217 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 49.3 us, 42.5 sy,  0.0 ni,  8.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+KiB Mem : 65800924 total,  9304252 free,   852112 used, 55644560 buff/cache
+KiB Swap:  2097148 total,  1996284 free,   100864 used. 64286068 avail Mem
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+34736 mn214     20   0   13344   2064   1412 R 100.0  0.0   5506:57 qecsim
+39655 mn214     20   0   13344   2060   1408 R 100.0  0.0   5445:41 qecsim
+54733 mn214     20   0   13040   1528   1316 R 100.0  0.0  16296:46 qecsim
+ 4234 splunk    20   0  298176 153848   5332 S   1.9  0.2 394:24.65 splunkd
+    1 root      20   0   54704   5144   3200 S   0.0  0.0  41:03.22 systemd
+    2 root      20   0       0      0      0 S   0.0  0.0   0:03.32 kthreadd
+    3 root      20   0       0      0      0 S   0.0  0.0   0:55.36 ksoftirqd/0
+    5 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/0:0H
+    7 root      rt   0       0      0      0 S   0.0  0.0  10:08.36 migration/0
+    8 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcu_bh
+    9 root      20   0       0      0      0 S   0.0  0.0  36:30.99 rcu_sched
+   10 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 lru-add-drain
+   11 root      rt   0       0      0      0 S   0.0  0.0   0:19.15 watchdog/0
+   12 root      rt   0       0      0      0 S   0.0  0.0   0:20.65 watchdog/1
+   13 root      rt   0       0      0      0 S   0.0  0.0   0:28.61 migration/1
+   14 root      20   0       0      0      0 S   0.0  0.0   0:04.32 ksoftirqd/1
+   16 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/1:0H
+   17 root      rt   0       0      0      0 S   0.0  0.0   0:21.13 watchdog/2
+   18 root      rt   0       0      0      0 S   0.0  0.0   1:25.41 migration/2
+   19 root      20   0       0      0      0 S   0.0  0.0   0:01.51 ksoftirqd/2
+   21 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/2:0H
+   22 root      rt   0       0      0      0 S   0.0  0.0   0:18.59 watchdog/3
+   23 root      rt   0       0      0      0 S   0.0  0.0   0:33.01 migration/3
+   24 root      20   0       0      0      0 S   0.0  0.0   0:00.35 ksoftirqd/3
+cr173@dcc-core-165  ~ $ exit
+logout
+Connection to dcc-core-165 closed.
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_6    common pm25_arr    cr173  R       3:02      1 dcc-core-165
+        45553396_8    common pm25_arr    cr173  R       3:02      1 dcc-core-181
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_6    common pm25_arr    cr173  R       3:08      1 dcc-core-165
+        45553396_8    common pm25_arr    cr173  R       3:08      1 dcc-core-181
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ more
+010030010/   010491003/   010731005/   site_10.out  site_2.err   site_3.out   site_5.err   site_6.out   site_8.err   site_9.out
+010270001/   010530002/   010731009/   site_1.err   site_2.out   site_4.err   site_5.out   site_7.err   site_8.out
+010331002/   010690003/   site_10.err  site_1.out   site_3.err   site_4.out   site_6.err   site_7.out   site_9.err
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ more site_6.err
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: coda
+Loading required package: magic
+Loading required package: abind
+Loading required package: Formula
+Parsed with column specification:
+cols(
+  site = col_character(),
+  date = col_datetime(format = ""),
+  latitude = col_double(),
+  longitude = col_double(),
+  pm25 = col_double()
+)
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ more site_6.out
+----------------------------------------
+  General model description
+----------------------------------------
+Model fit with 256 observations.
+
+Number of covariates 1 (including intercept if specified).
+
+Using the gaussian spatial correlation model.
+
+Using adaptive MCMC.
+
+  Number of batches 1000.
+  Batch length 50.
+  Target acceptance rate 0.43000.
+
+Priors and hyperpriors:
+  beta normal:
+  mu: 0.000
+  cov:
+  1000.000
+
+  sigma.sq IG hyperpriors shape=2.00000 and scale=2.00000
+  tau.sq IG hyperpriors shape=2.00000 and scale=0.10000
+  phi Unif hyperpriors a=0.05773 and b=0.05774
+-------------------------------------------------
+    Sampling
+-------------------------------------------------
+Batch: 100 of 1000, 10.00%
+  parameter acceptance  tuning
+  sigma.sq  52.0    0.82589
+  tau.sq    42.0    0.23427
+  phi   88.0    0.85960
+-------------------------------------------------
+Batch: 200 of 1000, 20.00%
+  parameter acceptance  tuning
+  sigma.sq  38.0    1.00875
+  tau.sq    40.0    0.23900
+  phi   60.0    2.29036
+-------------------------------------------------
+Batch: 300 of 1000, 30.00%
+  parameter acceptance  tuning
+  sigma.sq  44.0    1.04991
+  tau.sq    38.0    0.23427
+  phi   44.0    4.25761
+-------------------------------------------------
+----------------------------------------
+        General model description
+----------------------------------------
+Model fit with 362 observations.
+
+Number of covariates 1 (including intercept if specified).
+
+Using the gaussian spatial correlation model.
+
+Using adaptive MCMC.
+
+        Number of batches 1000.
+        Batch length 50.
+        Target acceptance rate 0.43000.
+
+Priors and hyperpriors:
+        beta normal:
+        mu:     0.000
+        cov:
+        1000.000
+
+        sigma.sq IG hyperpriors shape=2.00000 and scale=2.00000
+        tau.sq IG hyperpriors shape=2.00000 and scale=0.10000
+        phi Unif hyperpriors a=0.05773 and b=0.05774
+-------------------------------------------------
+                Sampling
+-------------------------------------------------
+Batch: 100 of 1000, 10.00%
+        parameter       acceptance      tuning
+        sigma.sq        44.0            0.76239
+...skipping...
+Batch: 400 of 1000, 40.00%
+  parameter acceptance  tuning
+  sigma.sq  36.0    0.98877
+  tau.sq    48.0    0.24383
+  phi   36.0    4.43136
+-------------------------------------------------
+Batch: 500 of 1000, 50.00%
+  parameter acceptance  tuning
+  sigma.sq  40.0    1.07112
+  tau.sq    48.0    0.22508
+  phi   32.0    4.17330
+-------------------------------------------------
+Batch: 600 of 1000, 60.00%
+  parameter acceptance  tuning
+  sigma.sq  48.0    1.07112
+  tau.sq    46.0    0.22963
+  phi   46.0    4.09066
+-------------------------------------------------
+Batch: 700 of 1000, 70.00%
+  parameter acceptance  tuning
+  sigma.sq  44.0    1.09276
+  tau.sq    40.0    0.22963
+  phi   38.0    4.34362
+-------------------------------------------------
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ less site_8.out
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_6    common pm25_arr    cr173  R       3:50      1 dcc-core-165
+        45553396_8    common pm25_arr    cr173  R       3:50      1 dcc-core-181
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ ssh dcc-core-165
+################################################################################
+# You are about to access a Duke University computer network that is intended  #
+# for authorized users only. You should have no expectation of privacy in      #
+# your use of this network. Use of this network constitutes consent to         #
+# monitoring, retrieval, and disclosure of any information stored within the   #
+# network for any purpose including criminal prosecution.                      #
+################################################################################
+Last login by user cr173: Thu Feb 7 12:44 - 12:44 (00:00) from: dcc-slogin-02.dscr.duke.local
+cr173@dcc-core-165  ~ $ top\
+> ^C
+cr173@dcc-core-165  ~ $ top
+top - 12:45:46 up 134 days, 23:20,  2 users,  load average: 15.19, 10.32, 7.23
+Tasks: 223 total,   5 running, 218 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 46.2 us, 38.7 sy,  0.0 ni, 15.1 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+KiB Mem : 65800924 total,  9237656 free,   917768 used, 55645500 buff/cache
+KiB Swap:  2097148 total,  1996284 free,   100864 used. 64220164 avail Mem
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+45814 cr173     20   0  868496 152584   9596 R 717.6  0.2  33:23.39 R
+34736 mn214     20   0   13344   2064   1412 R 100.0  0.0   5508:16 qecsim
+39655 mn214     20   0   13344   2060   1408 R 100.0  0.0   5447:00 qecsim
+54733 mn214     20   0   13040   1528   1316 R 100.0  0.0  16298:05 qecsim
+ 4234 splunk    20   0  298176 153880   5332 S   0.3  0.2 394:24.80 splunkd
+46136 cr173     20   0  172308   2416   1628 R   0.3  0.0   0:00.03 top
+    1 root      20   0   54704   5144   3200 S   0.0  0.0  41:03.27 systemd
+    2 root      20   0       0      0      0 S   0.0  0.0   0:03.32 kthreadd
+    3 root      20   0       0      0      0 S   0.0  0.0   0:55.36 ksoftirqd/0
+    5 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/0:0H
+    7 root      rt   0       0      0      0 S   0.0  0.0  10:08.36 migration/0
+    8 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcu_bh
+    9 root      20   0       0      0      0 S   0.0  0.0  36:31.00 rcu_sched
+   10 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 lru-add-drain
+   11 root      rt   0       0      0      0 S   0.0  0.0   0:19.15 watchdog/0
+   12 root      rt   0       0      0      0 S   0.0  0.0   0:20.65 watchdog/1
+   13 root      rt   0       0      0      0 S   0.0  0.0   0:28.61 migration/1
+   14 root      20   0       0      0      0 S   0.0  0.0   0:04.32 ksoftirqd/1
+   16 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/1:0H
+   17 root      rt   0       0      0      0 S   0.0  0.0   0:21.13 watchdog/2
+   18 root      rt   0       0      0      0 S   0.0  0.0   1:25.41 migration/2
+   19 root      20   0       0      0      0 S   0.0  0.0   0:01.51 ksoftirqd/2
+   21 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/2:0H
+   22 root      rt   0       0      0      0 S   0.0  0.0   0:18.59 watchdog/3
+cr173@dcc-core-165  ~ $ lscpu
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                12
+On-line CPU(s) list:   0-11
+Thread(s) per core:    1
+Core(s) per socket:    1
+Socket(s):             12
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-2680 v3 @ 2.50GHz
+Stepping:              0
+CPU MHz:               2494.224
+BogoMIPS:              4988.44
+Hypervisor vendor:     VMware
+Virtualization type:   full
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              30720K
+NUMA node0 CPU(s):     0-11
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm fsgsbase smep arat
+cr173@dcc-core-165  ~ $ exit
+logout
+Connection to dcc-core-165 closed.
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_8    common pm25_arr    cr173  R       4:35      1 dcc-core-181
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ squeue -u cr173
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        45553396_8    common pm25_arr    cr173  R       5:50      1 dcc-core-181
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $ ls
+010030010  010491003  010690003  site_10.err  site_1.out  site_3.err  site_4.out  site_6.err  site_7.out  site_9.err
+010270001  010530002  010731005  site_10.out  site_2.err  site_3.out  site_5.err  site_6.out  site_8.err  site_9.out
+010331002  010550010  010731009  site_1.err   site_2.out  site_4.err  site_5.out  site_7.err  site_8.out
+cr173@dcc-slogin-02  /work/sta790/cr173/example_pm25/results $

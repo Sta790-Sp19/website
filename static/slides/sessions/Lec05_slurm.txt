@@ -1,0 +1,1575 @@
+Last login: Tue Feb  5 10:48:54 on ttys004
+rundel@tbBook [~]$
+rundel@tbBook [~]$ ssh cr173@dcc-slogin.oit.duke.edu
+################################################################################
+# You are about to access a Duke University computer network that is intended  #
+# for authorized users only. You should have no expectation of privacy in      #
+# your use of this network. Use of this network constitutes consent to         #
+# monitoring, retrieval, and disclosure of any information stored within the   #
+# network for any purpose including criminal prosecution.                      #
+################################################################################
+Last login: Tue Feb  5 09:22:36 2019 from 10.197.214.137
+Last login by user cr173: Tue Feb 5 09:22 - 09:57 (00:34) from: 10.197.214.137
+cr173@dcc-slogin-02  ~ $ ls
+gerrymandering-xsede  r-ver.simg
+cr173@dcc-slogin-02  ~ $ rm r-ver.simg
+cr173@dcc-slogin-02  ~ $ ssh rundel-rhel.colab.duke.edu
+The authenticity of host 'rundel-rhel.colab.duke.edu (67.159.94.244)' can't be established.
+ECDSA key fingerprint is SHA256:5QsD8rYkF9CDrOxh++MwFMqsRj/Nd9dZWHwyJsVgkoc.
+ECDSA key fingerprint is MD5:3c:5a:7b:9d:cc:fd:22:ce:5a:da:f1:75:43:81:2d:26.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'rundel-rhel.colab.duke.edu,67.159.94.244' (ECDSA) to the list of known hosts.
+cr173@rundel-rhel.colab.duke.edu's password:
+Last login: Tue Feb  5 10:16:25 2019 from 10.197.214.137
+!! Important Notice about your RAPID VM !!
+
+This server is automatically set to patch and reboot every Sunday morning,
+between 3:00 AM and 4:00 AM.
+
+If you would like this behavior changed, you can do so by editing the file:
+/etc/cron.d/yum_autoupdate
+[cr173@vcm-8196 ~]$
+[cr173@vcm-8196 ~]$ exit
+logout
+Connection to rundel-rhel.colab.duke.edu closed.
+cr173@dcc-slogin-02  ~ $ exit
+logout
+Connection to dcc-slogin.oit.duke.edu closed.
+rundel@tbBook [~]$
+rundel@tbBook [~]$
+rundel@tbBook [~]$
+rundel@tbBook [~]$
+rundel@tbBook [~]$ ls -la
+total 528
+drwxr-xr-x+  98 rundel  staff   3136 Feb  5 11:44 .
+drwxr-xr-x    5 root    admin    160 Jul 19  2018 ..
+drwxr-xr-x    3 rundel  staff     96 Sep  4 10:09 .ApacheDirectoryStudio
+-rw-r--r--@   1 rundel  staff  47108 Feb  4 20:34 .DS_Store
+drwx------    3 rundel  staff     96 Nov 30  2009 .MacOSX
+-rw-r--r--    1 rundel  staff     20 May  4  2018 .Renviron
+-rw-r--r--    1 rundel  staff  17062 Jan 31 09:24 .Rhistory
+-rw-r--r--    1 rundel  staff    252 Jan 21 21:15 .Rprofile
+-rw-r--r--    1 rundel  staff      0 Oct  5 16:43 .S_O_L rc
+drwx------    5 rundel  staff    160 Feb  4 20:38 .Trash
+-rw-------    1 rundel  staff    794 Feb  1 16:21 .Xauthority
+drwxr-xr-x    2 rundel  staff     64 Jul 31  2008 .Xcode
+-rw-r--r--    1 rundel  staff    631 Jan  8 18:52 .anyconnect
+-rw-------    1 rundel  staff  13444 Feb  5 11:44 .bash_history
+-rw-r--r--@   1 rundel  staff   1331 Jan  3 20:19 .bash_profile
+drwx------   85 rundel  staff   2720 Jan 29 13:22 .bash_sessions
+drwxr-xr-x    6 rundel  staff    192 Sep  6 15:56 .box
+drwxr-xr-x    3 rundel  staff     96 Nov 12  2017 .bundle
+drwxr-xr-x    6 rundel  staff    192 Oct 17  2017 .cache
+drwxr-xr-x    5 rundel  staff    160 Oct  2 13:52 .cargo
+drwxr-xr-x   17 rundel  staff    544 Aug 31  2017 .ccache
+drwx------    5 rundel  staff    160 May  6  2018 .cisco
+-rw-r--r--    1 rundel  staff  10517 Nov 17 22:54 .cling_history
+drwxr-xr-x   12 rundel  staff    384 Sep 27 21:50 .config
+drwx------    3 rundel  staff     96 Oct 29  2008 .cups
+drwxr-xr-x    5 rundel  staff    160 Jan 31 16:57 .docker
+drwx------   13 rundel  staff    416 Nov 26 23:13 .dropbox
+drwxr-xr-x    4 rundel  staff    128 May 25  2018 .dvdcss
+drwxr-xr-x  161 rundel  staff   5152 Jan 23  2013 .fontconfig
+drwxr-xr-x   19 rundel  staff    608 Jan  4 16:28 .fonts
+drwxr-xr-x    3 rundel  staff     96 Jul 23  2018 .gdal
+-rw-------    1 rundel  staff   2914 Mar 16  2012 .gdb_history
+-rw-r--r--@   1 rundel  staff  17928 Dec 26 19:53 .gdbinit
+drwxr-xr-x    5 rundel  staff    160 Sep 23  2016 .gem
+-rw-r--r--    1 rundel  staff   1366 Mar  1  2018 .gitconfig
+drwxr-xr-x    3 rundel  staff     96 Jan 25  2017 .github
+-rw-r--r--    1 rundel  staff     12 Apr 25  2016 .gitignore
+-rw-r--r--    1 rundel  admin     13 Jul 16  2014 .gitignore_global
+drwx------    3 rundel  staff     96 Jan 12  2018 .google
+-rw-------    1 rundel  staff   3712 Apr 10  2018 .httr-oauth
+drwxr-xr-x    3 rundel  staff     96 Apr 30  2018 .ipynb_checkpoints
+drwxr-xr-x    8 rundel  staff    256 Sep 23  2016 .ipython
+drwxr-xr-x   13 rundel  staff    416 Jul  4  2017 .iterm2
+-rwxr-xr-x    1 rundel  staff  18894 Jul  4  2017 .iterm2_shell_integration.bash
+drwxr-xr-x    3 rundel  staff     96 Sep 24  2015 .jupyter
+drwxr-xr-x    3 rundel  staff     96 Oct 26 11:29 .keras
+drwxr-xr-x    4 rundel  staff    128 Sep 29  2017 .lfs
+drwx------    5 rundel  staff    160 Sep  2 22:09 .lldb
+drwxr-xr-x    4 rundel  staff    128 Sep 23  2016 .local
+drwxr-xr-x    4 rundel  staff    128 Apr 25  2018 .matplotlib
+drwxr-xr-x    3 rundel  staff     96 Jun 11  2008 .mplayer
+lrwxr-xr-x    1 rundel  staff     21 Oct  2 13:47 .multirust -> /Users/rundel/.rustup
+-rw-------    1 rundel  staff     85 Sep  5  2016 .netrc
+drwxr-xr-x    3 rundel  staff     96 Nov 12 22:40 .node-gyp
+drwxr-xr-x  774 rundel  staff  24768 Nov 12 22:40 .npm
+drwxr-xr-x    3 rundel  staff     96 Jul 17  2018 .oracle_jre_usage
+drwxr-xr-x    3 rundel  staff     96 Apr 10  2011 .pip
+-rw-r--r--    1 rundel  staff     38 Oct  2 13:47 .profile
+drwxr-xr-x    5 rundel  staff    160 Aug 22 14:18 .puppetlabs
+-rw-------    1 rundel  staff    554 Jul 16  2018 .python_history
+drwxr-xr-x@   7 rundel  staff    224 Oct  9 20:50 .rdecapdata
+drwxr-xr-x    5 rundel  staff    160 Nov 11 00:20 .rstudio
+drwxr-xr-x   26 rundel  staff    832 Feb  5 10:23 .rstudio-desktop
+drwxr-xr-x    7 rundel  staff    224 Oct  2 13:52 .rustup
+-rw-------    1 rundel  staff     87 Dec 13 17:45 .sqlite_history
+drwx------    9 rundel  staff    288 Jan 29 11:01 .ssh
+drwxr-xr-x    6 rundel  staff    192 Apr 24  2018 .subversion
+drwxr-xr-x    9 rundel  staff    288 Feb 20  2018 .vagrant.d
+drwxr-xr-x   26 rundel  staff    832 Sep 23  2016 .vim
+-rw-r--r--    1 rundel  staff  20873 Nov 24 10:44 .viminfo
+lrwxr-xr-x    1 rundel  staff     24 Nov 15  2016 .vimrc -> /Users/rundel/.vim/vimrc
+drwxr-xr-x    3 rundel  staff     96 Aug 25 12:41 .vscode
+drwx------    4 rundel  staff    128 Sep  6  2017 .wercker
+-rw-r--r--    1 rundel  staff    467 Dec 13 16:24 .wget-hsts
+drwx------    5 rundel  staff    160 Oct 24 23:00 Applications
+drwxr-x---    4 rundel  staff    128 Jan 13  2017 Blizzard
+drwxr-xr-x@ 135 rundel  staff   4320 Jan 18 23:11 Books
+drwx------    6 rundel  staff    192 Jan 16 10:47 Box Sync
+drwxr-xr-x@  32 rundel  staff   1024 Feb  5 10:34 Desktop
+drwx------+  60 rundel  staff   1920 Jan 10 12:32 Documents
+drwx------+  23 rundel  staff    736 Feb  5 10:34 Downloads
+drwxr-xr-x@   5 rundel  staff    160 Mar 18  2014 Drive
+drwx------@  21 rundel  staff    672 Dec 14 21:36 Dropbox
+drwxr-xr-x    6 rundel  staff    192 Aug 21  2014 GoPro
+drwx------@ 100 rundel  staff   3200 Jan 31 16:56 Library
+drwx------+   6 rundel  staff    192 Jan  6 00:32 Movies
+drwx------+   5 rundel  staff    160 Sep 18  2013 Music
+drwx------+  29 rundel  staff    928 Aug  8 14:33 Pictures
+drwxr-xr-x    6 rundel  staff    192 Sep 18  2013 Public
+drwxr-xr-x    8 rundel  staff    256 Jan 31 13:02 Scratch
+drwxr-xr-x+   3 rundel  staff     96 Nov 15  2016 Sites
+drwxr-xr-x    3 rundel  staff     96 Aug  1  2018 System
+-rwxr-xr-x    1 rundel  staff     68 Jul 15  2018 check_R.sh
+-rwxr-xr-x    1 rundel  staff     69 Apr  9  2018 check_mdworker.sh
+-rw-r--r--    1 root    wheel  29776 Dec 13 16:40 crlcache2.db
+drwxr-xr-x    7 rundel  staff    224 Oct 12  2016 iCloud Drive (Archive)
+-rw-r--r--@   1 rundel  staff   3082 Oct 29 15:53 shiny.R
+drwxr-xr-x    5 rundel  staff    160 Feb 28  2018 singularity-vm
+rundel@tbBook [~]$
+rundel@tbBook [~]$ ssh cr173@dcc-slogin.oit.duke.edu
+################################################################################
+# You are about to access a Duke University computer network that is intended  #
+# for authorized users only. You should have no expectation of privacy in      #
+# your use of this network. Use of this network constitutes consent to         #
+# monitoring, retrieval, and disclosure of any information stored within the   #
+# network for any purpose including criminal prosecution.                      #
+################################################################################
+Last login: Tue Feb  5 09:44:20 2019 from 10.197.214.137
+Last login by user cr173: Tue Feb 5 09:44 - 09:57 (00:12) from: 10.197.214.137
+cr173@dcc-slogin-01  ~ $ ls
+gerrymandering-xsede
+cr173@dcc-slogin-01  ~ $ pwd
+/dscrhome/cr173
+cr173@dcc-slogin-01  ~ $ groups
+dukeusers dscr rundellab sta790
+cr173@dcc-slogin-01  ~ $ cd /work/
+cr173@dcc-slogin-01  /work $ df -h | grep work
+oit-nas-fe13.dscr.duke.local:/ifs/oit-nas-fe13/hpcwork                          400T  294T  107T  74% /work
+cr173@dcc-slogin-01  /work $ ls
+23406458  44090920  44503252  44534610  44567155  aat11            crs70                           jdw54     mlp6                   test.csv
+44075873  44496858  44503253  44534611  44567156  ab690            cryosparc                       jenmod    mls99                  tfs3
+44075897  44496861  44503254  44534612  44567158  abv9             cy97                            jk409     mne8                   tj57
+44075898  44496864  44503289  44534613  44567819  ac407            cz63                            jma100    mrf20                  tm103
+44075899  44496865  44503306  44534614  44568297  ad265            cz73                            jmc89     mrm143                 tmo1
+44075900  44496866  44504802  44534615  44568306  ad344            dan24                           jmf88     mrm63                  tmp
+44075901  44496869  44504803  44534616  44568316  ad365            dangmh                          jo117     msk47                  tmp_dir
+44075902  44496872  44504804  44534617  44568317  aek27            data                            jom76     mtd28                  tmr17
+44075903  44496878  44504805  44534618  44568318  ahn15            dec18                           jpb15     mth37                  twr13
+44075904  44496881  44504806  44535253  44568319  ajc54            dfp8                            jpg31     musoki                 ty48
+44075905  44496894  44504807  44535254  44568320  ajk41            djd35                           jpm76     mv82                   tz47
+44075930  44497419  44504808  44535255  44568322  ajw70            dm237                           jps24     mw351                  var13
+44075931  44497420  44504809  44535256  44568323  ak349            dme13                           jt251     Nadeesha               vas11
+44075932  44497421  44504810  44535257  44568336  al324            dp139                           jtlab     njd18                  vjf2
+44075933  44497423  44504816  44535258  44568337  alj25            dunnlab                         jung0005  nkg6                   weights.dat
+44075934  44497428  44506178  44535259  44568367  am424            dw181                           jw585     nm224                  wmglab
+44075935  44497433  44506179  44535260  44568368  amd176           dyc6                            jwp37     nmg14                  worksc
+44075936  44497434  44506180  44535261  44568369  amd87            eam50                           kas141    novoalignmouse.sh      ww107
+44075937  44497435  44506181  44535262  44568371  AndrewGroup      Eb2-Input_S3_L002_R1_001.fastq  kc178     npf2                   wwl9
+44075938  44497436  44506182  44537922  44568372  ane7             ecb52                           kdm16     nrd10                  wy48
+44075939  44497437  44506183  44537923  44568373  anr33            edwar017                        keh65     nsp                    wywy48
+44077446  44499205  44506184  44537924  44568377  appion           elc50                           ki28      one_hot.py             xc46
+44077447  44499244  44506185  44537925  44568378  ar359            eo22                            kk192     owzar001               xd23
+44077448  44499245  44506186  44537926  44568379  asa45            forTom                          kl124     pa98                   xj18
+44077449  44499258  44506189  44537927  44568380  asy13            fp36                            kld54     pal23                  xl110
+44077452  44499314  44511854  44537928  44568395  avb14            fqj                             km389     pdm17                  xx52
+44077455  44499329  44511855  44537929  44568397  basin2           frr6                            kms147    pf31                   xz113
+44079093  44499330  44511856  44537930  44568398  bbt3             fs91                            kms173    pn68                   yc195
+44079096  44499350  44511857  44537931  44568399  bc187            fs97                            krn       psk9                   yc304
+44079097  44499360  44511858  44565809  44568412  bgb13            ga80                            kro18     pt59                   yd44
+44079098  44499411  44511859  44565810  44568413  bh163            gauss_scrdir                    kt115     pt66                   yh98
+44079099  44500988  44511860  44565811  44568416  bhl11            gd44                            lah94     ra101                  yk158
+44079100  44501012  44511861  44565813  44568417  bkb18            genome                          lem34     rausher                yk170
+44079101  44501026  44511862  44565815  44568419  bl166            ghg2                            lf71      rbb13                  yl299
+44079102  44501027  44511863  44565817  44568422  blanka           gj47                            lgb.py    rch37                  yl479
+44079103  44501028  44512715  44565818  44568563  bmw42            gjg3                            lhb20     rch42                  yl489
+44079104  44501031  44512716  44565820  44568564  BOB_CARLOS       gjh6                            ljg24     rcw27                  yl490
+44079563  44501032  44512717  44565824  44568565  bpb9             gjl7                            lks24     reweight_variable.log  yx116
+44079564  44501047  44512718  44565825  44568567  bpl10            gkh10                           llb22     rgh2                   yz364
+44079565  44501048  44512719  44566619  44568568  brf8             gpt4                            lmc86     rkd13                  yz393
+44079566  44501063  44512720  44566621  44568569  bw142            gw60                            long      rl124                  yz398
+44079567  44501987  44512721  44566622  44568570  bwa_mapping      GWASprocess_sample.R            lu        rmh25                  yz432
+44079568  44501988  44512722  44566627  44568571  by51             hmm40                           lz134     rmsd.dat               yz463
+44079569  44501989  44512723  44566628  44568572  cas157           hpchome                         lz91      san33                  yz533
+44079570  44501990  44512724  44566630  44568574  cat33            hs189                           mc394     sc486                  yz540
+44079571  44501991  44514032  44566631  44569124  cat57            hy126                           md270     sc587                  zc96
+44079572  44501994  44514033  44566632  44569125  cc216            ia41                            md332     sht9                   zd24
+44090903  44502002  44514034  44566633  44569126  cc559            ifm4                            mdelong   sk130                  zm14
+44090912  44502006  44514035  44566635  44569127  clean_test.csv   illumina_data                   mez9      ss240                  zq21
+44090913  44502007  44514036  44567137  44569128  clean_train.csv  ip45                            mfl10     ssl33                  zx61
+44090914  44502008  44514037  44567139  44569142  cmb96            janice                          mhg19     sta790                 zy69
+44090915  44503247  44514038  44567140  44569143  CMOR1_4          jap114                          mis17     sw360
+44090916  44503248  44514039  44567141  44569161  CNV              jar_files                       mjr52     sy111
+44090917  44503249  44514040  44567151  44569181  code             jc500                           mkd20     sy127
+44090918  44503250  44514041  44567152  44569200  convading        jcf26                           mla39     tag15
+44090919  44503251  44534609  44567153  aac48     cr173            jdm67                           mle25     tb211
+cr173@dcc-slogin-01  /work $ cd sta790/
+cr173@dcc-slogin-01  /work/sta790 $ ls
+cr173
+cr173@dcc-slogin-01  /work/sta790 $ ls -la
+total 194
+drwxrwxr-x.   3 cr173 sta790    23 Feb  4 11:15 .
+drwxrwxrwt. 543 root  root   13715 Feb  4 11:05 ..
+drwxr-xr-x.   2 cr173 sta790     0 Feb  4 11:15 cr173
+cr173@dcc-slogin-01  /work/sta790 $ mkdir cr173-2
+cr173@dcc-slogin-01  /work/sta790 $ ls -la
+total 322
+drwxrwxr-x.   7 cr173 sta790   115 Feb  5 12:02 .
+drwxrwxrwt. 543 root  root   13715 Feb  4 11:05 ..
+drwxr-xr-x.   2 cr173 sta790     0 Feb  4 11:15 cr173
+drwxr-xr-x.   2 cr173 sta790     0 Feb  5 12:02 cr173-2
+drwxr-xr-x.   2 fb75  sta790     0 Feb  5 12:02 fb75
+drwxr-xr-x.   2 lrl22 sta790     0 Feb  5 12:02 lrl22
+drwxr-xr-x.   2 psv6  sta790     0 Feb  5 12:01 psv6
+cr173@dcc-slogin-01  /work/sta790 $ rm -rf cr173-2/
+cr173@dcc-slogin-01  /work/sta790 $
+cr173@dcc-slogin-01  /work/sta790 $ lscpu
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                4
+On-line CPU(s) list:   0-3
+Thread(s) per core:    1
+Core(s) per socket:    1
+Socket(s):             4
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-2680 v3 @ 2.50GHz
+Stepping:              0
+CPU MHz:               2494.224
+BogoMIPS:              4988.44
+Hypervisor vendor:     VMware
+Virtualization type:   full
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              30720K
+NUMA node0 CPU(s):     0-3
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts nopl xtopology tsc_reliable nonstop_tsc aperfmperf eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm epb fsgsbase tsc_adjust bmi1 avx2 smep bmi2 invpcid xsaveopt dtherm ida arat pln pts
+cr173@dcc-slogin-01  /work/sta790 $ free -h
+              total        used        free      shared  buff/cache   available
+Mem:           7.6G        951M        3.3G        2.0M        3.4G        6.2G
+Swap:          2.0G        931M        1.1G
+cr173@dcc-slogin-01  /work/sta790 $ scontrol show partition
+PartitionName=scavenger
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-aryalab-01,dcc-biodept-[01,03],dcc-biostat-[01-03],dcc-cagpm-[01-02],dcc-carin-[01-25],dcc-chg-[01-05],dcc-compeb-[01-14],dcc-dailabs-[01-05],dcc-dhvi-[01-03],dcc-econ-[01-03,17-23],dcc-gcb-[01-09,62-67],dcc-hashimilab-02,dcc-symposium-01,dcc-jirtle-[01-09],dcc-khauserlab-01,dcc-kumarlab-01,dcc-lefkowitz-01,dcc-mcglynnlab-01,dcc-nicolab-01,dcc-noor-[01-02],dcc-owzarteam-01,dcc-pfister-01,dcc-rausherlab-[01-02],dcc-rodrigolab-01,dcc-savageresearch-[01-02],dcc-shawlab-01,dcc-schmidlab-01,dcc-bragg-[01-05],dcc-tmolab-[02,03],dcc-wychem-01,dcc-yoderlab-[01,03]
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=2550 TotalNodes=122 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=artai-gpu
+   AllowGroups=ALL AllowAccounts=artai AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=03:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-dsplus-gpu-[01-12]
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=OFF
+   State=UP TotalCPUs=120 TotalNodes=12 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=aryalab
+   AllowGroups=ALL AllowAccounts=aryalab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-aryalab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=9 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=biodept
+   AllowGroups=ALL AllowAccounts=biodept AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-biodept-[01,03]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=46 TotalNodes=2 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=biostat
+   AllowGroups=ALL AllowAccounts=biostat AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-biostat-[01-03]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=129 TotalNodes=3 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=brownlab-gpu
+   AllowGroups=ALL AllowAccounts=brownlab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=7-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-brownlab-gpu-[01-04]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=40 TotalNodes=4 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=cagpm
+   AllowGroups=ALL AllowAccounts=cagpm AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-cagpm-[01-02]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=46 TotalNodes=2 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=carin
+   AllowGroups=ALL AllowAccounts=carin AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-carin-[01-25]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=275 TotalNodes=25 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=carin-gpu
+   AllowGroups=ALL AllowAccounts=carin AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=7-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-carin-gpu-[01-12]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=240 TotalNodes=12 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=chg
+   AllowGroups=ALL AllowAccounts=chg AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-chg-[01-05]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=55 TotalNodes=5 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=collinslab
+   AllowGroups=ALL AllowAccounts=collinslab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-collinslab-gpu-[01-04]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=80 TotalNodes=4 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=common
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=ALL
+   AllocNodes=ALL Default=YES QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-core-[01-65,74-100,106-239]
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=2578 TotalNodes=226 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=common-large
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-core-101
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=23 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=compeb
+   AllowGroups=ALL AllowAccounts=compeb AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-compeb-[01-14]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=225 TotalNodes=14 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=dailabs
+   AllowGroups=ALL AllowAccounts=dailabs AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-dailabs-[01-05]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=55 TotalNodes=5 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=dbchem
+   AllowGroups=ALL AllowAccounts=dbchem AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-dbchem-[01-18]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=246 TotalNodes=18 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=dhvi
+   AllowGroups=ALL AllowAccounts=dhvi AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-dhvi-[01-03]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=129 TotalNodes=3 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=dhvi-gpu
+   AllowGroups=ALL AllowAccounts=dhvi AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-dhvi-gpu-[01-20]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=220 TotalNodes=20 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=strucbio-cryosparc-gpu
+   AllowGroups=ALL AllowAccounts=dhvi-strucbio AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=7-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-dhvi-strucbio-gpu-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=80 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=dhvi-strucbio-gpu
+   AllowGroups=ALL AllowAccounts=dhvi-strucbio AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=7-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-dhvi-strucbio-gpu-[02-05]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=80 TotalNodes=4 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=dolbowlab
+   AllowGroups=ALL AllowAccounts=dolbowlab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-dolbowlab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=70 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=donglab
+   AllowGroups=ALL AllowAccounts=donglab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-donglab-[01-03]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=42 TotalNodes=3 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=dsplus-gpu
+   AllowGroups=ALL AllowAccounts=plusds AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=7-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-dsplus-gpu-[01-12]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=120 TotalNodes=12 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=ece-gpu-high
+   AllowGroups=ALL AllowAccounts=ece-gpu-high AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=06:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-ece-gpu-[05-20]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=OFF
+   State=UP TotalCPUs=224 TotalNodes=16 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=ece-gpu-low
+   AllowGroups=ALL AllowAccounts=ece-gpu-low AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=06:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-ece-gpu-[05-20]
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=OFF
+   State=UP TotalCPUs=224 TotalNodes=16 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=econ
+   AllowGroups=ALL AllowAccounts=econ AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-econ-[01-03,17-23]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=286 TotalNodes=10 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=gcb
+   AllowGroups=ALL AllowAccounts=gcb AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-gcb-[01-09,62-67]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=474 TotalNodes=15 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=gpu-common
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=2-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-gpu-[15-26,30-32]
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=88 TotalNodes=15 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=hashimilab
+   AllowGroups=ALL AllowAccounts=hashimilab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-hashimilab-02
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=23 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=herringlab
+   AllowGroups=ALL AllowAccounts=herringlab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-herringlab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=70 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=herringlab-low
+   AllowGroups=ALL AllowAccounts=herringlab,volfovskylab,statdept AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-herringlab-01
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=70 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=hpc
+   AllowGroups=ALL AllowAccounts=hpc AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-symposium-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=31 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=jirtle
+   AllowGroups=ALL AllowAccounts=jirtle AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-jirtle-[01-09]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=99 TotalNodes=9 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=khauserlab
+   AllowGroups=ALL AllowAccounts=khauserlab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-khauserlab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=23 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=kumarlab
+   AllowGroups=ALL AllowAccounts=kumarlab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-kumarlab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=23 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=lefkowitz
+   AllowGroups=ALL AllowAccounts=lefkowitz AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-lefkowitz-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=31 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=mcglynnlab
+   AllowGroups=ALL AllowAccounts=mcglynnlab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-mcglynnlab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=31 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=nicolab
+   AllowGroups=ALL AllowAccounts=nicolab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-nicolab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=21 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=noor
+   AllowGroups=ALL AllowAccounts=noor AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-noor-[01-02]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=46 TotalNodes=2 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=nsoe-it
+   AllowGroups=ALL AllowAccounts=nsoe-it AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-nsoe-it-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=44 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=owzarteam
+   AllowGroups=ALL AllowAccounts=owzarteam AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-owzarteam-01,dcc-owzarteam-gpu-[01-02]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=35 TotalNodes=3 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=pcharbon
+   AllowGroups=ALL AllowAccounts=pcharbon,pcharbonlow AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-pcharbon-[01-20]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=420 TotalNodes=20 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=pfisterlab
+   AllowGroups=ALL AllowAccounts=pfisterlab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-pfister-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=43 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=psklab
+   AllowGroups=ALL AllowAccounts=psklab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-psklab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=36 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=randleslab
+   AllowGroups=ALL AllowAccounts=randleslab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-randleslab-[01-21]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=483 TotalNodes=21 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=randleslab-gpu
+   AllowGroups=ALL AllowAccounts=randleslab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-ib-a-rlab-gpu-ad29-[26,28,30,32,34],dcc-ib-a-rlab-gpu-ae29-[26,28,30,32,34]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=840 TotalNodes=10 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=randleslab-ib
+   AllowGroups=ALL AllowAccounts=randleslab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-ib-a-rlab-ae29-[01-25],dcc-ib-a-rlab-ad29-[01-25],dcc-ib-a-rlab-gpu-ad29-[26,28,30,32,34],dcc-ib-a-rlab-gpu-ae29-[26,28,30,32,34]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=5040 TotalNodes=60 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=randleslab-ib-low
+   AllowGroups=ALL AllowAccounts=randleslab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-ib-a-rlab-ae29-[01-25],dcc-ib-a-rlab-ad29-[01-25],dcc-ib-a-rlab-gpu-ad29-[26,28,30,32,34],dcc-ib-a-rlab-gpu-ae29-[26,28,30,32,34]
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=5040 TotalNodes=60 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=rausherlab
+   AllowGroups=ALL AllowAccounts=rausherlab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-rausherlab-[01-02]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=22 TotalNodes=2 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=rodrigolab
+   AllowGroups=ALL AllowAccounts=rodrigolab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-rodrigolab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=31 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=savageresearch
+   AllowGroups=ALL AllowAccounts=savageresearch AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-savageresearch-[01-02]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=46 TotalNodes=2 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=shawlab
+   AllowGroups=ALL AllowAccounts=shawlab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-shawlab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=31 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=schmidlab
+   AllowGroups=ALL AllowAccounts=schmidlab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-schmidlab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=27 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=statdept
+   AllowGroups=ALL AllowAccounts=statdept AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-statdept-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=70 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=statdept-low
+   AllowGroups=ALL AllowAccounts=herringlab,volfovskylab,statdept AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-statdept-01
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=70 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=tcfdg
+   AllowGroups=ALL AllowAccounts=tcfdg AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-bragg-[01-05]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=135 TotalNodes=5 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=tmolab
+   AllowGroups=ALL AllowAccounts=tmolab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-tmolab-[02,03]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=46 TotalNodes=2 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=ultrasound
+   AllowGroups=ALL AllowAccounts=ultrasound AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-ultrasound-[01-11]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=717 TotalNodes=11 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=ultrasound-gpu
+   AllowGroups=ALL AllowAccounts=ultrasound AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-ultrasound-gpu-[01-04]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=80 TotalNodes=4 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=volfovskylab
+   AllowGroups=ALL AllowAccounts=volfovskylab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-volfovskylab-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=70 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=volfovskylab-low
+   AllowGroups=ALL AllowAccounts=herringlab,volfovskylab,statdept AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-volfovskylab-01
+   PriorityJobFactor=10 PriorityTier=10 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=70 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=wmglab
+   AllowGroups=ALL AllowAccounts=wmglab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-wmglab-[01-05,15-37],dcc-peterchev-[01-09]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=1164 TotalNodes=37 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=wychem
+   AllowGroups=ALL AllowAccounts=wychem AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-wychem-01
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=23 TotalNodes=1 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+PartitionName=yoderlab
+   AllowGroups=ALL AllowAccounts=yoderlab AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=90-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED
+   Nodes=dcc-yoderlab-[01,03]
+   PriorityJobFactor=20 PriorityTier=20 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=GANG,REQUEUE
+   State=UP TotalCPUs=66 TotalNodes=2 SelectTypeParameters=NONE
+   JobDefaults=(null)
+   DefMemPerNode=UNLIMITED MaxMemPerNode=UNLIMITED
+
+cr173@dcc-slogin-01  /work/sta790 $
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common --pty bash -i
+srun: job 45198438 queued and waiting for resources
+srun: job 45198438 has been allocated resources
+cr173@dcc-core-41  /work/sta790 $ lscpu
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                12
+On-line CPU(s) list:   0-11
+Thread(s) per core:    1
+Core(s) per socket:    1
+Socket(s):             12
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-2680 v3 @ 2.50GHz
+Stepping:              0
+CPU MHz:               2494.224
+BogoMIPS:              4988.44
+Hypervisor vendor:     VMware
+Virtualization type:   full
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              30720K
+NUMA node0 CPU(s):     0-11
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm fsgsbase smep arat
+cr173@dcc-core-41  /work/sta790 $ free -h
+              total        used        free      shared  buff/cache   available
+Mem:            31G        5.3G        4.1G        332K         21G         25G
+Swap:          2.0G        258M        1.7G
+cr173@dcc-core-41  /work/sta790 $
+cr173@dcc-core-41  /work/sta790 $ R
+bash: R: command not found
+cr173@dcc-core-41  /work/sta790 $ python
+Python 2.7.5 (default, Sep 12 2018, 05:31:16)
+[GCC 4.8.5 20150623 (Red Hat 4.8.5-36)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>>
+cr173@dcc-core-41  /work/sta790 $ /opt/apps/
+admin/                               intelcsl/                            Python-2.7.10/
+amber11/                             isl/                                 Python-2.7.3/
+amber12/                             jellyfish/                           Python-2.7.5/
+anaconda3/                           lib/                                 Python-3.3.2/
+bayenv2/                             lib64/                               Python-3.3.3/
+beagle/                              libexec/                             Queue-2.3-9/
+BEASTv1.7.5/                         log4cpp/                             R-2.15.2/
+BEASTv1.8.0/                         mathematica8/                        R-3.0.3/
+bedtools2-2.19.1/                    MATLAB/                              rhel6/
+bin/                                 matlabR2014a/                        rhel7/
+boost_1_55_0/                        matlabR2015a/                        rldev/
+bwa-0.7.9a/                          matlabR2016a/                        sas/
+chem/                                mcl/                                 sbgrid/
+cloog-0.18.1/                        modulefiles/                         sbgrid-linux64/
+cuda-5.5/                            mpc-0.9/                             sbin/
+cufflinks-2.1.1/                     mpfr-3.0.0/                          sdg/
+dev/                                 NAMD_2.10_Source/                    sge_data/
+doc/                                 novocraft/                           share/
+drv6/                                nwchem/                              signalp-4.1/
+EMBOSS-6.6.0/                        nwchem-6.3r2/                        sing/
+etc/                                 nwchem-6.3.revision2-src.2013-10-17/ slurm/
+gcc/                                 nwchem-src-2013-02-06/               staging/
+GenomeAnalysisTK-2.3-9/              nwchem-trunk/                        stata/
+gmp-4.3.2/                           openmm/                              stata13/
+icm-3.8-0/                           openmm5.2/                           th224/
+ima2/                                pb_mpi1.5a/                          tophat/
+images/                              perl-5.16.2/                         tophat-2.0.10/
+include/                             perl-5.20.1/                         tophat-bowtie/
+intel/                               Python-2.7.1/                        trinityrnaseq-2.1.1/
+cr173@dcc-core-41  /work/sta790 $ /opt/apps/R-3.0.3/bin/R
+
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> rowNames(installed.packages())
+Error: could not find function "rowNames"
+> rownames(installed.packages())
+ [1] "acepack"           "animation"         "ape"
+ [4] "base"              "bayou"             "BiocInstaller"
+ [7] "bitops"            "boot"              "brew"
+[10] "chron"             "class"             "cluster"
+[13] "clusterGeneration" "coda"              "codetools"
+[16] "colorspace"        "compiler"          "corpcor"
+[19] "datasets"          "data.table"        "denstrip"
+[22] "deSolve"           "devtools"          "dichromat"
+[25] "digest"            "evaluate"          "expm"
+[28] "fastmatch"         "fitdistrplus"      "foreign"
+[31] "Formula"           "geiger"            "ggplot2"
+[34] "glmmADMB"          "graphics"          "grDevices"
+[37] "grid"              "gridExtra"         "gtable"
+[40] "httr"              "igraph"            "jsonlite"
+[43] "KernSmooth"        "labeling"          "lattice"
+[46] "latticeExtra"      "maps"              "MASS"
+[49] "Matrix"            "memoise"           "methods"
+[52] "mgcv"              "mime"              "mnormt"
+[55] "msm"               "munsell"           "mvtnorm"
+[58] "nlme"              "nloptr"            "nnet"
+[61] "numDeriv"          "OUwie"             "parallel"
+[64] "phangorn"          "phytools"          "plotrix"
+[67] "plyr"              "proto"             "quadprog"
+[70] "qvalue"            "R2admb"            "R6"
+[73] "RColorBrewer"      "Rcpp"              "RcppArmadillo"
+[76] "RCurl"             "reshape2"          "rgl"
+[79] "Rmpi"              "roxygen2"          "rpart"
+[82] "rstudioapi"        "scales"            "scatterplot3d"
+[85] "spatial"           "splines"           "stats"
+[88] "stats4"            "stringr"           "subplex"
+[91] "survival"          "tcltk"             "tools"
+[94] "utils"             "whisker"
+>
+Save workspace image? [y/n/c]: n
+cr173@dcc-core-41  /work/sta790 $ exit
+exit
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common-large --pty bash -i
+srun: job 45198881 queued and waiting for resources
+srun: job 45198881 has been allocated resources
+cr173@dcc-core-101  /work/sta790 $ lscpu
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                24
+On-line CPU(s) list:   0-23
+Thread(s) per core:    1
+Core(s) per socket:    1
+Socket(s):             24
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-2670 v3 @ 2.30GHz
+Stepping:              0
+CPU MHz:               2294.686
+BogoMIPS:              4589.37
+Hypervisor vendor:     VMware
+Virtualization type:   full
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              30720K
+NUMA node0 CPU(s):     0-23
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts nopl xtopology tsc_reliable nonstop_tsc aperfmperf eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm epb fsgsbase tsc_adjust bmi1 avx2 smep bmi2 invpcid xsaveopt dtherm ida arat pln pts
+cr173@dcc-core-101  /work/sta790 $ free -h
+              total        used        free      shared  buff/cache   available
+Mem:           235G        4.0G         24G        368K        207G        230G
+Swap:          2.0G        248M        1.8G
+cr173@dcc-core-101  /work/sta790 $ srun: Force Terminated job 45198881
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: error: dcc-core-101: task 0: Killed
+cr173@dcc-slogin-01  /work/sta790 $
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common -N4 -l /bin/hostname
+srun: job 45200579 queued and waiting for resources
+srun: job 45200579 has been allocated resources
+3: dcc-core-222
+2: dcc-core-221
+0: dcc-core-219
+1: dcc-core-220
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common -N4 -l /bin/hostname
+srun: job 45200584 queued and waiting for resources
+srun: job 45200584 has been allocated resources
+2: dcc-core-219
+3: dcc-core-220
+0: dcc-core-217
+1: dcc-core-218
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common -n4 -l /bin/hostname
+srun: job 45200587 queued and waiting for resources
+srun: job 45200587 has been allocated resources
+3: dcc-core-84
+1: dcc-core-83
+2: dcc-core-83
+0: dcc-core-82
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common -n4 -l /bin/hostname
+srun: job 45200592 queued and waiting for resources
+srun: job 45200592 has been allocated resources
+0: dcc-core-77
+1: dcc-core-77
+3: dcc-core-77
+2: dcc-core-77
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common -n4 -l /opt/apps/R-3.0.3/
+bin/       lib64/     .Rhistory  share/
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common -n4 -l /opt/apps/R-3.0.3/bin/R --quiet -e "rnorm(3)"
+srun: job 45201109 queued and waiting for resources
+srun: job 45201109 has been allocated resources
+3: > rnorm(3)
+3: [1] 0.03756377 0.45568187 1.80952281
+3: >
+3: >
+1: > rnorm(3)
+1: [1] 0.005107641 2.086591104 0.484568547
+1: >
+1: >
+2: > rnorm(3)
+2: [1]  0.5976351  0.3523798 -2.6824414
+2: >
+2: >
+0: > rnorm(3)
+0: [1]  1.01089756 -1.35291635 -0.05076571
+0: >
+0: >
+cr173@dcc-slogin-01  /work/sta790 $
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common --mem1G --pty -i
+srun: unrecognized option '--mem1G'
+srun: option requires an argument -- 'i'
+srun: unrecognized option '--mem1G'
+Try "srun --help" for more information
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common --mem1G --pty bash -i
+srun: unrecognized option '--mem1G'
+srun: unrecognized option '--mem1G'
+Try "srun --help" for more information
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common --mem 1G --pty bash -i
+srun: job 45201152 queued and waiting for resources
+^Csrun: Job allocation 45201152 has been revoked
+srun: Force Terminated job 45201152
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common --mem=1G --pty bash -i
+srun: job 45201154 queued and waiting for resources
+srun: job 45201154 has been allocated resources
+cr173@dcc-core-17  /work/sta790 $ /opt/apps/R-
+R-2.15.2/ R-3.0.3/
+cr173@dcc-core-17  /work/sta790 $ /opt/apps/R-3.0.3/bin/R
+
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+>
+> install.packages("pryr")
+Warning in install.packages("pryr") :
+  'lib = "/hpchome/apps/R-3.0.3/lib64/R/library"' is not writable
+Would you like to use a personal library instead?  (y/n) y
+Would you like to create a personal library
+~/R/x86_64-unknown-linux-gnu-library/3.0
+to install packages into?  (y/n) y
+--- Please select a CRAN mirror for use in this session ---
+CRAN mirror
+
+  1: 0-Cloud [https]                    2: 0-Cloud
+  3: Algeria [https]                    4: Algeria
+  5: Argentina (La Plata)               6: Australia (Canberra) [https]
+  7: Australia (Canberra)               8: Australia (Melbourne 1) [https]
+  9: Australia (Melbourne 2) [https]   10: Australia (Perth) [https]
+ 11: Austria [https]                   12: Austria
+ 13: Belgium (Antwerp)                 14: Belgium (Ghent) [https]
+ 15: Belgium (Ghent)                   16: Brazil (BA)
+ 17: Brazil (PR) [https]               18: Brazil (PR)
+ 19: Brazil (RJ) [https]               20: Brazil (RJ)
+ 21: Brazil (SP 1) [https]             22: Brazil (SP 1)
+ 23: Brazil (SP 2) [https]             24: Brazil (SP 2)
+ 25: Bulgaria [https]                  26: Bulgaria
+ 27: Canada (BC) [https]               28: Canada (BC)
+ 29: Canada (MB) [https]               30: Canada (MB)
+ 31: Canada (NS) [https]               32: Canada (NS)
+ 33: Canada (ON)                       34: Chile 1 [https]
+ 35: Chile 1                           36: Chile 2 [https]
+ 37: China (Beijing) [https]           38: China (Beijing)
+ 39: China (Hefei) [https]             40: China (Hefei)
+ 41: China (Hong Kong) [https]         42: China (Guangzhou) [https]
+ 43: China (Lanzhou) [https]           44: China (Lanzhou)
+ 45: China (Shanghai 1) [https]        46: China (Shanghai 2) [https]
+ 47: Colombia (Cali) [https]           48: Colombia (Cali)
+ 49: Czech Republic [https]            50: Czech Republic
+ 51: Denmark [https]                   52: Denmark
+ 53: East Asia [https]                 54: Ecuador (Cuenca) [https]
+ 55: Ecuador (Cuenca)                  56: Ecuador (Quito) [https]
+ 57: El Salvador                       58: Estonia [https]
+ 59: Estonia                           60: France (Lyon 1) [https]
+ 61: France (Lyon 2) [https]           62: France (Lyon 2)
+ 63: France (Marseille) [https]        64: France (Marseille)
+ 65: France (Montpellier) [https]      66: France (Montpellier)
+ 67: France (Paris 1)                  68: France (Paris 2) [https]
+ 69: France (Paris 2)                  70: Germany (Erlangen) [https]
+ 71: Germany (Göttingen) [https]       72: Germany (Göttingen)
+ 73: Germany (Münster) [https]         74: Germany (Münster)
+ 75: Greece [https]                    76: Greece
+ 77: Hungary [https]                   78: Hungary
+ 79: Iceland [https]                   80: Iceland
+ 81: India [https]                     82: India
+ 83: Indonesia (Jakarta) [https]       84: Iran [https]
+ 85: Iran                              86: Ireland [https]
+ 87: Ireland                           88: Italy (Milano)
+ 89: Italy (Padua) [https]             90: Italy (Padua)
+ 91: Japan (Tokyo) [https]             92: Japan (Tokyo)
+ 93: Japan (Yonezawa) [https]          94: Korea (Busan) [https]
+ 95: Korea (Gyeongsan-si) [https]      96: Korea (Seoul 1) [https]
+ 97: Korea (Seoul 2)                   98: Korea (Ulsan) [https]
+ 99: Korea (Ulsan)                    100: Malaysia [https]
+101: Malaysia                         102: Mexico (Mexico City) [https]
+103: Mexico (Mexico City)             104: Mexico (Texcoco)
+105: New Zealand [https]              106: New Zealand
+107: Norway [https]                   108: Norway
+109: Philippines [https]              110: Philippines
+111: Portugal (Lisbon)                112: Portugal (Porto)
+113: Serbia [https]                   114: Singapore (Singapore) [https]
+115: Singapore (Singapore)            116: South Africa (Cape Town)
+117: South Africa (Johannesburg)      118: Spain (A Coruña) [https]
+119: Spain (A Coruña)                 120: Spain (Madrid) [https]
+121: Spain (Madrid)                   122: Sweden [https]
+123: Sweden                           124: Switzerland [https]
+125: Switzerland                      126: Taiwan (Chungli) [https]
+127: Taiwan (Chungli)                 128: Taiwan (Taipei)
+129: Thailand                         130: Turkey (Denizli) [https]
+131: Turkey (Denizli)                 132: Turkey (Mersin) [https]
+133: Turkey (Mersin)                  134: UK (Bristol) [https]
+135: UK (Bristol)                     136: UK (London 1) [https]
+137: UK (London 1)                    138: USA (CA 1) [https]
+139: USA (CA 1)                       140: USA (CA 2)
+141: USA (IA) [https]                 142: USA (IA)
+143: USA (IN) [https]                 144: USA (IN)
+145: USA (KS) [https]                 146: USA (KS)
+147: USA (MI 1) [https]               148: USA (MI 1)
+149: USA (MO)                         150: USA (NC)
+151: USA (OH) [https]                 152: USA (OH)
+153: USA (OR) [https]                 154: USA (OR)
+155: USA (PA 1)                       156: USA (PA 2)
+157: USA (TN) [https]                 158: USA (TN)
+159: USA (TX 1) [https]               160: USA (TX 1)
+161: Uruguay [https]                  162: Venezuela
+
+
+Selection: 1
+Warning: unable to access index for repository https://cloud.r-project.org/src/contrib
+Warning message:
+package ‘pryr’ is not available (for R version 3.0.3)
+>
+> m = matrix(1, 10000, 10000)
+> m = matrix(1, 12000, 12000)
+Killed
+cr173@dcc-core-17  /work/sta790 $ exit
+srun: error: dcc-core-17: task 0: Out Of Memory
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common --pty bash -i
+srun: job 45201158 queued and waiting for resources
+srun: job 45201158 has been allocated resources
+cr173@dcc-core-17  /work/sta790 $ /opt/apps/R-3.0.3/bin/R
+
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> m = matrix(1, 10000, 10000)
+> m = matrix(1, 12000, 12000)
+> m = matrix(1, 20000, 20000)
+Killed
+cr173@dcc-core-17  /work/sta790 $ /opt/apps/R-3.0.3/bin/R
+
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> m = matrix(1, 15000, 15000)
+> m
+^C
+
+         [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
+    [1,]    1    1    1    1    1    1    1    1    1     1     1     1     1
+    [2,]    1    1    1    1    1    1    1    1    1     1     1     1     1
+    [3,]    1    1    1    1    1    1    1    1    1     1     1     1     1
+    [4,]    1    1    1    1    1    1    1    1    1     1     1     1     1
+    [5,]    1    1    1    1    1    1    1    1    1     1     1     1     1
+    [6,]    1    1    1    1    1    1    1    1    1     1
+>
+>
+>
+> m = matrix(1, 15000, 15000)
+Killed
+cr173@dcc-core-17  /work/sta790 $ /opt/apps/R-3.0.3/bin/R
+
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> m = matrix(1, 10000, 10000)
+> m = matrix(1, 10000, 10000)
+> m = matrix(1, 10000, 10000)
+> m = matrix(1, 10000, 10000)
+> m = matrix(1, 10000, 10000)
+> m = matrix(2, 10000, 10000)
+> m = matrix(3, 10000, 10000)
+> m = matrix(4, 10000, 10000)
+> gc()
+            used  (Mb) gc trigger   (Mb)  max used   (Mb)
+Ncells    182934   9.8     407500   21.8    350000   18.7
+Vcells 100279751 765.1  282686163 2156.8 200440545 1529.3
+> m2 = matrix(4, 10000, 10000)
+> m1 = matrix(1, 10000, 10000)
+Killed
+cr173@dcc-core-17  /work/sta790 $ exit
+exit
+srun: error: dcc-core-17: task 0: Out Of Memory
+cr173@dcc-slogin-01  /work/sta790 $
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common -c4 --pty bash -i
+srun: job 45202778 queued and waiting for resources
+srun: job 45202778 has been allocated resources
+cr173@dcc-core-25  /work/sta790 $ /
+admin/       cifs/        dev/         .gem/        lib/         mnt/         proc/        sbin/        tmp/         work/
+bin/         data/        dscrhome/    home/        lib64/       nfs/         root/        srv/         usr/
+boot/        datacommons/ etc/         hpchome/     media/       opt/         run/         sys/         var/
+cr173@dcc-core-25  /work/sta790 $ /work/sta790/cr173/tidyverse.simg
+s6-mkdir: warning: unable to mkdir /var/run/s6: Permission denied
+cr173@dcc-core-25  /work/sta790 $ cd /work/sta790/cr173/tidyverse.simg
+bash: cd: /work/sta790/cr173/tidyverse.simg: Not a directory
+cr173@dcc-core-25  /work/sta790 $ ls
+cr173  fb75  ff31  hc149  hz118  jkk31  jt266  lrl22  psv6  zl129
+cr173@dcc-core-25  /work/sta790 $ cd cr173/
+cr173@dcc-core-25  /work/sta790/cr173 $ ls
+tidyverse.simg
+cr173@dcc-core-25  /work/sta790/cr173 $ ls -la
+total 786512
+drwxr-xr-x.  2 cr173 sta790           32 Feb  5 12:50 .
+drwxrwxr-x. 12 cr173 sta790          227 Feb  5 12:04 ..
+-rwxr-xr-x.  1 cr173 rundellab 669515807 Feb  5 12:49 tidyverse.simg
+cr173@dcc-core-25  /work/sta790/cr173 $ ./tidyverse.simg
+s6-mkdir: warning: unable to mkdir /var/run/s6: Permission denied
+cr173@dcc-core-25  /work/sta790/cr173 $ singularity exec tidyverse.simg bash
+cr173@dcc-core-25:~$ ^C
+cr173@dcc-core-25:~$ exit
+exit
+cr173@dcc-core-25  /work/sta790/cr173 $ singularity exec tidyverse.simg R
+
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> m = matrix(rnorm(10), 10000, 10000)
+> z = m %*% m
+> z = m %*% m
+>
+>
+cr173@dcc-core-25  /work/sta790/cr173 $ exit
+exit
+cr173@dcc-slogin-01  /work/sta790 $ srun -p common -c8 --pty bash -i
+srun: job 45202785 queued and waiting for resources
+srun: job 45202785 has been allocated resources
+cr173@dcc-core-26  /work/sta790 $ singularity exec /work/sta790/cr173/tidyverse.simg R
+
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> m = matrix(1, 10000, 10000)
+> z = m %*% m
+>
+cr173@dcc-core-26  /work/sta790 $ exit
+exit
+cr173@dcc-slogin-01  /work/sta790 $
