@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Rcpp + Thrust</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Colin Rundel" />
+    <meta name="date" content="2019-03-26" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Rcpp + Thrust
+### Colin Rundel
+### 2019-03-26
+
+---
+
+exclude: true
+
+
+
+
+```r
+knitr::opts_chunk$set(
+  cache = FALSE, 
+  fig.align = "center", 
+  fig.width = 10, 
+  out.width = "90%",
+  dpi = 150
+)
+```
+
+
+```r
+eng_nvcc = function(options) {
+  file = paste0(options$label,".cu")
+  exec = sub("\\.cu$", "", file)
+  writeLines(options$code, file)
+  
+  on.exit(unlink(c(file, exec)), add = TRUE)
+  
+  
+  bin = options$engine.opts$bin
+  flags = options$engine.opts$flags
+  
+  if (is.null(flags))
+    flags = ""
+  
+  if (is.null(bin))
+    bin = "/usr/local/cuda/bin"
+  
+  nvcc = file.path(bin,"nvcc")
+  
+  nvcc_cmd = paste(nvcc, flags, file, "-o", exec)
+  exec_cmd = paste0("./", exec)
+  
+  if (options$eval) {
+    nvcc_out = system(paste(nvcc_cmd, "2&gt;&amp;1"), intern = TRUE)
+    exec_out = system(paste(exec_cmd, "2&gt;&amp;1"), intern = TRUE)
+    
+    out = rmarkdown:::one_string(c(
+      paste("&gt;", nvcc_cmd),
+      nvcc_out,
+      "",
+      paste("&gt;", exec_cmd),
+      exec_out
+    ))
+  } else {
+    out = ''
+  }
+  
+  options$engine = "cpp"
+  
+  knitr::engine_output(options, options$code, out)
+}
+
+knitr::knit_engines$set(nvcc = eng_nvcc)
+```
+
+---
+class: middle
+
+# C++ Classes / Structs
+
+---
+
+## A Simple Example
+
+.small[
+```cpp
+template&lt;typename T&gt;
+struct rect {
+T x1, x2, y1, y2;
+
+rect() 
+: x1(0), x2(1), y1(0), y2(1)
+{ }
+
+rect(T _x1, T _x2, T _y1, T _y2)
+: x1(_x1), x2(_x2), y1(_y1), y2(_y2)
+{ }
+
+rect(rect&lt;T&gt; const&amp; r) {
+x1 = r.x1;
+x2 = r.x2;
+y1 = r.y1;
+y2 = r.y2;
+}
+
+T get_width() {
+return x2 - x1;
+}
+
+T get_height() {
+return y2 - y1;
+}
+
+T get_area() {
+return get_height() * get_width();
+}
+};
+```
+]
+
+---
+
+## Functors
+
+In the STL sometimes we have to use a function which can only take a single argument (e.g. when using `std::transform`) but we still want to write generic code that has additional parameters. We can accomplish this using a functor, which is just a struct that acts like a function by overloading the `()` operator.
+
+--
+
+.smaller[ .columns[
+.col[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+double scale_3_5(double val) {
+  return 3*val + 5;
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector scale_fixed(Rcpp::NumericVector v) {
+  std::transform(
+    v.begin(), v.end(), 
+    v.begin(), 
+    scale_3_5
+  );
+  
+  return v;
+}
+```
+
+
+```r
+scale_fixed(1:5)
+```
+
+```
+## [1]  8 11 14 17 20
+```
+]
+
+.col[
+
+```cpp
+#include &lt;Rcpp.h&gt;
+
+struct scale {
+  double a,b;
+  scale(double _a, double _b) : a(_a), b(_b) { }
+  
+  double operator()(double&amp; x) const {
+    return a*x + b;
+  }
+};
+
+// [[Rcpp::export]]
+Rcpp::NumericVector scale_functor(Rcpp::NumericVector v, 
+                                  double a, double b) {
+  std::transform(
+    v.begin(), v.end(), 
+    v.begin(), 
+    scale(a,b)
+  );
+  
+  return v;
+}
+```
+
+
+```r
+scale_functor(1:5, 3, 5)
+```
+
+```
+## [1]  8 11 14 17 20
+```
+
+```r
+scale_functor(1:5, 5, 3)
+```
+
+```
+## [1]  8 13 18 23 28
+```
+]
+] ]
+
+---
+class: middle
+
+# CUDA &amp; Thrust
+
+
+---
+
+## Checking CUDA - deviceQuery
+
+.smaller[
+
+```bash
+/usr/local/cuda/samples/1_Utilities/deviceQuery/deviceQuery
+```
+
+```
+## /usr/local/cuda/samples/1_Utilities/deviceQuery/deviceQuery Starting...
+## 
+##  CUDA Device Query (Runtime API) version (CUDART static linking)
+## 
+## Detected 2 CUDA Capable device(s)
+## 
+## Device 0: "Tesla P100-PCIE-16GB"
+##   CUDA Driver Version / Runtime Version          10.0 / 10.0
+##   CUDA Capability Major/Minor version number:    6.0
+##   Total amount of global memory:                 16281 MBytes (17071734784 bytes)
+##   (56) Multiprocessors, ( 64) CUDA Cores/MP:     3584 CUDA Cores
+##   GPU Max Clock rate:                            1329 MHz (1.33 GHz)
+##   Memory Clock rate:                             715 Mhz
+##   Memory Bus Width:                              4096-bit
+##   L2 Cache Size:                                 4194304 bytes
+##   Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
+##   Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
+##   Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
+##   Total amount of constant memory:               65536 bytes
+##   Total amount of shared memory per block:       49152 bytes
+##   Total number of registers available per block: 65536
+##   Warp size:                                     32
+##   Maximum number of threads per multiprocessor:  2048
+##   Maximum number of threads per block:           1024
+##   Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+##   Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
+##   Maximum memory pitch:                          2147483647 bytes
+##   Texture alignment:                             512 bytes
+##   Concurrent copy and kernel execution:          Yes with 2 copy engine(s)
+##   Run time limit on kernels:                     No
+##   Integrated GPU sharing Host Memory:            No
+##   Support host page-locked memory mapping:       Yes
+##   Alignment requirement for Surfaces:            Yes
+##   Device has ECC support:                        Enabled
+##   Device supports Unified Addressing (UVA):      Yes
+##   Device supports Compute Preemption:            Yes
+##   Supports Cooperative Kernel Launch:            Yes
+##   Supports MultiDevice Co-op Kernel Launch:      Yes
+##   Device PCI Domain ID / Bus ID / location ID:   0 / 2 / 0
+##   Compute Mode:
+##      &lt; Default (multiple host threads can use ::cudaSetDevice() with device simultaneously) &gt;
+## 
+## Device 1: "Tesla P100-PCIE-16GB"
+##   CUDA Driver Version / Runtime Version          10.0 / 10.0
+##   CUDA Capability Major/Minor version number:    6.0
+##   Total amount of global memory:                 16281 MBytes (17071734784 bytes)
+##   (56) Multiprocessors, ( 64) CUDA Cores/MP:     3584 CUDA Cores
+##   GPU Max Clock rate:                            1329 MHz (1.33 GHz)
+##   Memory Clock rate:                             715 Mhz
+##   Memory Bus Width:                              4096-bit
+##   L2 Cache Size:                                 4194304 bytes
+##   Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
+##   Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
+##   Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
+##   Total amount of constant memory:               65536 bytes
+##   Total amount of shared memory per block:       49152 bytes
+##   Total number of registers available per block: 65536
+##   Warp size:                                     32
+##   Maximum number of threads per multiprocessor:  2048
+##   Maximum number of threads per block:           1024
+##   Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+##   Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
+##   Maximum memory pitch:                          2147483647 bytes
+##   Texture alignment:                             512 bytes
+##   Concurrent copy and kernel execution:          Yes with 2 copy engine(s)
+##   Run time limit on kernels:                     No
+##   Integrated GPU sharing Host Memory:            No
+##   Support host page-locked memory mapping:       Yes
+##   Alignment requirement for Surfaces:            Yes
+##   Device has ECC support:                        Enabled
+##   Device supports Unified Addressing (UVA):      Yes
+##   Device supports Compute Preemption:            Yes
+##   Supports Cooperative Kernel Launch:            Yes
+##   Supports MultiDevice Co-op Kernel Launch:      Yes
+##   Device PCI Domain ID / Bus ID / location ID:   0 / 3 / 0
+##   Compute Mode:
+##      &lt; Default (multiple host threads can use ::cudaSetDevice() with device simultaneously) &gt;
+## &gt; Peer access from Tesla P100-PCIE-16GB (GPU0) -&gt; Tesla P100-PCIE-16GB (GPU1) : Yes
+## &gt; Peer access from Tesla P100-PCIE-16GB (GPU1) -&gt; Tesla P100-PCIE-16GB (GPU0) : Yes
+## 
+## deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 10.0, CUDA Runtime Version = 10.0, NumDevs = 2
+## Result = PASS
+```
+]
+
+---
+
+## Checking CUDA - nvidia-smi
+
+.small[
+
+```bash
+nvidia-smi
+```
+
+```
+## Tue Mar 26 10:06:12 2019       
+## +-----------------------------------------------------------------------------+
+## | NVIDIA-SMI 410.104      Driver Version: 410.104      CUDA Version: 10.0     |
+## |-------------------------------+----------------------+----------------------+
+## | GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+## | Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+## |===============================+======================+======================|
+## |   0  Tesla P100-PCIE...  Off  | 00000000:02:00.0 Off |                    0 |
+## | N/A   37C    P0    31W / 250W |    751MiB / 16280MiB |      0%      Default |
+## +-------------------------------+----------------------+----------------------+
+## |   1  Tesla P100-PCIE...  Off  | 00000000:03:00.0 Off |                    0 |
+## | N/A   38C    P0    30W / 250W |     10MiB / 16280MiB |      0%      Default |
+## +-------------------------------+----------------------+----------------------+
+##                                                                                
+## +-----------------------------------------------------------------------------+
+## | Processes:                                                       GPU Memory |
+## |  GPU       PID   Type   Process name                             Usage      |
+## |=============================================================================|
+## |    0    218630      C   /usr/lib/rstudio-server/bin/rsession         741MiB |
+## +-----------------------------------------------------------------------------+
+```
+]
+
+---
+
+## Rcpp Plugins
+
+.small[
+
+```r
+Rcpp:::.plugins
+```
+
+```
+## &lt;environment: 0x55f696af7be8&gt;
+```
+
+```r
+ls(envir=Rcpp:::.plugins)
+```
+
+```
+##  [1] "cpp0x"         "cpp11"         "cpp14"         "cpp17"         "cpp1y"         "cpp1z"        
+##  [7] "cpp2a"         "cpp98"         "openmp"        "unwindProtect"
+```
+
+```r
+Rcpp:::.plugins$openmp
+```
+
+```
+## function () 
+## {
+##     list(env = list(PKG_CXXFLAGS = "-fopenmp", PKG_LIBS = "-fopenmp"))
+## }
+## &lt;bytecode: 0x55f696af90f8&gt;
+## &lt;environment: namespace:Rcpp&gt;
+```
+
+```r
+Rcpp:::.plugins$cpp11
+```
+
+```
+## function () 
+## {
+##     if (getRversion() &gt;= "3.4") 
+##         list(env = list(USE_CXX11 = "yes"))
+##     else if (getRversion() &gt;= "3.1") 
+##         list(env = list(USE_CXX1X = "yes"))
+##     else if (.Platform$OS.type == "windows") 
+##         list(env = list(PKG_CXXFLAGS = "-std=c++0x"))
+##     else list(env = list(PKG_CXXFLAGS = "-std=c++11"))
+## }
+## &lt;bytecode: 0x55f696af72f0&gt;
+## &lt;environment: namespace:Rcpp&gt;
+```
+]
+
+---
+
+## Rcpp Thrust Plugin
+
+
+```r
+thrust = function() {
+  list(
+    env = list(
+      MAKEFLAGS = paste(
+        "CXX=/usr/local/cuda/bin/nvcc",
+        "CXXFLAGS=-x\\ cu\\ -g\\ -G\\ -O3 --std=c++11",
+        "CXXPICFLAGS=-Xcompiler\\ -fpic\\ -Xcudafe\\ --diag_suppress=code_is_unreachable",
+        "LDFLAGS="
+      ),
+      PKG_CXXFLAGS = paste0("-I", here::here())
+    )
+  )
+}
+Rcpp::registerPlugin("thrust", thrust)
+```
+
+
+
+---
+
+## Host Vector
+
+.small[
+
+```cpp
+// [[Rcpp::plugins(thrust)]]
+#include &lt;Rcpp.h&gt;
+#include &lt;thrust/device_vector.h&gt;
+
+// [[Rcpp::export]]
+void host_vec(Rcpp::NumericVector v) {
+  thrust::host_vector&lt;double&gt; H(v.begin(), v.end());
+  
+  // H.size() returns the size of vector H
+  Rcpp::Rcout &lt;&lt; "H has size " &lt;&lt; H.size() &lt;&lt; std::endl;
+  
+  // print contents of H
+  for(int i = 0; i &lt; H.size(); i++)
+    Rcpp::Rcout &lt;&lt; "H[" &lt;&lt; i &lt;&lt; "] = " &lt;&lt; H[i] &lt;&lt; std::endl;
+}
+```
+
+
+```r
+host_vec(1:5)
+```
+
+```
+## H has size 5
+## H[0] = 1
+## H[1] = 2
+## H[2] = 3
+## H[3] = 4
+## H[4] = 5
+```
+]
+
+---
+
+## Device Vector
+
+.small[
+
+```cpp
+// [[Rcpp::plugins(thrust)]]
+#include &lt;Rcpp.h&gt;
+#include &lt;thrust/device_vector.h&gt;
+
+// [[Rcpp::export]]
+void dev_vec(Rcpp::NumericVector v) {
+  thrust::device_vector&lt;double&gt; D(v.begin(), v.end());
+  
+  // H.size() returns the size of vector H
+  Rcpp::Rcout &lt;&lt; "D has size " &lt;&lt; D.size() &lt;&lt; std::endl;
+  
+  // print contents of H
+  for(int i = 0; i &lt; D.size(); i++)
+    Rcpp::Rcout &lt;&lt; "D[" &lt;&lt; i &lt;&lt; "] = " &lt;&lt; D[i] &lt;&lt; std::endl;
+}
+```
+
+
+```r
+dev_vec(1:5)
+```
+
+```
+## D has size 5
+## D[0] = 1
+## D[1] = 2
+## D[2] = 3
+## D[3] = 4
+## D[4] = 5
+```
+]
+
+---
+
+## GPU Sort
+
+.small[
+
+```cpp
+// [[Rcpp::plugins(thrust)]]
+#include &lt;Rcpp.h&gt;
+#include &lt;thrust/device_vector.h&gt;
+
+// [[Rcpp::export]]
+void std_sort(int n) {
+  Rcpp::NumericVector r = Rcpp::runif(n);
+  Rcpp::NumericVector v(r.begin(), r.end());
+  std::sort(v.begin(), v.end());
+}
+
+// [[Rcpp::export]]
+void thrust_host_sort(int n) {
+  Rcpp::NumericVector r = Rcpp::runif(n);
+  thrust::host_vector&lt;double&gt; H(r.begin(), r.end());
+  thrust::sort(H.begin(), H.end());
+}
+
+// [[Rcpp::export]]
+void thrust_gpu_sort(int n) {
+  Rcpp::NumericVector r = Rcpp::runif(n);
+  thrust::device_vector&lt;double&gt; D(r.begin(), r.end());
+  thrust::sort(D.begin(), D.end());
+}
+```
+]
+
+---
+
+
+```
+## Warning: Some expressions had a GC in every iteration; so filtering is disabled.
+```
+
+&lt;img src="Lec13_files/figure-html/unnamed-chunk-15-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## GPU Sort - sort timing
+
+.small[
+
+
+&lt;img src="Lec13_files/figure-html/unnamed-chunk-17-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## GPU Vectorized exp
+
+.small[
+
+```cpp
+// [[Rcpp::plugins(thrust)]]
+#include &lt;Rcpp.h&gt;
+#include &lt;thrust/device_vector.h&gt;
+
+template&lt;class T&gt;
+struct exp_functor{
+  __host__ __device__ T operator()(T &amp;x) const{
+    return exp(x);
+  }
+};
+
+// [[Rcpp::export]]
+void std_exp(int n) {
+  std::vector&lt;double&gt; v(n, 1.0);
+  std::transform(v.begin(), v.end(), v.begin(), exp_functor&lt;double&gt;());
+}
+
+// [[Rcpp::export]]
+void thrust_host_exp(int n) {
+  thrust::host_vector&lt;double&gt; H(n, 1.0);
+  thrust::transform(H.begin(), H.end(), H.begin(), exp_functor&lt;double&gt;());
+}
+
+// [[Rcpp::export]]
+void thrust_dev_exp(int n) {
+  thrust::device_vector&lt;double&gt; D(n, 1.0);
+  thrust::transform(D.begin(), D.end(), D.begin(), exp_functor&lt;double&gt;());
+}
+```
+]
+
+---
+
+&lt;img src="Lec13_files/figure-html/unnamed-chunk-19-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+## GPU Exp - Timings
+
+
+
+&lt;img src="Lec13_files/figure-html/unnamed-chunk-21-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Covariance Matrix Calculation
+
+
+```r
+r_sq_exp_cov = function(d, sigma2=1, range=1) {
+  sigma2*exp(-d*d*range*range)
+}
+```
+
+
+```cpp
+// [[Rcpp::depends(RcppArmadillo)]]
+#include &lt;RcppArmadillo.h&gt;
+
+// [[Rcpp::export]]
+arma::mat arma_sq_exp_cov(arma::mat const&amp; d, double sigma2 = 1, double range=1) {
+  
+  return sigma2 * arma::exp(-(arma::square(d * range)));
+}
+```
+
+---
+
+
+```cpp
+// [[Rcpp::plugins(thrust)]]
+#include &lt;Rcpp.h&gt;
+#include &lt;thrust/device_vector.h&gt;
+
+struct sq_exp_cov_functor{
+  double sigma2;
+  double range;
+  
+  sq_exp_cov_functor(double s, double r) : sigma2(s), range(r) { }
+  
+  __host__ __device__ double operator()(double &amp;d) const{
+    return sigma2 * exp(-d*d * range*range);
+  }
+};
+
+// [[Rcpp::export]]
+Rcpp::NumericMatrix gpu_sq_exp_cov(Rcpp::NumericMatrix const&amp; d, 
+                                   double sigma2 = 1, double range=1) {
+  thrust::device_vector&lt;double&gt; D(d.begin(), d.end());
+  thrust::transform(D.begin(), D.end(), D.begin(), sq_exp_cov_functor(sigma2, range));
+  
+  Rcpp::NumericMatrix cov(d.nrow(), d.ncol());
+  thrust::copy(D.begin(), D.end(), cov.begin());
+  
+  return cov;
+}
+```
+
+---
+
+&lt;img src="Lec13_files/figure-html/unnamed-chunk-25-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+
+
+
+
+
+&lt;img src="Lec13_files/figure-html/unnamed-chunk-29-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Thrust Reductions
+
+
+```cpp
+// [[Rcpp::plugins(thrust)]]
+#include &lt;Rcpp.h&gt;
+#include &lt;thrust/device_vector.h&gt;
+#include &lt;thrust/functional.h&gt;
+
+// [[Rcpp::export]]
+double thrust_sum(Rcpp::NumericVector v) {
+  thrust::device_vector&lt;double&gt; d(v.begin(), v.end());
+  double sum = thrust::reduce(
+    d.begin(), d.end(), (double) 0, thrust::plus&lt;double&gt;()
+  );
+  
+  return sum;
+}
+```
+
+
+```r
+thrust_sum(1:5)
+```
+
+```
+## [1] 15
+```
+
+---
+
+.small[
+
+```cpp
+// [[Rcpp::plugins(thrust)]]
+#include &lt;Rcpp.h&gt;
+#include &lt;thrust/device_vector.h&gt;
+#include &lt;thrust/functional.h&gt;
+
+template&lt;class T&gt;
+struct prod {
+  __host__ __device__ T operator()(T&amp; x, T&amp; y) const{
+    return x * y;
+  }
+};
+
+// [[Rcpp::export]]
+double thrust_prod(Rcpp::NumericVector v) {
+  thrust::device_vector&lt;double&gt; d(v.begin(), v.end());
+  
+  return thrust::reduce(
+    d.begin(), d.end(), (double) 1, prod&lt;double&gt;()
+  );
+}
+```
+
+
+```r
+thrust_prod(1:5)
+```
+
+```
+## [1] 120
+```
+]
+
+---
+
+.small[
+
+```cpp
+// [[Rcpp::plugins(thrust)]]
+#include &lt;Rcpp.h&gt;
+#include &lt;thrust/device_vector.h&gt;\
+
+template&lt;class T&gt;
+struct min_functor {
+  __host__ __device__ T operator()(T&amp; x, T&amp; y) const{
+    return min(x, y);
+  }
+};
+
+// [[Rcpp::export]]
+double thrust_min(Rcpp::NumericVector v) {
+  thrust::device_vector&lt;double&gt; d(v.begin(), v.end());
+  
+  return thrust::reduce(
+    d.begin(), d.end(), (double) 1, min_functor&lt;double&gt;()
+  );
+}
+```
+
+
+```r
+thrust_min(c(3,6,2,1,7,9))
+```
+
+```
+## [1] 1
+```
+]
+
+---
+
+## Transform + Reduce
+
+.small[
+
+```cpp
+// [[Rcpp::plugins(thrust)]]
+#include &lt;Rcpp.h&gt;
+#include &lt;thrust/device_vector.h&gt;
+#include &lt;thrust/transform_reduce.h&gt;
+#include &lt;thrust/functional.h&gt;
+
+template&lt;class T&gt;
+struct square {
+  __host__ __device__ T operator()(T const&amp; x) const{
+    return x * x;
+  }
+};
+
+// [[Rcpp::export]]
+double thrust_rmse(Rcpp::NumericVector v) {
+  thrust::device_vector&lt;double&gt; d(v.begin(), v.end());
+  
+  double sum_of_squares = thrust::transform_reduce(
+    d.begin(), d.end(), square&lt;double&gt;(), (double) 0, thrust::plus&lt;double&gt;()
+  );
+  
+  return sqrt(sum_of_squares / v.size());
+}
+```
+
+
+```r
+resid = rnorm(1000)
+
+thrust_rmse(resid)
+```
+
+```
+## [1] 0.9960206
+```
+
+```r
+resid^2 %&gt;% mean() %&gt;% sqrt()
+```
+
+```
+## [1] 0.9960206
+```
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

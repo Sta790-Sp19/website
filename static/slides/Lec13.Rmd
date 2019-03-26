@@ -1,0 +1,855 @@
+---
+title: "Rcpp + Thrust"
+author: "Colin Rundel"
+date: "2019-03-26"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      countIncrementalSlides: false
+
+---
+exclude: true
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(Rcpp)
+library(purrr)
+library(patchwork)
+
+options(tibble.width = 110, width = 110)
+```
+
+```{r global_options}
+knitr::opts_chunk$set(
+  cache = FALSE, 
+  fig.align = "center", 
+  fig.width = 10, 
+  out.width = "90%",
+  dpi = 150
+)
+```
+
+```{r eval=FALSE}
+eng_nvcc = function(options) {
+  file = paste0(options$label,".cu")
+  exec = sub("\\.cu$", "", file)
+  writeLines(options$code, file)
+  
+  on.exit(unlink(c(file, exec)), add = TRUE)
+  
+  
+  bin = options$engine.opts$bin
+  flags = options$engine.opts$flags
+  
+  if (is.null(flags))
+    flags = ""
+  
+  if (is.null(bin))
+    bin = "/usr/local/cuda/bin"
+  
+  nvcc = file.path(bin,"nvcc")
+  
+  nvcc_cmd = paste(nvcc, flags, file, "-o", exec)
+  exec_cmd = paste0("./", exec)
+  
+  if (options$eval) {
+    nvcc_out = system(paste(nvcc_cmd, "2>&1"), intern = TRUE)
+    exec_out = system(paste(exec_cmd, "2>&1"), intern = TRUE)
+    
+    out = rmarkdown:::one_string(c(
+      paste(">", nvcc_cmd),
+      nvcc_out,
+      "",
+      paste(">", exec_cmd),
+      exec_out
+    ))
+  } else {
+    out = ''
+  }
+  
+  options$engine = "cpp"
+  
+  knitr::engine_output(options, options$code, out)
+}
+
+knitr::knit_engines$set(nvcc = eng_nvcc)
+```
+
+---
+class: middle
+
+# C++ Classes / Structs
+
+---
+
+## A Simple Example
+
+.small[
+```cpp
+template<typename T>
+struct rect {
+T x1, x2, y1, y2;
+
+rect() 
+: x1(0), x2(1), y1(0), y2(1)
+{ }
+
+rect(T _x1, T _x2, T _y1, T _y2)
+: x1(_x1), x2(_x2), y1(_y1), y2(_y2)
+{ }
+
+rect(rect<T> const& r) {
+x1 = r.x1;
+x2 = r.x2;
+y1 = r.y1;
+y2 = r.y2;
+}
+
+T get_width() {
+return x2 - x1;
+}
+
+T get_height() {
+return y2 - y1;
+}
+
+T get_area() {
+return get_height() * get_width();
+}
+};
+```
+]
+
+---
+
+## Functors
+
+In the STL sometimes we have to use a function which can only take a single argument (e.g. when using `std::transform`) but we still want to write generic code that has additional parameters. We can accomplish this using a functor, which is just a struct that acts like a function by overloading the `()` operator.
+
+--
+
+.smaller[ .columns[
+.col[
+```{Rcpp}
+#include <Rcpp.h>
+
+double scale_3_5(double val) {
+  return 3*val + 5;
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector scale_fixed(Rcpp::NumericVector v) {
+  std::transform(
+    v.begin(), v.end(), 
+    v.begin(), 
+    scale_3_5
+  );
+  
+  return v;
+}
+```
+
+```{r}
+scale_fixed(1:5)
+```
+]
+
+.col[
+```{Rcpp}
+#include <Rcpp.h>
+
+struct scale {
+  double a,b;
+  scale(double _a, double _b) : a(_a), b(_b) { }
+  
+  double operator()(double& x) const {
+    return a*x + b;
+  }
+};
+
+// [[Rcpp::export]]
+Rcpp::NumericVector scale_functor(Rcpp::NumericVector v, 
+                                  double a, double b) {
+  std::transform(
+    v.begin(), v.end(), 
+    v.begin(), 
+    scale(a,b)
+  );
+  
+  return v;
+}
+```
+
+```{r}
+scale_functor(1:5, 3, 5)
+scale_functor(1:5, 5, 3)
+```
+]
+] ]
+
+---
+class: middle
+
+# CUDA & Thrust
+
+
+---
+
+## Checking CUDA - deviceQuery
+
+.smaller[
+```{bash}
+/usr/local/cuda/samples/1_Utilities/deviceQuery/deviceQuery
+```
+]
+
+---
+
+## Checking CUDA - nvidia-smi
+
+.small[
+```{bash}
+nvidia-smi
+```
+]
+
+---
+
+## Rcpp Plugins
+
+.small[
+```{r}
+Rcpp:::.plugins
+ls(envir=Rcpp:::.plugins)
+Rcpp:::.plugins$openmp
+Rcpp:::.plugins$cpp11
+```
+]
+
+---
+
+## Rcpp Thrust Plugin
+
+```{r}
+thrust = function() {
+  list(
+    env = list(
+      MAKEFLAGS = paste(
+        "CXX=/usr/local/cuda/bin/nvcc",
+        "CXXFLAGS=-x\\ cu\\ -g\\ -G\\ -O3 --std=c++11",
+        "CXXPICFLAGS=-Xcompiler\\ -fpic\\ -Xcudafe\\ --diag_suppress=code_is_unreachable",
+        "LDFLAGS="
+      ),
+      PKG_CXXFLAGS = paste0("-I", here::here())
+    )
+  )
+}
+Rcpp::registerPlugin("thrust", thrust)
+```
+
+
+
+---
+
+## Host Vector
+
+.small[
+```{Rcpp}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <thrust/device_vector.h>
+
+// [[Rcpp::export]]
+void host_vec(Rcpp::NumericVector v) {
+  thrust::host_vector<double> H(v.begin(), v.end());
+  
+  // H.size() returns the size of vector H
+  Rcpp::Rcout << "H has size " << H.size() << std::endl;
+  
+  // print contents of H
+  for(int i = 0; i < H.size(); i++)
+    Rcpp::Rcout << "H[" << i << "] = " << H[i] << std::endl;
+}
+```
+
+```{r}
+host_vec(1:5)
+```
+]
+
+---
+
+## Device Vector
+
+.small[
+```{Rcpp}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <thrust/device_vector.h>
+
+// [[Rcpp::export]]
+void dev_vec(Rcpp::NumericVector v) {
+  thrust::device_vector<double> D(v.begin(), v.end());
+  
+  // H.size() returns the size of vector H
+  Rcpp::Rcout << "D has size " << D.size() << std::endl;
+  
+  // print contents of H
+  for(int i = 0; i < D.size(); i++)
+    Rcpp::Rcout << "D[" << i << "] = " << D[i] << std::endl;
+}
+```
+
+```{r}
+dev_vec(1:5)
+```
+]
+
+---
+
+## GPU Sort
+
+.small[
+```{Rcpp}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <thrust/device_vector.h>
+
+// [[Rcpp::export]]
+void std_sort(int n) {
+  Rcpp::NumericVector r = Rcpp::runif(n);
+  Rcpp::NumericVector v(r.begin(), r.end());
+  std::sort(v.begin(), v.end());
+}
+
+// [[Rcpp::export]]
+void thrust_host_sort(int n) {
+  Rcpp::NumericVector r = Rcpp::runif(n);
+  thrust::host_vector<double> H(r.begin(), r.end());
+  thrust::sort(H.begin(), H.end());
+}
+
+// [[Rcpp::export]]
+void thrust_gpu_sort(int n) {
+  Rcpp::NumericVector r = Rcpp::runif(n);
+  thrust::device_vector<double> D(r.begin(), r.end());
+  thrust::sort(D.begin(), D.end());
+}
+```
+]
+
+---
+
+```{r echo=FALSE, message=FALSE}
+res = bench::press(
+  n = c(1e3, 1e6, 1e7),
+  bench::mark(
+    std_sort(n),
+    thrust_host_sort(n),
+    thrust_gpu_sort(n),
+    check = FALSE
+  )
+)
+
+plot(res)
+```
+
+---
+
+## GPU Sort - sort timing
+
+.small[
+```{Rcpp echo=FALSE}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <thrust/device_vector.h>
+#include <util/timer.h>
+
+// [[Rcpp::export]]
+double std_sort_timer(int n) {
+  Rcpp::NumericVector r = Rcpp::runif(n);
+  Rcpp::NumericVector v(r.begin(), r.end());
+  
+  timer t;
+  std::sort(v.begin(), v.end());
+  return t.tick();
+}
+
+// [[Rcpp::export]]
+double thrust_host_sort_timer(int n) {
+  Rcpp::NumericVector r = Rcpp::runif(n);
+  thrust::host_vector<double> H(r.begin(), r.end());
+  
+  timer t;
+  thrust::sort(H.begin(), H.end());
+  return t.tick();
+}
+
+// [[Rcpp::export]]
+double thrust_gpu_sort_timer(int n) {
+  Rcpp::NumericVector r = Rcpp::runif(n);
+  thrust::device_vector<double> D(r.begin(), r.end());
+  
+  timer t;
+  thrust::sort(D.begin(), D.end());
+  return t.tick();
+}
+```
+
+```{r echo=FALSE}
+res = map_dfr(
+  10^(3:7),
+  function(n) {
+    tribble(
+      ~func, ~time,
+      "std::sort",  map_dbl(1:5, ~std_sort_timer(n)) %>% median(),
+      "thrust cpu", map_dbl(1:5, ~thrust_host_sort_timer(n)) %>% median(),
+      "thrust gpu", map_dbl(1:5, ~thrust_gpu_sort_timer(n)) %>% median(),
+    ) %>%
+      mutate(n = n)
+  }
+)
+
+ggplot(res, aes(x=n, y=time, color=func)) +
+  geom_point() +
+  geom_line() +
+  scale_x_log10() +
+  scale_y_log10()
+```
+]
+
+---
+
+## GPU Vectorized exp
+
+.small[
+```{Rcpp}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <thrust/device_vector.h>
+
+template<class T>
+struct exp_functor{
+  __host__ __device__ T operator()(T &x) const{
+    return exp(x);
+  }
+};
+
+// [[Rcpp::export]]
+void std_exp(int n) {
+  std::vector<double> v(n, 1.0);
+  std::transform(v.begin(), v.end(), v.begin(), exp_functor<double>());
+}
+
+// [[Rcpp::export]]
+void thrust_host_exp(int n) {
+  thrust::host_vector<double> H(n, 1.0);
+  thrust::transform(H.begin(), H.end(), H.begin(), exp_functor<double>());
+}
+
+// [[Rcpp::export]]
+void thrust_dev_exp(int n) {
+  thrust::device_vector<double> D(n, 1.0);
+  thrust::transform(D.begin(), D.end(), D.begin(), exp_functor<double>());
+}
+```
+]
+
+---
+
+```{r echo=FALSE, message=FALSE}
+res = bench::press(
+  n = c(1e3, 1e6, 1e7),
+  bench::mark(
+    std_exp(n),
+    thrust_host_exp(n),
+    thrust_dev_exp(n),
+    check = FALSE
+  )
+)
+
+plot(res)
+```
+
+
+
+---
+
+## GPU Exp - Timings
+
+```{Rcpp echo=FALSE}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <thrust/device_vector.h>
+#include <chrono>
+
+template<class T>
+struct exp_functor{
+  __host__ __device__ T operator()(T &x) const{
+    return exp(x);
+  }
+};
+
+// [[Rcpp::export]]
+Rcpp::List thrust_dev_exp_time(int n, int k) {
+  Rcpp::NumericVector alloc(k);
+  Rcpp::NumericVector calc(k);
+  
+  for(int i=0; i != k; ++i){
+    auto tick1 = std::chrono::high_resolution_clock::now();
+    thrust::device_vector<double> D(n, 1.0);
+    
+    auto tick2 = std::chrono::high_resolution_clock::now();
+    thrust::transform(D.begin(), D.end(), D.begin(), exp_functor<double>());
+    
+    auto tick3 = std::chrono::high_resolution_clock::now();
+    
+    alloc[i] = std::chrono::duration_cast<std::chrono::microseconds>(tick2 - tick1).count();
+    calc[i]  = std::chrono::duration_cast<std::chrono::microseconds>(tick3 - tick2).count();
+  }
+  
+  return Rcpp::List::create(
+    Rcpp::Named("alloc") = alloc,
+    Rcpp::Named("calc") = calc
+  );
+}
+
+// [[Rcpp::export]]
+Rcpp::List std_exp_time(int n, int k) {
+  Rcpp::NumericVector alloc(k);
+  Rcpp::NumericVector calc(k);
+  
+  for(int i=0; i != k; ++i){
+    auto tick1 = std::chrono::high_resolution_clock::now();
+    std::vector<double> v(n, 1.0);
+    
+    auto tick2 = std::chrono::high_resolution_clock::now();
+    std::transform(v.begin(), v.end(), v.begin(), exp_functor<double>());
+    
+    auto tick3 = std::chrono::high_resolution_clock::now();
+    
+    alloc[i] = std::chrono::duration_cast<std::chrono::microseconds>(tick2 - tick1).count();
+    calc[i]  = std::chrono::duration_cast<std::chrono::microseconds>(tick3 - tick2).count();
+  }
+  
+  return Rcpp::List::create(
+    Rcpp::Named("alloc") = alloc,
+    Rcpp::Named("calc") = calc
+  );
+}
+```
+
+```{r echo=FALSE}
+timings = bind_rows(
+  map_dfr(3:7, ~ thrust_dev_exp_time(10^.x, k = 20) %>% map(median) %>% c(n=10^.x, .)) %>%
+    mutate(func = "thrust_dev_exp_time"),
+  map_dfr(3:7, ~ std_exp_time(10^.x, k = 20) %>% map(median) %>% c(n=10^.x, .)) %>% 
+    mutate(func = "std_exp_time")
+) %>%
+  mutate(total = alloc + calc) %>%
+  gather(op, time, alloc, calc, total)
+
+timings %>%
+  filter(time != 0) %>%
+  ggplot(aes(x=n, y=time, color=func)) +
+  geom_point() +
+  geom_line() +
+  scale_x_log10() +
+  scale_y_log10() +
+  facet_wrap(~op) +
+  labs(y = "time (us)")
+```
+
+---
+
+## Covariance Matrix Calculation
+
+```{r}
+r_sq_exp_cov = function(d, sigma2=1, range=1) {
+  sigma2*exp(-d*d*range*range)
+}
+```
+
+```{Rcpp}
+// [[Rcpp::depends(RcppArmadillo)]]
+#include <RcppArmadillo.h>
+
+// [[Rcpp::export]]
+arma::mat arma_sq_exp_cov(arma::mat const& d, double sigma2 = 1, double range=1) {
+  
+  return sigma2 * arma::exp(-(arma::square(d * range)));
+}
+```
+
+---
+
+```{Rcpp}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <thrust/device_vector.h>
+
+struct sq_exp_cov_functor{
+  double sigma2;
+  double range;
+  
+  sq_exp_cov_functor(double s, double r) : sigma2(s), range(r) { }
+  
+  __host__ __device__ double operator()(double &d) const{
+    return sigma2 * exp(-d*d * range*range);
+  }
+};
+
+// [[Rcpp::export]]
+Rcpp::NumericMatrix gpu_sq_exp_cov(Rcpp::NumericMatrix const& d, 
+                                   double sigma2 = 1, double range=1) {
+  thrust::device_vector<double> D(d.begin(), d.end());
+  thrust::transform(D.begin(), D.end(), D.begin(), sq_exp_cov_functor(sigma2, range));
+  
+  Rcpp::NumericMatrix cov(d.nrow(), d.ncol());
+  thrust::copy(D.begin(), D.end(), cov.begin());
+  
+  return cov;
+}
+```
+
+---
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+n = 5000
+xy = matrix(runif(2*n), n, 2)
+d = dist(xy) %>% as.matrix()
+
+res = bench::press(
+  m = c(1000, 2000, 3000, 4000, 5000),
+  {
+    d_m = d[1:m, 1:m]
+    bench::mark(
+      r_sq_exp_cov(d_m),
+      arma_sq_exp_cov(d_m),
+      gpu_sq_exp_cov(d_m),
+      check=FALSE
+    )  
+  }
+)
+
+plot(res)
+```
+
+---
+
+```{r echo=FALSE}
+timer = function() {
+  list(
+    env = list(
+      PKG_CXXFLAGS = paste0("-I", here::here())
+    )
+  )
+}
+Rcpp::registerPlugin("timer", timer)
+```
+
+```{Rcpp echo=FALSE}
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::plugins(timer,cpp11)]]
+
+#include <RcppArmadillo.h>
+#include <util/timer.h>
+
+// [[Rcpp::export]]
+double arma_sq_exp_cov_timing(arma::mat const& d, double sigma2 = 1, double range=1) {
+  timer t;
+  arma::mat res = sigma2 * arma::exp(-(arma::square(d * range)));
+  
+  return t.tick();
+}
+```
+
+```{Rcpp echo=FALSE}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <util/timer.h>
+#include <thrust/device_vector.h>
+
+struct sq_exp_cov_functor{
+  double sigma2;
+  double range;
+  
+  sq_exp_cov_functor(double s, double r) : sigma2(s), range(r) { }
+  
+  __host__ __device__ double operator()(double &d) const{
+    return sigma2 * exp(-d*d * range*range);
+  }
+};
+
+// [[Rcpp::export]]
+double gpu_sq_exp_cov_timing(Rcpp::NumericMatrix const& d, 
+                             double sigma2 = 1, double range=1) {
+  thrust::device_vector<double> D(d.begin(), d.end());
+  
+  timer t;
+  thrust::transform(D.begin(), D.end(), D.begin(), sq_exp_cov_functor(sigma2, range));
+  
+  return t.tick();
+}
+```
+
+```{r echo=FALSE}
+n = 5000
+xy = matrix(runif(2*n), n, 2)
+d = dist(xy) %>% as.matrix()
+
+res = map_dfr(
+  c(1000, 2000, 3000, 4000, 5000),
+  function(m) {
+    d_m = d[1:m, 1:m]
+    
+    tribble(
+      ~func, ~time,
+      "arma",  map_dbl(1:10, ~arma_sq_exp_cov_timing(d_m)) %>% median(),
+      "thrust gpu", map_dbl(1:10, ~gpu_sq_exp_cov_timing(d_m)) %>% median(),
+    ) %>%
+      mutate(n = m)
+  }
+)
+
+(
+  ggplot(res, aes(x=n, y=time, color=func)) +
+    geom_point() +
+    geom_line()
+) + (
+  ggplot(res, aes(x=n, y=time, color=func)) +
+    geom_point() +
+    geom_line() +
+    scale_y_log10()
+)
+```
+
+
+---
+
+## Thrust Reductions
+
+```{Rcpp}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <thrust/device_vector.h>
+#include <thrust/functional.h>
+
+// [[Rcpp::export]]
+double thrust_sum(Rcpp::NumericVector v) {
+  thrust::device_vector<double> d(v.begin(), v.end());
+  double sum = thrust::reduce(
+    d.begin(), d.end(), (double) 0, thrust::plus<double>()
+  );
+  
+  return sum;
+}
+```
+
+```{r}
+thrust_sum(1:5)
+```
+
+---
+
+.small[
+```{Rcpp}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <thrust/device_vector.h>
+#include <thrust/functional.h>
+
+template<class T>
+struct prod {
+  __host__ __device__ T operator()(T& x, T& y) const{
+    return x * y;
+  }
+};
+
+// [[Rcpp::export]]
+double thrust_prod(Rcpp::NumericVector v) {
+  thrust::device_vector<double> d(v.begin(), v.end());
+  
+  return thrust::reduce(
+    d.begin(), d.end(), (double) 1, prod<double>()
+  );
+}
+```
+
+```{r}
+thrust_prod(1:5)
+```
+]
+
+---
+
+.small[
+```{Rcpp}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <thrust/device_vector.h>\
+
+template<class T>
+struct min_functor {
+  __host__ __device__ T operator()(T& x, T& y) const{
+    return min(x, y);
+  }
+};
+
+// [[Rcpp::export]]
+double thrust_min(Rcpp::NumericVector v) {
+  thrust::device_vector<double> d(v.begin(), v.end());
+  
+  return thrust::reduce(
+    d.begin(), d.end(), (double) 1, min_functor<double>()
+  );
+}
+```
+
+```{r}
+thrust_min(c(3,6,2,1,7,9))
+```
+]
+
+---
+
+## Transform + Reduce
+
+.small[
+```{Rcpp}
+// [[Rcpp::plugins(thrust)]]
+#include <Rcpp.h>
+#include <thrust/device_vector.h>
+#include <thrust/transform_reduce.h>
+#include <thrust/functional.h>
+
+template<class T>
+struct square {
+  __host__ __device__ T operator()(T const& x) const{
+    return x * x;
+  }
+};
+
+// [[Rcpp::export]]
+double thrust_rmse(Rcpp::NumericVector v) {
+  thrust::device_vector<double> d(v.begin(), v.end());
+  
+  double sum_of_squares = thrust::transform_reduce(
+    d.begin(), d.end(), square<double>(), (double) 0, thrust::plus<double>()
+  );
+  
+  return sqrt(sum_of_squares / v.size());
+}
+```
+
+```{r}
+resid = rnorm(1000)
+
+thrust_rmse(resid)
+
+resid^2 %>% mean() %>% sqrt()
+```
+]
